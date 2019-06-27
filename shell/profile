@@ -1,0 +1,13 @@
+export QT_QPA_PLATFORM=xcb
+export QT_QPA_PLATFORMTHEME='qt5ct'
+#export QT_QPA_PLATFORMTHEME='breeze-dark'
+export GTK_THEME=Breeze-Dark
+export GTK2_RC_FILES=/home/franco/.gtkrc-2.0-kde4
+export KDEDIRS=/usr
+#export KDE_FULL_SESSION=true
+export KDE_SESSION_UID=1000
+export KDE_SESSION_VERSION=5
+export XDG_CONFIG_DIRS=/etc/xdg:/usr/share/kde-settings/kde-profile/default/xdg
+export XDG_CURRENT_DESKTOP=KDE
+export XDG_SESSION_DESKTOP=KDE
+export PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/share/pkgconfig

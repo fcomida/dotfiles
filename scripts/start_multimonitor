@@ -1,0 +1,12 @@
+#!/bin/sh
+#pkill compton
+pkill polybar
+xrandr --output HDMI-1 --auto --right-of eDP-1
+sleep 10
+polybar example -c /home/franco/.config/polybar/config
+~/.scripts/paswitch
+feh --bg-fill ~/.config/i3/sardinia.jpg
+#sleep 10
+#compton -b
+#seq 0 3 | xargs -l1 -I@ compton -b -d :0.@
+~/.scripts/start_polybar_on_hdmi

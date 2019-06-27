@@ -1,0 +1,446 @@
+; vim:ft=dosini
+;=====================================================
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/jaagr/polybar
+;
+;   The README contains alot of information
+;
+;=====================================================
+
+[colors]
+#background = #ffffffff
+background = #ff000000
+background-alt = #444
+foreground = #a8a19f
+foreground-alt = #555
+primary = #d5911a
+secondary = #6666ea
+alert = #bd2c40
+col = #00f
+
+[bar/hdmi]
+monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 24
+;offset-x = 1%
+;offset-y = 1%
+;radius = 6.0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f22c40
+
+border-size = 0
+border-color = #00000000
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = "Noto Sans:pixelsize=9:antialias=true:autohint=true;0"
+font-1 = "Source Code Pro for Powerline:pixelsize=9:antialias=true:autohint=true;2"
+font-2 = "Siji:pixelsize=9;1"
+
+#modules-left = i3 powermenu player-mpris-tail
+modules-left = i3 powermenu mpd
+modules-right = volume wlan battery memory cpu temperature xkeyboard popup-calendar
+
+#tray-position = right
+#tray-padding = 0
+;tray-transparent = true
+;tray-background = #0063ff
+
+;wm-restack = bspwm
+#wm-restack = i3
+
+#override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = %{F#6666ea} %{F-}
+format-prefix-foreground = ${colors.foreground-alt}
+format-prefix-underline = ${colors.secondary}
+
+label-layout = %{F#6666ea}%layout%%{F-}
+label-layout-underline = ${colors.secondary}
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+#label-indicator-background = ${colors.secondary}
+#label-indicator-underline = ${colors.secondary}
+label-indicator-background = #6666ea
+label-indicator-foreground = #ffff00
+label-indicator-underline = ${colors.secondary}
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+[module/home]
+type = internal/fs
+interval = 25
+
+mount-0 = /home
+
+label-mounted = %{F#0a81f5}~%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+label-occupied = %index%
+label-occupied-padding = 2
+
+label-urgent = %index%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-empty = %index%
+label-empty-foreground = ${colors.foreground-alt}
+label-empty-padding = 2
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = #1b1918
+;label-focused-background = ${module/bspwm.label-focused-background}
+label-focused-underline = ${module/bspwm.label-focused-underline}
+label-focused-padding = ${module/bspwm.label-focused-padding}
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${module/bspwm.label-urgent-background}
+label-urgent-padding = ${module/bspwm.label-urgent-padding}
+
+[module/mpd]
+type = internal/mpd
+format-online = <label-song> <label-time> <icon-prev> <toggle> <icon-next>
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+#icon-prev = <-
+#icon-stop = X
+#icon-play-prefix = #f00
+#icon-play = (Paused)
+#icon-pause =
+#icon-next = ->
+
+;bar-progress-width = 45
+;bar-progress-indicator = |
+;bar-progress-fill = -
+;bar-progress-empty = -
+
+label-song =  %artist% - %title%
+label-song-maxlen = 70
+label-song-ellipsis = true
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar>
+label = BL
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = #ff
+bar-indicator-font = 2
+bar-fill = ─
+bar-fill-font = 2
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-font = 2
+bar-empty-foreground = ${colors.foreground-alt}
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = %{F#ffff00} %{F-}
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #ffff00
+label = %{F#ffff00}%percentage%%%{F-}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = %{F#00ad9c} %{F-}
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #00ad9c
+label = %{F#00ad9c}%percentage_used%%%{F-}
+
+[module/wlan]
+type = internal/network
+interface = wlp3s0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = #6666ea
+;format-connected-underline = #9f78e1
+label-connected = %{F#6666ea}%essid%%{F-}
+
+;format-disconnected =
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+label-disconnected = no wifi
+label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = #6666ea
+
+[module/eth]
+type = internal/network
+interface = enp2s0f1
+interval = 3.0
+
+format-connected-underline = #5ab738
+;format-connected-underline = ${xrdb:color10}
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+;format-disconnected =
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+label-disconnected = no eth
+label-disconnected-foreground = ${colors.foreground-alt}
+
+[module/date]
+type = internal/date
+interval = 5
+
+;date = " %a, %b %d, %Y"
+;date-alt = " %a, %b %d, %Y at %I:%M%p"
+date = " %d/%m/%Y"
+
+;time = " at %I:%M%p"
+
+# If you're not living in a country where AM and PM is used you can add -alt to the time above this line and comment it using ;, then you can remove the -alt to the time under this line and uncomment it.
+;time-alt = " at %H:%M"
+;time-alt = %H:%M:%S
+time = %H:%M
+
+format-prefix = 
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #407ee7
+;format-underline = #0a6cf5
+
+#label = %date% %time%
+label = %{F#d5911a}%time%%{F-}
+
+[module/volume]
+type = internal/volume
+
+format-volume = <label-volume> <bar-volume>
+label-volume = VOL
+label-volume-foreground = #5ab738
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = VOL OFF
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #5ab738
+bar-volume-foreground-1 = #5ab738
+bar-volume-foreground-2 = #5ab738
+bar-volume-foreground-3 = #5ab738
+bar-volume-foreground-4 = #5ab738
+bar-volume-foreground-5 = #5ab738
+bar-volume-foreground-6 = #f22c40
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = =
+bar-volume-fill-font = 2
+bar-volume-empty = =
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = ADP1
+full-at = 98
+
+;format-charging = Charging... <label-charging>
+format-charging = <animation-charging> %{F#aa0015}<label-charging>%{F-}
+format-charging-underline = #aa0015
+
+;format-discharging = <label-discharging>
+format-discharging = <ramp-capacity> %{F#aa0015}<label-discharging>%{F-}
+format-discharging-underline = ${self.format-charging-underline}
+
+format-full-prefix = %{F#aa0015} %{F-}
+format-full-prefix-foreground = #aa0015
+format-full-underline = ${self.format-charging-underline}
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-foreground = #aa0015
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-foreground = #aa0015
+animation-charging-framerate = 750
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <ramp> <label>
+format-underline = #ffaa00
+;format-underline = #f50a4d
+format-warn = <ramp> <label-warn>
+format-warn-underline = ${self.format-underline}
+
+label = %{F#ffaa00}%temperature-c%%{F-}
+label-warn = %temperature-c%
+label-warn-foreground = #f00
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = #ffaa00
+
+[module/powermenu]
+type = custom/menu
+
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.secondary}
+label-close =  cancella
+label-close-foreground = ${colors.secondary}
+label-separator = |
+label-separator-foreground = ${colors.foreground-alt}
+;label-open = O
+;label-open-foreground = ${colors.secondary}
+;label-close = C cancel
+;label-close-foreground = ${colors.secondary}
+;label-separator = |
+;label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = riavvia
+menu-0-0-exec = menu-open-1
+menu-0-1 = spegni
+menu-0-1-exec = menu-open-2
+menu-0-2 = esci
+menu-0-2-exec = menu-open-3
+
+menu-1-0 = riavvia
+menu-1-0-exec = sudo reboot
+menu-1-1 = cancella
+menu-1-1-exec = menu-open-0
+
+menu-2-0 = spegni
+menu-2-0-exec = sudo poweroff
+menu-2-1 = cancella
+menu-2-1-exec = menu-open-0
+
+menu-3-0 = esci
+menu-3-0-exec = pkill i3
+menu-3-1 = cancella
+menu-3-1-exec = menu-open-0
+
+[module/popup-calendar]
+type = custom/script
+exec = ~/.scripts/popup-calendar.sh
+interval = 5
+click-left = ~/.scripts/popup-calendar.sh --popup
+format-prefix = %{F#407ee7}%{F-}
+format-underline = #407ee7
+label = %{F#407ee7}%output%%{F-}
+
+[module/player-mpris-tail]
+type = custom/script
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+#exec = ~/.scripts/player-mpris-tail.py -f '{icon} {artist} - {title}' --icon-playing  --icon-stopped  --icon-paused 
+exec = ~/.scripts/player-mpris-tail.py --icon-playing  --icon-stopped  --icon-paused  -f '{icon} {:artist:t18:{artist}:}{:artist: - :}{:t20:{title}:}  %{A1:~/.scripts/player-mpris-tail.py previous -b vlc -b plasma-browser-integration:} ⏮ %{A} %{A1:~/.scripts/player-mpris-tail.py play-pause -b vlc -b plasma-browser-integration:} {icon-reversed} %{A} %{A1:~/.scripts/player-mpris-tail.py next -b vlc -b plasma-browser-integration:} ⏭ %{A}' -b vlc -b plasma-browser-integration
+tail = true
+label = %output%
+click-left = ~/.scripts/player-mpris-tail.py previous
+click-right = ~/.scripts/player-mpris-tail.py next
+click-middle = ~/.scripts/player-mpris-tail.py play-pause
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOKEN="311e6c7c9608731d5f25dc9963829bb64578e544"
+TOKEN="OAuth_token_here"
 
 notifications=$(curl -fs https://api.github.com/notifications?access_token=$TOKEN | jq ".[].unread" | grep -c true)
 

@@ -148,7 +148,8 @@ bindsym $mod+o          sticky toggle
 bindsym $mod+Shift+p    exec --no-startup-id mypaint; workspace $ws2
 
 bindsym $mod+Shift+d    exec --no-startup-id dmenu_run
-bindsym $mod+d          exec --no-startup-id rofi -show drun -width 50 -lines 10 -theme ~/.config/rofi/themes/gruvbox-dark.rasi -show-icons -drun-icon-theme Breeze
+#bindsym $mod+d          exec --no-startup-id rofi -show drun -width 50 -lines 10 -theme ~/.config/rofi/themes/gruvbox-dark.rasi -show-icons -drun-icon-theme Breeze
+bindsym $mod+d          exec --no-startup-id rofi -show drun -theme sidebar -show-icons -drun-show-actions
 bindsym $mod+Shift+h    exec --no-startup-id rofi -show ssh -width 50 -lines 10  -theme ~/.config/rofi/themes/gruvbox-dark.rasi -terminal /usr/local/bin/st
 
 bindsym $mod+g          workspace prev
@@ -394,7 +395,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id udiskie -t -f dolphin
 
 # Clipboard manager
-exec --no-startup-id copyq
+exec --no-startup-id "env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' copyq"
 
 # Redshift
 exec --no-startup-id redshift-gtk
@@ -415,5 +416,5 @@ exec --no-startup-id setxkbmap
 exec --no-startup-id /usr/libexec/kf5/polkit-kde-authentication-agent-1
 
 # KDE Connect
-exec --no-startup-id "sleep 5; env XDG_CURRENT_DESKTOP=i3 kdeconnect-indicator"
+exec --no-startup-id "sleep 5; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' kdeconnect-indicator"
 

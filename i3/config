@@ -6,10 +6,8 @@
 #font pango:Noto Sans Bold 10
 font pango:Noto Sans 10
 set $mod Mod4
-#set $term --no-startup-id termite
 set $term --no-startup-id /usr/local/bin/st
-#set $term --no-startup-id tabbed -c -r 2 st -w ''
-#set $stoprec --no-startup-id killall ffmpeg
+
 # SYSTEMD
 set $shutdown sudo shutdown -h now
 set $reboot sudo reboot
@@ -39,7 +37,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi veramente terminare i3?' -b 'Si, termina i3' 'i3-msg exit'"
+bindsym $mod+Shift+e    exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi veramente terminare i3?' -b 'Si, termina i3' 'i3-msg exit'"
 
 # reboot
 bindsym $mod+Shift+BackSpace    exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi riavviare il computer?' -b 'Si, riavvia' '$reboot'"
@@ -92,8 +90,6 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute/u
 exec --no-startup-id pactl set-sink-mute 0 0
 
 # Screen brightness controls
-#bindsym XF86MonBrightnessUp exec --no-startup-id "bash -c 'expr $(cat /sys/class/backlight/intel_backlight/brightness) + 100 | sudo tee /sys/class/backlight/intel_backlight/brightness'"
-#bindsym XF86MonBrightnessDown exec --no-startup-id "bash -c 'expr $(cat /sys/class/backlight/intel_backlight/brightness) - 100 | sudo tee /sys/class/backlight/intel_backlight/brightness'"
 bindsym XF86MonBrightnessUp exec --no-startup-id  light -b -A 5
 bindsym XF86MonBrightnessDown exec --no-startup-id light -b -U 5
 
@@ -102,10 +98,6 @@ bindsym XF86AudioPlay exec --no-startup-id playerctl -p mpd play-pause
 bindsym XF86AudioStop exec --no-startup-id playerctl -p mpd stop
 bindsym XF86AudioNext exec --no-startup-id playerctl -p mpd next
 bindsym XF86AudioPrev exec --no-startup-id playerctl -p mpd previous
-##bindsym XF86AudioPlay exec --no-startup-id mpc toggle
-##bindsym XF86AudioStop exec --no-startup-id mpc stop
-##bindsym XF86AudioNext exec --no-startup-id mpc next
-##bindsym XF86AudioPrev exec --no-startup-id mpc previous
 
 # Volume keys
 bindsym $mod+plus           exec --no-startup-id playerctl volume .05+
@@ -148,9 +140,8 @@ bindsym $mod+o          sticky toggle
 bindsym $mod+Shift+p    exec --no-startup-id mypaint; workspace $ws2
 
 bindsym $mod+Shift+d    exec --no-startup-id dmenu_run
-#bindsym $mod+d          exec --no-startup-id rofi -show drun -width 50 -lines 10 -theme ~/.config/rofi/themes/gruvbox-dark.rasi -show-icons -drun-icon-theme Breeze
-bindsym $mod+d          exec --no-startup-id rofi -show drun -theme sidebar -show-icons -drun-show-actions
-bindsym $mod+Shift+h    exec --no-startup-id rofi -show ssh -width 50 -lines 10  -theme ~/.config/rofi/themes/gruvbox-dark.rasi -terminal /usr/local/bin/st
+bindsym $mod+d          exec --no-startup-id rofi -show drun -theme sidebar -show-icons -drun-show-actions -icon-theme breeze-dark
+bindsym $mod+Shift+h    exec --no-startup-id rofi -show ssh -width 50 -lines 10  -theme Monokai -terminal $term
 
 bindsym $mod+g          workspace prev
 bindsym $mod+Shift+g    exec --no-startup-id gimp; workspace $ws2
@@ -159,14 +150,9 @@ bindsym $mod+x          exec --no-startup-id ~/.config/i3/lock.sh
 
 bindsym $mod+c          exec --no-startup-id ~/.scripts/camtoggle
 
-#bindsym $mod+m          exec --no-startup-id urxvt256c-ml -e ncmpcpp
-#bindsym $mod+m          exec --no-startup-id  $term -e ncmpcpp -c ~/.ncmpcpp/config
 bindsym $mod+m          exec --no-startup-id  $term -e ncmpcpp
 
 bindsym $mod+Shift+v    exec --no-startup-id projectMSDL
-
-#bindsym $mod+b         bar mode toggle
-#bindsym $mod+Shift+b   floating toggle; sticky toggle; exec --no-startup-id bottomleft
 
 bindsym $mod+Shift+s    exec --no-startup-id tabbed surf -e
 
@@ -216,13 +202,10 @@ bindsym $mod+Next           workspace next
 bindsym $mod+Shift+Next     move container to workspace next
 bindsym $mod+Tab            workspace back_and_forth
 bindsym $mod+XF86Back       workspace prev
-##bindsym $mod+Shift+XF86Back
 bindsym $mod+XF86Forward    workspace next
-##bindsym $mod+Shift+XF86Forward
 bindsym $mod+semicolon      workspace next
 bindsym $mod+apostrophe     split horizontal ;; exec $term
 bindsym $mod+slash          split vertical ;; exec $term
-##bindsym $mod+Shift+slash    kill
 bindsym $mod+backslash      workspace back_and_forth
 
 ## Manual management of external displays
@@ -307,11 +290,9 @@ bindsym $mod+F5     exec --no-startup-id $netrefresh
 ##bindsym $mod+F7
 ##bindsym $mod+F8
 bindsym $mod+F9     exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
-##bindsym $mod+F10    exec --no-startup-id dmenuumount
 bindsym $mod+F10 exec --no-startup-id ~/.local/bin/quickswitch.py -j -e -f -C Polybar
 bindsym $mod+F11 exec --no-startup-id ~/.local/bin/quickswitch.py -m -C Polybar
 bindsym $mod+F12 exec --no-startup-id ~/.local/bin/quickswitch.py -C Polybar
-
 
 # #---Arrow Keys---# #
 bindsym $mod+Left       focus left
@@ -327,18 +308,13 @@ bindsym $mod+Shift+Right    move right
 bindsym Print           exec --no-startup-id spectacle
 #bindsym Shift+Print     exec --no-startup-id scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/shots/'
 bindsym Shift+Print     exec --no-startup-id maim -s ~/shots/$(date +%s).png
-#bindsym $mod+Print      exec --no-startup-id dmenurecord
-#bindsym $mod+Print      exec --no-startup-id dmenurecord
-#bindsym $mod+Scroll_Lock    exec --no-startup-id "killall screenkey || screenkey"
-#bindsym $mod+Delete     exec $stoprec
-#bindsym XF86Launch1     exec $stoprec & xset dpms force off
 
 # #---Extra XF86 Keys---# #
 # These are the extra media keys that some keyboards have.
 bindsym XF86Calculator  exec --no-startup-id kcalc
 bindsym XF86Sleep       exec sudo zzz
 bindsym XF86WWW         exec --no-startup-id firefox
-bindsym XF86ScreenSaver     exec --no-startup-id ~/.scripts/monitor-off
+bindsym XF86ScreenSaver exec --no-startup-id ~/.scripts/monitor-off
 bindsym XF86WebCam      exec --no-startup-id ~/.scripts/camtoggle
 
 for_window [class="(?i)qsynth"] floating enable
@@ -385,8 +361,8 @@ exec --no-startup-id mpDris2
 # Runs the key remapping scripts
 #exec --no-startup-id ~/.scripts/remaps
 
-# Unclutter makes the mouse invisible after a brief period
-#exec --no-startup-id unclutter
+# xbanish - hide the X11 mouse cursor when a key is pressed
+exec --no-startup-id xbanish
 
 # Network Manager applet
 exec --no-startup-id nm-applet

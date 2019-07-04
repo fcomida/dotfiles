@@ -6,7 +6,7 @@
 #font pango:Noto Sans Bold 10
 font pango:Noto Sans 10
 set $mod Mod4
-set $term --no-startup-id /usr/local/bin/st
+set $term /usr/local/bin/st
 
 # SYSTEMD
 set $shutdown sudo shutdown -h now
@@ -127,13 +127,13 @@ bindsym $mod+Shift+q    kill
 
 bindsym $mod+Shift+w    exec --no-startup-id firefox
 
-bindsym $mod+r          exec $term -t vifm -e vifm
+bindsym $mod+r          exec --no-startup-id $term -t vifm -e vifm
 
 bindsym $mod+t          split toggle
 
 bindsym $mod+u          [title="dropdown"] scratchpad show; [title="dropdown"] move position center
 
-bindsym $mod+i          exec $term -e htop
+bindsym $mod+i          exec --no-startup-id $term -e htop
 
 bindsym $mod+o          sticky toggle
 
@@ -159,16 +159,16 @@ bindsym $mod+Shift+s    exec --no-startup-id tabbed surf -e
 # Resize window (you can also use the mouse for that)
 bindsym $mod+p mode "resize"
 mode "resize" {
-        bindsym j resize shrink width 5 px or 5 ppt
-        bindsym k resize grow height 5 px or 5 ppt
-        bindsym l resize shrink height 5 px or 5 ppt
-        bindsym ograve resize grow width 5 px or 5 ppt
+        bindsym h resize shrink width 2 px or 2 ppt
+        bindsym k resize grow height 2 px or 2 ppt
+        bindsym j resize shrink height 2 px or 2 ppt
+        bindsym l resize grow width 2 px or 2 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 5 px or 5 ppt
+        bindsym Down resize grow height 5 px or 5 ppt
+        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Right resize grow width 5 px or 5 ppt
 
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
@@ -204,8 +204,8 @@ bindsym $mod+Tab            workspace back_and_forth
 bindsym $mod+XF86Back       workspace prev
 bindsym $mod+XF86Forward    workspace next
 bindsym $mod+semicolon      workspace next
-bindsym $mod+apostrophe     split horizontal ;; exec $term
-bindsym $mod+slash          split vertical ;; exec $term
+bindsym $mod+apostrophe     split horizontal ;; exec --no-startup-id $term
+bindsym $mod+slash          split vertical ;; exec --no-startup-id $term
 bindsym $mod+backslash      workspace back_and_forth
 
 ## Manual management of external displays
@@ -289,7 +289,7 @@ bindsym $mod+F5     exec --no-startup-id $netrefresh
 ##bindsym $mod+F6     exec --no-startup-id $term -e transmission-remote-cli
 ##bindsym $mod+F7
 ##bindsym $mod+F8
-bindsym $mod+F9     exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
+bindsym $mod+F9  exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
 bindsym $mod+F10 exec --no-startup-id ~/.local/bin/quickswitch.py -j -e -f -C Polybar
 bindsym $mod+F11 exec --no-startup-id ~/.local/bin/quickswitch.py -m -C Polybar
 bindsym $mod+F12 exec --no-startup-id ~/.local/bin/quickswitch.py -C Polybar

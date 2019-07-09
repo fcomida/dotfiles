@@ -122,7 +122,6 @@ vnoremap <C-c> "+y
 "let mapleader = ','
 let mapleader = ' '
 "map <leader>( a()<ESC>i
-map <Leader>f iciao franco<ESC>
 map <Leader>( a<CR>{<CR><ESC>o<ESC>i}<ESC>ki<TAB>
 map <C-n> :NERDTreeToggle<CR>
 map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
@@ -176,6 +175,13 @@ autocmd BufWrite * :call DeleteTrailingWhiteSpace()
 " Automatic reloading of .vimrc file
 "autocmd! bufwritepost .vimrc source %
 
+" Enable filetype plugins
+filetype plugin on
+filetype indent on
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
 " Buffer (File) Options:
 set hidden                     " Edit multiple unsaved files at the same time
 set confirm                    " Prompt to save unsaved changes when exiting
@@ -205,22 +211,40 @@ set cmdheight=2                " Prevent "Press Enter" messages
 set statusline=%f%m%r%h%w\ [%n:%{&ff}/%Y]%=[0x\%04.4B][%03v][%p%%\ line\ %l\ of\ %L]
 
 "
-set dict=/usr/share/dict/words
 set cursorline
 set ruler
 syntax enable
 set synmaxcol=0
-""set term=xterm-256color
 set display=uhex
 set shortmess+=aAIsT
 set nowrap
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use spaces instead of tabs
+set expandtab
+" Be smart when using tabs ;)
+set smarttab
+
+" 1 tab == 4 spaces
+set shiftwidth=4
 set tabstop=4
 set softtabstop=4
-set shiftwidth=4
-set expandtab
+
+set smartindent
+set autoindent
+
 set smartcase
 set relativenumber
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Files, backups and undo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nowritebackup
+set nobackup
+set noswapfile
 
 set showmatch
 set matchtime=1
@@ -246,7 +270,9 @@ set tags+=~/.vim/tags/qt5-widgets
 set tags+=~/.vim/tags/qt5-concurrent
 set tags+=~/.vim/tags/qt5-printsupport
 
+""""""""""""""""""""""""""""""""""""""""""""""
 " OmniCppComplete
+""""""""""""""""""""""""""""""""""""""""""""""
 let OmniCpp_NamespaceSearch = 1
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
@@ -258,11 +284,11 @@ let OmniCpp_DefaultNamespaces = ['std', '_GLIBCXX_STD']
 " automatically open and close the popup menu / preview window
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
+
+""""""""""""""""""""""""""""""""""""""""""""""
+" COLORS
+""""""""""""""""""""""""""""""""""""""""""""""
 set grepprg=grep\ -nH\ $*
-filetype indent on
-set smartindent
-set autoindent
-set laststatus=2
 set t_Co=256
 set background=dark
 " let st terminal display true colors
@@ -282,11 +308,18 @@ endif
 let g:gruvbox_contrast_dark='hard'
 let g:solarized_termcolors=256
 let g:palenight_terminal_italics=1
-colorscheme palenight
+try
+    colorscheme palenight
+catch
+endtry
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntastic
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
@@ -301,12 +334,17 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 let g:syntastic_cpp_check_header = 1
 let g:syntastic_cpp_auto_refresh_includes = 1
-""let g:syntastic_vim_checkers = ['vint']
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ultisnip
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsExpandTrigger='<tab>'
 let g:UltiSnipsJumpForwardTrigger='<c-j>'
 let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Airline
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_theme='jellybeans'
 let g:airline_powerline_fonts = 1
 let g:promptline_theme = 'jelly'

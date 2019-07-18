@@ -83,6 +83,9 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+Shift+a focus child
 
+# hide/show polybar
+bindsym $mod+Shift+b exec --no-startup-id polybar-msg cmd toggle
+
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
@@ -342,17 +345,14 @@ exec --no-startup-id compton
 
 # Setting the background:
 #exec_always --no-startup-id feh --bg-fill ~/.config/i3/sardinia.jpg
-exec_always --no-startup-id "sleep 3; feh --bg-fill ~/.config/i3/001.png"
+exec_always --no-startup-id "sleep 1; feh --bg-fill ~/.config/i3/001.png"
 
 # Launch Polybar where appropriate:
 #exec --no-startup-id "sleep 2; polybar top -c ~/.config/polybar/config &"
-exec --no-startup-id "sleep 3; polybar top -r &"
+exec --no-startup-id "sleep 5; polybar top -r &"
 
 # Starts dunst for notifications:
 exec --no-startup-id dunst
-
-# Music player daemon:
-exec --no-startup-id mpDris2
 
 # Torrent daemon:
 #exec --no-startup-id transmission-daemon
@@ -381,9 +381,9 @@ exec --no-startup-id xinput set-prop 14 289 1
 exec --no-startup-id xinput set-prop 14 309 0.8
 
 # Conky
-exec --no-startup-id "sleep 1; conky -c ~/.conky/conkyrc_i3"
-exec --no-startup-id "sleep 1; conky -c ~/.conky/Gotham/Gotham_i3"
-exec --no-startup-id "sleep 1; cd ~/.conky-weather/; ./run"
+exec --no-startup-id "sleep 10; conky -c ~/.conky/conkyrc_i3"
+exec --no-startup-id "sleep 10; conky -c ~/.conky/Gotham/Gotham_i3"
+exec --no-startup-id "sleep 10; cd ~/.conky-weather/; ./run"
 
 # IT keymap
 exec --no-startup-id setxkbmap

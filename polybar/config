@@ -28,6 +28,8 @@ height = 24
 ;radius = 6.0
 fixed-center = false
 
+enable-ipc=true
+
 background = ${colors.background}
 foreground = ${colors.foreground}
 
@@ -78,10 +80,10 @@ blacklist-0 = num lock
 
 format-prefix = %{F#6666ea} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
+#format-prefix-underline = ${colors.secondary}
 
 label-layout = %{F#6666ea}%layout%%{F-}
-label-layout-underline = ${colors.secondary}
+#label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 2
 label-indicator-margin = 1
@@ -89,7 +91,7 @@ label-indicator-margin = 1
 #label-indicator-underline = ${colors.secondary}
 label-indicator-background = #6666ea
 label-indicator-foreground = #ffff00
-label-indicator-underline = ${colors.secondary}
+#label-indicator-underline = ${colors.secondary}
 
 [module/filesystem]
 type = internal/fs
@@ -126,7 +128,8 @@ label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
 label-focused = %index%
-label-focused-background = #1b1918
+#label-focused-background = #1b1918
+label-focused-background = #00004d
 label-focused-underline= ${colors.primary}
 label-focused-padding = 2
 
@@ -137,7 +140,7 @@ label-unfocused-padding = 2
 ; visible = Active workspace on unfocused monitor
 label-visible = %index%
 label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
+#label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
@@ -193,7 +196,7 @@ type = internal/cpu
 interval = 2
 format-prefix = %{F#ffff00} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #ffff00
+#format-underline = #ffff00
 label = %{F#ffff00}%percentage%%%{F-}
 
 [module/memory]
@@ -201,7 +204,7 @@ type = internal/memory
 interval = 2
 format-prefix = %{F#00ad9c} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #00ad9c
+#format-underline = #00ad9c
 label = %{F#00ad9c}%percentage_used%%%{F-}
 
 [module/wlan]
@@ -210,12 +213,12 @@ interface = wlp3s0
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #6666ea
+#format-connected-underline = #6666ea
 label-connected = %{F#6666ea}%essid%%{F-}
 
 ;format-disconnected =
 format-disconnected = <label-disconnected>
-format-disconnected-underline = ${self.format-connected-underline}
+#format-disconnected-underline = ${self.format-connected-underline}
 label-disconnected = no wifi
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -231,14 +234,14 @@ type = internal/network
 interface = enp2s0f1
 interval = 3.0
 
-format-connected-underline = #5ab738
+#format-connected-underline = #5ab738
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 
 ;format-disconnected =
 format-disconnected = <label-disconnected>
-format-disconnected-underline = ${self.format-connected-underline}
+#format-disconnected-underline = ${self.format-connected-underline}
 label-disconnected = no eth
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -256,7 +259,7 @@ time = %H:%M
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #407ee7
+#format-underline = #407ee7
 
 label = %{F#d5911a}%time%%{F-}
 
@@ -275,7 +278,8 @@ ramp-volume-2 = 
 ramp-volume-3 = 
 ramp-volume-foreground= #5ab738
 
-format-volume-underline = #5ab738
+#format-volume-underline = #5ab738
+#format-muted-underline = #ff0000
 
 format-muted-prefix =
 label-muted = %{F#ff0000}  spento%{F-}
@@ -305,15 +309,15 @@ full-at = 98
 
 ;format-charging = Charging... <label-charging>
 format-charging = <animation-charging> %{F#aa0015}<label-charging>%{F-}
-format-charging-underline = #aa0015
+#format-charging-underline = #aa0015
 
 ;format-discharging = <label-discharging>
 format-discharging = <ramp-capacity> %{F#aa0015}<label-discharging>%{F-}
-format-discharging-underline = ${self.format-charging-underline}
+#format-discharging-underline = ${self.format-charging-underline}
 
 format-full-prefix = %{F#aa0015} %{F-}
 format-full-prefix-foreground = #aa0015
-format-full-underline = ${self.format-charging-underline}
+#format-full-underline = ${self.format-charging-underline}
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -332,9 +336,9 @@ thermal-zone = 0
 warn-temperature = 60
 
 format = <ramp> <label>
-format-underline = #ffaa00
+#format-underline = #ffaa00
 format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
+#format-warn-underline = ${self.format-underline}
 
 label = %{F#ffaa00}%temperature-c%%{F-}
 label-warn = %temperature-c%
@@ -385,7 +389,7 @@ exec = ~/.scripts/popup-calendar-kde.sh
 interval = 5
 click-left = ~/.scripts/popup-calendar-kde.sh --popup
 format-prefix = %{F#55ff00}%{F-}
-format-underline = #55ff00
+#format-underline = #55ff00
 label = %{F#55ff00}%output%%{F-}
 
 [module/player-mpris-simple]

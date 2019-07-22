@@ -51,6 +51,7 @@ font-2 = "Siji:size=9;1"
 font-3 = "Noto Color Emoji:size=9;1"
 font-4 = "OpenSymbol:size=9;0"
 font-5 = "Font Awesome"
+font-6 = "Font Awesome 5 Brands Regular:style=Regular"
 
 #modules-left = i3 powermenu player-mpris-tail
 #modules-left = i3 powermenu player-mpris-simple
@@ -424,11 +425,13 @@ label = %{T5}%output%%{T-}
 [module/notification-github]
 type = custom/script
 exec = ~/.scripts/notification-github.sh
+label = %{F#ffff00}%{T6} %output%%{T-}%{F-}
 interval = 60
 
 [module/updates-fedora]
 type = custom/script
 exec = ~/.scripts/updates-fedora.sh
+label = %{F#ffff00}%{T6} %output%%{T-}%{F-}
 interval = 600
 
 [settings]

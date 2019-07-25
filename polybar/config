@@ -425,13 +425,13 @@ label = %{T5}%output%%{T-}
 [module/notification-github]
 type = custom/script
 exec = ~/.scripts/notification-github.sh
-label = %{F#ffff00}%{T6} %output%%{T-}%{F-}
+label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
 interval = 60
 
 [module/updates-fedora]
 type = custom/script
 exec = ~/.scripts/updates-fedora.sh
-label = %{F#ffff00}%{T6} %output%%{T-}%{F-}
+label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
 interval = 600
 
 [settings]

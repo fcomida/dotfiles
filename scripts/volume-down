@@ -1,0 +1,3 @@
+#!/bin/sh
+index=$(pacmd list-sinks | awk '$1 == "*" && $2 == "index:" {print $3}')
+pactl set-sink-volume $index -5%

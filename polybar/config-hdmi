@@ -44,25 +44,24 @@ module-margin-left = 1
 module-margin-right = 2
 
 font-0 = "Noto Sans:pixelsize=9:antialias=true:autohint=true;0"
-font-1 = "Source Code Pro for Powerline:pixelsize=9:antialias=true:autohint=true;2"
-font-2 = "Siji:pixelsize=9;1"
+font-1 = "Font Awesome 5 Free:style=Solid:size=9;0"
+font-2 = "Siji:size=9;1"
+font-3 = "Noto Color Emoji:size=9;1"
+font-4 = "OpenSymbol:size=9;0"
+font-5 = "Font Awesome"
+font-6 = "Font Awesome 5 Brands Regular:style=Regular"
 
 #modules-left = i3 powermenu player-mpris-tail
-modules-left = i3 powermenu mpd
-modules-right = volume wlan battery memory cpu temperature xkeyboard popup-calendar
+modules-left = i3
+modules-right = volume wlan battery memory cpu temperature popup-calendar xkeyboard
 
 #tray-position = right
 #tray-padding = 0
 ;tray-transparent = true
 ;tray-background = #0063ff
 
-;wm-restack = bspwm
 #wm-restack = i3
-
 #override-redirect = true
-
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
 
 scroll-up = i3wm-wsnext
 scroll-down = i3wm-wsprev
@@ -77,18 +76,14 @@ blacklist-0 = num lock
 
 format-prefix = %{F#6666ea} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
 
 label-layout = %{F#6666ea}%layout%%{F-}
-label-layout-underline = ${colors.secondary}
 
 label-indicator-padding = 2
 label-indicator-margin = 1
 #label-indicator-background = ${colors.secondary}
-#label-indicator-underline = ${colors.secondary}
 label-indicator-background = #6666ea
 label-indicator-foreground = #ffff00
-label-indicator-underline = ${colors.secondary}
 
 [module/filesystem]
 type = internal/fs
@@ -110,25 +105,6 @@ label-mounted = %{F#0a81f5}~%{F-}: %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground-alt}
 
-[module/bspwm]
-type = internal/bspwm
-
-label-focused = %index%
-label-focused-background = ${colors.background-alt}
-label-focused-underline= ${colors.primary}
-label-focused-padding = 2
-
-label-occupied = %index%
-label-occupied-padding = 2
-
-label-urgent = %index%!
-label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
-
-label-empty = %index%
-label-empty-foreground = ${colors.foreground-alt}
-label-empty-padding = 2
-
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
@@ -144,41 +120,34 @@ label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
 label-focused = %index%
-label-focused-background = #1b1918
-;label-focused-background = ${module/bspwm.label-focused-background}
-label-focused-underline = ${module/bspwm.label-focused-underline}
-label-focused-padding = ${module/bspwm.label-focused-padding}
+label-focused-background = #00004d
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
 
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = %index%
-label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+label-unfocused-padding = 2
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %index%
 label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %index%
-label-urgent-background = ${module/bspwm.label-urgent-background}
-label-urgent-padding = ${module/bspwm.label-urgent-padding}
+label-urgent = %index%!
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
 
 [module/mpd]
 type = internal/mpd
-format-online = <label-song> <label-time> <icon-prev> <toggle> <icon-next>
+format-online = <label-song> <label-time>
 
 icon-prev = 
 icon-stop = 
 icon-play = 
 icon-pause = 
 icon-next = 
-#icon-prev = <-
-#icon-stop = X
-#icon-play-prefix = #f00
-#icon-play = (Paused)
-#icon-pause =
-#icon-next = ->
 
 ;bar-progress-width = 45
 ;bar-progress-indicator = |
@@ -186,7 +155,7 @@ icon-next = 
 ;bar-progress-empty = -
 
 label-song =  %artist% - %title%
-label-song-maxlen = 70
+label-song-maxlen = 45
 label-song-ellipsis = true
 
 [module/xbacklight]
@@ -216,7 +185,6 @@ type = internal/cpu
 interval = 2
 format-prefix = %{F#ffff00} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #ffff00
 label = %{F#ffff00}%percentage%%%{F-}
 
 [module/memory]
@@ -224,7 +192,6 @@ type = internal/memory
 interval = 2
 format-prefix = %{F#00ad9c} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #00ad9c
 label = %{F#00ad9c}%percentage_used%%%{F-}
 
 [module/wlan]
@@ -233,14 +200,10 @@ interface = wlp3s0
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #6666ea
-;format-connected-underline = #9f78e1
 label-connected = %{F#6666ea}%essid%%{F-}
 
 ;format-disconnected =
 format-disconnected = <label-disconnected>
-format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
 label-disconnected = no wifi
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -256,16 +219,12 @@ type = internal/network
 interface = enp2s0f1
 interval = 3.0
 
-format-connected-underline = #5ab738
-;format-connected-underline = ${xrdb:color10}
 format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 
 ;format-disconnected =
 format-disconnected = <label-disconnected>
-format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
 label-disconnected = no eth
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -273,11 +232,8 @@ label-disconnected-foreground = ${colors.foreground-alt}
 type = internal/date
 interval = 5
 
-;date = " %a, %b %d, %Y"
-;date-alt = " %a, %b %d, %Y at %I:%M%p"
 date = " %d/%m/%Y"
 
-;time = " at %I:%M%p"
 
 # If you're not living in a country where AM and PM is used you can add -alt to the time above this line and comment it using ;, then you can remove the -alt to the time under this line and uncomment it.
 ;time-alt = " at %H:%M"
@@ -286,22 +242,26 @@ time = %H:%M
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #407ee7
-;format-underline = #0a6cf5
 
-#label = %date% %time%
 label = %{F#d5911a}%time%%{F-}
 
 [module/volume]
-type = internal/volume
+type = internal/pulseaudio
 
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL
 label-volume-foreground = #5ab738
 
-format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground-alt}
-label-muted = VOL OFF
+
+format-volume = <ramp-volume> <bar-volume>
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-3 = 
+ramp-volume-foreground= #5ab738
+
+format-muted-prefix =
+label-muted = %{F#ff0000}  spento%{F-}
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #5ab738
@@ -312,11 +272,11 @@ bar-volume-foreground-4 = #5ab738
 bar-volume-foreground-5 = #5ab738
 bar-volume-foreground-6 = #f22c40
 bar-volume-gradient = false
-bar-volume-indicator = |
+bar-volume-indicator =
 bar-volume-indicator-font = 2
-bar-volume-fill = =
+bar-volume-fill = 
 bar-volume-fill-font = 2
-bar-volume-empty = =
+bar-volume-empty = 
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
@@ -328,15 +288,12 @@ full-at = 98
 
 ;format-charging = Charging... <label-charging>
 format-charging = <animation-charging> %{F#aa0015}<label-charging>%{F-}
-format-charging-underline = #aa0015
 
 ;format-discharging = <label-discharging>
 format-discharging = <ramp-capacity> %{F#aa0015}<label-discharging>%{F-}
-format-discharging-underline = ${self.format-charging-underline}
 
 format-full-prefix = %{F#aa0015} %{F-}
 format-full-prefix-foreground = #aa0015
-format-full-underline = ${self.format-charging-underline}
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -355,10 +312,7 @@ thermal-zone = 0
 warn-temperature = 60
 
 format = <ramp> <label>
-format-underline = #ffaa00
-;format-underline = #f50a4d
 format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
 
 label = %{F#ffaa00}%temperature-c%%{F-}
 label-warn = %temperature-c%
@@ -380,12 +334,6 @@ label-close =  cancella
 label-close-foreground = ${colors.secondary}
 label-separator = |
 label-separator-foreground = ${colors.foreground-alt}
-;label-open = O
-;label-open-foreground = ${colors.secondary}
-;label-close = C cancel
-;label-close-foreground = ${colors.secondary}
-;label-separator = |
-;label-separator-foreground = ${colors.foreground-alt}
 
 menu-0-0 = riavvia
 menu-0-0-exec = menu-open-1
@@ -411,12 +359,19 @@ menu-3-1-exec = menu-open-0
 
 [module/popup-calendar]
 type = custom/script
-exec = ~/.scripts/popup-calendar.sh
+exec = ~/.scripts/popup-calendar-kde.sh
 interval = 5
-click-left = ~/.scripts/popup-calendar.sh --popup
-format-prefix = %{F#407ee7}%{F-}
-format-underline = #407ee7
-label = %{F#407ee7}%output%%{F-}
+click-left = ~/.scripts/popup-calendar-kde.sh --popup
+format-prefix = %{F#55ff00}%{F-}
+label = %{F#55ff00}%output%%{F-}
+
+[module/player-mpris-simple]
+type = custom/script
+exec = ~/.scripts/player-mpris-simple.sh
+interval = 3
+click-left = playerctl previous
+click-right = playerctl next
+click-middle = playerctl play-pause
 
 [module/player-mpris-tail]
 type = custom/script
@@ -432,6 +387,24 @@ label = %output%
 click-left = ~/.scripts/player-mpris-tail.py previous
 click-right = ~/.scripts/player-mpris-tail.py next
 click-middle = ~/.scripts/player-mpris-tail.py play-pause
+
+[module/kdeconnect]
+type = custom/script
+exec = ". ~/.scripts/polybar-kdeconnect.sh; show_devices"
+tail = true
+label = %{T5}%output%%{T-}
+
+[module/notification-github]
+type = custom/script
+exec = ~/.scripts/notification-github.sh
+label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
+interval = 60
+
+[module/updates-fedora]
+type = custom/script
+exec = ~/.scripts/updates-fedora.sh
+label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
+interval = 600
 
 [settings]
 screenchange-reload = true

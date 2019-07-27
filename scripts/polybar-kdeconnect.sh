@@ -6,7 +6,7 @@ YOFFSET=0
 XOFFSET=0
 WIDTH=24
 WIDTH_WIDE=48
-THEME=solarized
+THEME=Monokai
 
 # Color Settings of Icon shown in Polybar
 COLOR_DISCONNECTED='#000'       # Device Disconnected

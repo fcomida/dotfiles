@@ -6,7 +6,7 @@ YOFFSET=0
 XOFFSET=0
 WIDTH=24
 WIDTH_WIDE=48
-THEME=solarized
+THEME=Monokai
 
 menu="$(rofi -sep "|" -dmenu -i -p "$1" -location $LOCATION -yoffset $YOFFSET -xoffset $XOFFSET -theme $THEME -width $WIDTH -hide-scrollbar -line-padding 4 -padding 20 -lines 5 <<< "Chiudi la sessione|Blocca lo schermo|Sospendi in RAM|Spegni il computer|Riavvia il computer")"
                 case "$menu" in

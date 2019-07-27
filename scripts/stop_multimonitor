@@ -1,8 +1,6 @@
 #!/bin/sh
 pkill polybar
 xrandr --output HDMI-1 --auto --off
-sleep 10
-polybar example -c /home/franco/.config/polybar/config
+sleep 5
+polybar top -r &
 ~/.scripts/parestore
-#sleep 10
-#compton -b

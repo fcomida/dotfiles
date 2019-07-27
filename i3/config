@@ -87,9 +87,9 @@ bindsym $mod+Shift+a focus child
 bindsym $mod+Shift+b exec --no-startup-id polybar-msg cmd toggle
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute/unmute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.scripts/volume-up #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/.scripts/volume-down #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id ~/.scripts/volume-toggle # mute/unmute sound
 exec --no-startup-id pactl set-sink-mute 0 0
 
 # Screen brightness controls
@@ -130,7 +130,7 @@ bindsym $mod+Shift+q    kill
 
 bindsym $mod+Shift+w    exec --no-startup-id firefox
 
-bindsym $mod+r          exec --no-startup-id $term -t vifm -e vifm
+bindsym $mod+r          exec --no-startup-id $term -t vifm -e ~/.local/bin/vifm
 
 bindsym $mod+t          split toggle
 
@@ -292,6 +292,7 @@ bindsym $mod+F3 scratchpad show
 bindsym $mod+F1     exec --no-startup-id okular ~/.config/i3/i3_guide.pdf
 bindsym $mod+F4     exec --no-startup-id $suspend
 bindsym $mod+F5     exec --no-startup-id $netrefresh
+bindsym $mod+F6     exec --no-startup-id ~/.scripts/paswitch #switch audio card
 ##bindsym $mod+F6     exec --no-startup-id $term -e transmission-remote-cli
 ##bindsym $mod+F7
 ##bindsym $mod+F8
@@ -348,14 +349,14 @@ exec --no-startup-id compton
 
 # Setting the background:
 #exec_always --no-startup-id feh --bg-fill ~/.config/i3/sardinia.jpg
-exec_always --no-startup-id "sleep 1; feh --bg-fill ~/.config/i3/001.png"
+exec_always --no-startup-id "sleep 2; feh --bg-fill ~/.config/i3/001.png"
 
 # Launch Polybar where appropriate:
 #exec --no-startup-id "sleep 2; polybar top -c ~/.config/polybar/config &"
-exec --no-startup-id "sleep 5; polybar top -r &"
+exec --no-startup-id "sleep 3; polybar top -r"
 
 # Starts dunst for notifications:
-exec --no-startup-id dunst
+exec --no-startup-id "sleep 5; dunst"
 
 # Torrent daemon:
 #exec --no-startup-id transmission-daemon
@@ -368,16 +369,16 @@ exec --no-startup-id dunst
 exec --no-startup-id xbanish
 
 # Network Manager applet
-exec --no-startup-id nm-applet
+exec --no-startup-id "sleep 5; nm-applet"
 
 # Automounter
-exec --no-startup-id udiskie -t -f dolphin
+exec --no-startup-id "sleep 5; udiskie -t -f dolphin"
 
 # Clipboard manager
-exec --no-startup-id "env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' copyq"
+exec --no-startup-id "sleep 5; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' copyq"
 
 # Redshift
-exec --no-startup-id redshift-gtk
+exec --no-startup-id "sleep 5; redshift-gtk"
 
 # Touchpad tap and speed
 exec --no-startup-id xinput set-prop 14 289 1

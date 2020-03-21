@@ -1,4 +1,3 @@
-#!/bin/sh
 #!/usr/bin/env sh
 
 # Terminate already running bar instances
@@ -7,29 +6,6 @@ killall -q polybar
 # Wait until the processes have been shut down
 while pgrep -x polybar >/dev/null; do sleep 1; done
 
-# Launch bar1 and bar2
-#polybar example &
+# Launch bar
+polybar top -r &
 
-#for i in $(polybar -m | awk -F: '{print $1}'); do MONITOR=$i polybar example -c ~/.config/polybar/config & done
-#feh --bg-fill ~/.config/i3/sardinia.jpg
-
-#for i in $(polybar -m | awk -F: '{print $1}'); do
-#    MONITOR=$i
-#    if [ MONITOR == "eDP-1" ]; then
-#        echo $MONITOR
-#        MONITOR=$i polybar example -c ~/.config/polybar/config &
-#    else
-#        echo $MONITOR
-#        MONITOR=$i polybar example -c ~/.config/polybar/config-hdmi &
-#    fi
-#done
-i=$(polybar -m | awk -F: '{print $1}')
-if [ $i -eq "0" ]; then
-    echo $i
-    echo "ONE MONITOR"
-else
-    echo $i
-    echo "TWO MONITORS"
-fi
-
-echo "Bars launched..."

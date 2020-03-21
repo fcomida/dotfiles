@@ -16,6 +16,8 @@ Plugin 'vim-airline/vim-airline'
 
 Plugin 'vim-airline/vim-airline-themes'
 
+Plugin 'arcticicestudio/nord-vim'
+
 Plugin 'edkolev/tmuxline.vim'
 
 Plugin 'edkolev/promptline.vim'
@@ -308,8 +310,11 @@ endif
 let g:gruvbox_contrast_dark='hard'
 let g:solarized_termcolors=256
 let g:palenight_terminal_italics=1
+let g:nord_italic=1
+let g:nord_italic_comments=1
+unlet g:c_comment_strings
 try
-    colorscheme palenight
+    colorscheme nord
 catch
 endtry
 
@@ -326,7 +331,7 @@ let g:cpp_class_decl_highlight = 1
 
 let g:syntastic_debug = 0
 let g:syntastic_cpp_compiler_options = '-std=gnu++11 -fPIC -Wno-deprecated-declarations'
-let g:syntastic_cpp_include_dirs = ['./src', './build/src', '/usr/include','/usr/include/qt5','/usr/include/qt5/QtCore','/usr/include/qt5/QtGui','/usr/include/qt5/QtWidgets','/usr/include/qt5/QtConcurrent','/usr/include/qt5/QtSql','/usr/include/qt5/QtXml','/usr/include/qt5/QtWebEngineWidgets','/usr/include/qt5/QtNetwork','/usr/include/exiv2','/usr/include/OpenEXR','/usr/include/cfitsio','/usr/include/eigen3']
+let g:syntastic_cpp_include_dirs = ['./librtprocess/src/include', './src', './build/src', '/usr/include','/usr/include/qt5','/usr/include/qt5/QtCore','/usr/include/qt5/QtGui','/usr/include/qt5/QtWidgets','/usr/include/qt5/QtConcurrent','/usr/include/qt5/QtSql','/usr/include/qt5/QtXml','/usr/include/qt5/QtWebEngineWidgets','/usr/include/qt5/QtNetwork','/usr/include/exiv2','/usr/include/OpenEXR','/usr/include/cfitsio','/usr/include/eigen3']
 let g:syntastic_ignore_files = ['\m\c\<ui_[^/]*\.h$', '\m\c\<config\.h$', '\m\c\<global[^/]*$']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -345,6 +350,51 @@ let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " Airline
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='jellybeans'
-let g:airline_powerline_fonts = 1
-let g:promptline_theme = 'jelly'
+if &term != "linux"
+    let g:airline_theme='nord'
+    let g:airline_powerline_fonts = 1
+    "let g:promptline_theme = 'palenight'
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" fzf
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_layout = { 'down': '~40%' }
+
+" Populate quickfix list with selected files
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  botright copen
+  cc
+endfunction
+
+" Ctrl-q allows to select multiple elements an open them in quick list
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Add namespace for fzf.vim exported commands
+let g:fzf_command_prefix = 'Fzf'
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+nnoremap <silent> <leader>o :FZF<CR>

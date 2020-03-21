@@ -1,0 +1,5 @@
+#!/bin/sh
+
+du -a ~/Video/*.* | cut -f2 | rofi -dmenu -p "Guarda un video"\
+    -theme Monokai | xargs -r -I {} mpv "{}"
+

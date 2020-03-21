@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 """
 i3t.py -- list i3wm windows, get next window id, wrap/loop around
 

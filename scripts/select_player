@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# CONFIGURATION
+LOCATION=0
+YOFFSET=0
+XOFFSET=0
+WIDTH=48
+WIDTH_WIDE=48
+THEME=Monokai
+
+list=$(playerctl -l)
+player=$(cat ~/.scripts/selected_player)
+
+menu="$(rofi -sep " " -dmenu -i -p "Scegli un player" -markup-rows -mesg "<big>Attuale:</big> $player"\
+    -location $LOCATION -yoffset $YOFFSET -xoffset $XOFFSET -theme $THEME -width $WIDTH -hide-scrollbar -line-padding 4 -padding 20 -lines 5 <<< "$(echo $list)")"
+
+if [ ! $menu ]
+then
+    menu=$player
+fi
+
+echo "$menu" > ~/.scripts/selected_player

@@ -9,8 +9,7 @@
 ;=====================================================
 
 [colors]
-#background = #ffffffff
-background = #ff000000
+background = #ca000000
 background-alt = #444
 foreground = #a8a19f
 foreground-alt = #555
@@ -23,9 +22,6 @@ col = #00f
 monitor = ${env:MONITOR:eDP-1}
 width = 100%
 height = 24
-#offset-x = 1%
-#offset-y = 5%
-;radius = 6.0
 fixed-center = false
 
 enable-ipc=true
@@ -48,32 +44,23 @@ module-margin-right = 2
 font-0 = "Noto Sans:pixelsize=9:antialias=true:autohint=true;0"
 font-1 = "Font Awesome 5 Free:style=Solid:size=9;0"
 font-2 = "Siji:size=9;1"
-font-3 = "Noto Color Emoji:size=9;1"
+font-3 = "Noto Color Emoji:scale=10"
 font-4 = "OpenSymbol:size=9;0"
-font-5 = "Font Awesome"
-font-6 = "Font Awesome 5 Brands Regular:style=Regular"
+font-5 = "Font Awesome:size=9;0"
+font-6 = "Font Awesome 5 Brands Regular:style=Regular:size=9;0"
 
-#modules-left = i3 powermenu player-mpris-tail
-#modules-left = i3 powermenu player-mpris-simple
-modules-left = i3 powermenu mpd
-modules-right = volume wlan battery memory cpu temperature popup-calendar xkeyboard notification-github updates-fedora
-#modules-right = volume wlan battery memory cpu temperature popup-calendar xkeyboard kdeconnect
+modules-left = i3 player-mpris-simple
+modules-right = pulseaudio-control wlan memory cpu temperature popup-calendar xkeyboard notification-github updates-fedora
 
 tray-position = right
 tray-padding = 0
-#tray-transparent = true
-#tray-background = #000000
-tray-reparent = true
+#tray-reparent = true
 
 #wm-restack = i3
 #override-redirect = true
 
 scroll-up = i3wm-wsnext
 scroll-down = i3wm-wsprev
-
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -89,26 +76,9 @@ label-indicator-margin = 1
 #label-indicator-background = ${colors.secondary}
 label-indicator-background = #6666ea
 label-indicator-foreground = #ffff00
-
-[module/filesystem]
-type = internal/fs
-interval = 25
-
-mount-0 = /
-
-label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
-
-[module/home]
-type = internal/fs
-interval = 25
-
-mount-0 = /home
-
-label-mounted = %{F#0a81f5}~%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
+indicator-icon-default =
+indicator-icon-0 = caps lock;-CL;🔒
+label-indicator-on-capslock = %icon%
 
 [module/i3]
 type = internal/i3
@@ -162,28 +132,6 @@ icon-next = 
 label-song =  %artist% - %title%
 label-song-maxlen = 45
 label-song-ellipsis = true
-
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #ff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
 
 [module/cpu]
 type = internal/cpu
@@ -239,10 +187,7 @@ interval = 5
 
 date = " %d/%m/%Y"
 
-
 # If you're not living in a country where AM and PM is used you can add -alt to the time above this line and comment it using ;, then you can remove the -alt to the time under this line and uncomment it.
-;time-alt = " at %H:%M"
-;time-alt = %H:%M:%S
 time = %H:%M
 
 format-prefix = 
@@ -266,7 +211,7 @@ ramp-volume-3 = 
 ramp-volume-foreground= #5ab738
 
 format-muted-prefix =
-label-muted = %{F#ff0000}  spento%{F-}
+label-muted = %{F#ff0000}  spento  %{F-}
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #5ab738
@@ -364,60 +309,63 @@ menu-3-1-exec = menu-open-0
 
 [module/popup-calendar]
 type = custom/script
-exec = ~/.scripts/popup-calendar-kde.sh
+exec = ~/.scripts/popup-calendar-kde
 interval = 5
-click-left = ~/.scripts/popup-calendar-kde.sh --popup
+click-left = ~/.scripts/popup-calendar-kde --popup
 format-prefix = %{F#55ff00}%{F-}
 label = %{F#55ff00}%output%%{F-}
 
 [module/player-mpris-simple]
 type = custom/script
-exec = ~/.scripts/player-mpris-simple.sh
-interval = 3
+exec = ~/.scripts/player-mpris-simple
+interval = 1
 click-left = playerctl previous
 click-right = playerctl next
 click-middle = playerctl play-pause
-
-[module/player-mpris-tail]
-type = custom/script
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-#exec = ~/.scripts/player-mpris-tail.py -f '{icon} {artist} - {title}' --icon-playing  --icon-stopped  --icon-paused 
-exec = ~/.scripts/player-mpris-tail.py -b plasma-browser-integration -f '{icon} {artist} - {title}' --icon-playing  --icon-stopped  --icon-paused 
-tail = true
-label = %output%
-click-right = ~/.scripts/player-mpris-tail.py previous
-click-left = ~/.scripts/player-mpris-tail.py next
-click-middle = ~/.scripts/player-mpris-tail.py play-pause
+label = %{F#55aaff}%output%%{F-}
+label-maxlen = 120
+label-ellipsis = true
 
 [module/kdeconnect]
 type = custom/script
-exec = ". ~/.scripts/polybar-kdeconnect.sh; show_devices"
+exec = ". ~/.scripts/polybar-kdeconnect; show_devices"
 tail = true
-label = %{T5}%output%%{T-}
+label = %{T3}%output%%{T-}
 
 [module/notification-github]
 type = custom/script
-exec = ~/.scripts/notification-github.sh
+exec = ~/.scripts/notification-github
 label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
 interval = 60
 
 [module/updates-fedora]
 type = custom/script
-exec = ~/.scripts/updates-fedora.sh
+exec = ~/.scripts/updates-fedora
 label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
 interval = 600
 
+[module/pulseaudio-control]
+type = custom/script
+tail = true
+label=%{F#5ab1f6}%output%%{F-}
+#format-underline = ${colors.blue}
+
+exec = ~/.scripts/pulseaudio-control --listen
+click-right = exec pavucontrol &
+click-left = ~/.scripts/pulseaudio-control --togmute
+click-middle = ~/.scripts/pulseaudio-control --change
+scroll-up = ~/.scripts/pulseaudio-control --up
+scroll-down = ~/.scripts/pulseaudio-control --down
+label-padding = 2
+label-foreground = ${colors.foreground}
+
 [settings]
 screenchange-reload = true
-;compositing-background = xor
+compositing-background = xor
 ;compositing-background = screen
-;compositing-foreground = source
+compositing-foreground = source
 ;compositing-border = over
-pseudo-transparency = true
+#pseudo-transparency = true
 
 [global/wm]
 margin-top = 5

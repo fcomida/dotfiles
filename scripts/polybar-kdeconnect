@@ -23,6 +23,7 @@ ICON_SMARTPHONE=''
 ICON_SMARTPHONE=''
 ICON_SMARTPHONE='☎'
 ICON_SMARTPHONE=''
+ICON_SMARTPHONE='📱'
 ICON_TABLET=''
 SEPERATOR='|'
 
@@ -74,8 +75,8 @@ show_menu () {
                 case "$menu" in
                     *Ping) qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$3/ping org.kde.kdeconnect.device.ping.sendPing ;;
                     *'Trova il telefono') qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$3/findmyphone org.kde.kdeconnect.device.findmyphone.ring ;;
-                    #*'Send File') qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$2/share org.kde.kdeconnect.device.share.shareUrl "file://$(zenity --file-selection)" ;;
-                    *'Invia file') qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$3/share org.kde.kdeconnect.device.share.shareUrl "file://$(kdialog --getopenfilename)" ;;
+                    *'Invia file') qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$2/share org.kde.kdeconnect.device.share.shareUrl "file://$(zenity --file-selection)" ;;
+                    #*'Invia file') qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$3/share org.kde.kdeconnect.device.share.shareUrl "file://$(kdialog --getopenurl)" ;;
                     *'Disassocia' ) qdbus-qt5 org.kde.kdeconnect /modules/kdeconnect/devices/$3 org.kde.kdeconnect.device.unpair
                 esac
 }

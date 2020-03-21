@@ -1,0 +1,51 @@
+#!/bin/sh
+
+players=($(playerctl -l))
+savedplayer=$(cat ~/.scripts/selected_player)
+player_status=$(playerctl -p $savedplayer status 2> /dev/null)
+
+oneplayer=FALSE
+if [ ${#players[@]} -eq 1 ]
+then
+    oneplayer=TRUE
+    player="mpd"
+fi
+
+if [ $oneplayer == FALSE ]
+then
+    if [[ ($savedplayer == "mpd") && ($player_status != "Stopped") ]];
+    then
+        player="mpd"
+    else
+        found=FALSE
+
+        for item in ${players[*]}
+        do
+            if [[ $item == $savedplayer ]];
+            then
+                player=$savedplayer
+                found=TRUE
+            fi
+        done
+
+        if [ $found == FALSE ]
+        then
+            for item in ${players[*]}
+            do
+                if [[ $item != "mpd" ]];
+                then
+                    player=$item
+                fi
+            done
+        fi
+    fi
+fi
+
+if [[ "$1" == "volume" ]];
+then
+    playerctl -p $player volume $2
+elif [[ "$1" == "player" ]];
+then
+    playerctl -p $player $2
+fi
+

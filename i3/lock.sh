@@ -7,7 +7,7 @@ timeout="60000"
 scrot /tmp/screen.png
 
 # Add the lock to the swirled and blurred image:
-[[ -f ~/.config/i3/lock.png ]] && convert /tmp/screen.png -paint 1 -swirl 360  ~/.config/i3/lock.png -gravity center -composite -matte /tmp/screen.png
+[[ -f ~/.config/i3/lock_1.png ]] && convert /tmp/screen.png -paint 1 -swirl 360  ~/.config/i3/lock_1.png -gravity center -composite -matte /tmp/screen.png
 
 # Pause music (mocp and mpd):
 pactl set-sink-mute 0 toggle # mute sound

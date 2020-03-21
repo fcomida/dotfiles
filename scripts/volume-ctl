@@ -1,0 +1,8 @@
+#!/bin/sh
+index=$(pacmd list-sinks | awk '$1 == "*" && $2 == "index:" {print $3}')
+
+case "$1" in
+    toggle) pactl set-sink-mute $index toggle ;;
+    up) pactl set-sink-volume $index +5% ;;
+    down) pactl set-sink-volume $index -5% ;;
+esac

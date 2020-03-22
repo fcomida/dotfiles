@@ -5,8 +5,10 @@ import sys
 def convert(seconds):
     min, sec = divmod(seconds, 60)
     hour, min = divmod(min, 60)
-    #return "%d:%02d:%02d" % (hour, min, sec)
     return (hour, min, sec)
+
+if len( sys.argv) != 2:
+    sys.exit(1)
 
 seconds = sys.argv[1]
 
@@ -14,13 +16,15 @@ hour = 0
 min = 0
 sec = 0
 
-if (float(seconds) < 10000):
-    hour, min, sec = convert(int(float(seconds)))
-else:
-    hour, min, sec = convert(int(float(seconds)/1000000))
+try:
+    if (float(seconds) < 10000):
+        hour, min, sec = convert(int(float(seconds)))
+    else:
+        hour, min, sec = convert(int(float(seconds)/1000000))
 
-if (hour == 0):
-    print("%02d:%02d" % (min, sec))
-else:
-    print("%d:%02d:%02d" % (hour, min, sec))
-
+    if (hour == 0):
+        print("%02d:%02d" % (min, sec))
+    else:
+        print("%d:%02d:%02d" % (hour, min, sec))
+except:
+        print("%d:%02d:%02d" % (hour, min, sec))

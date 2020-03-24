@@ -1,0 +1,11 @@
+#!/bin/sh
+
+device=$(xinput | grep Touch | awk '{ print $6 }' | awk -F '=' '{ print $2 }')
+
+tapping=$(xinput list-props $device | grep "Tapping Enabled" | grep -P "^((?!Default).)*$" | awk '{ print $4 }' | tr -d "():")
+
+xinput set-prop $device $tapping 1
+
+speed=$(xinput list-props $device | grep "Accel Speed" | grep -P "^((?!Default).)*$" | awk '{ print $4 }' | tr -d "():")
+
+xinput set-prop $device $speed 0.8

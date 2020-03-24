@@ -9,16 +9,22 @@ set $mod Mod4
 set $term /usr/local/bin/st
 
 # SYSTEMD
-set $shutdown sudo shutdown -h now
-set $reboot sudo reboot
-set $netrefresh --no-startup-id sudo systemctl restart NetworkManager
-set $suspend sudo systemctl suspend
+set $shutdown   sudo shutdown -h now
+set $reboot     sudo reboot
+set $netrefresh sudo systemctl restart NetworkManager
+set $netstop    sudo systemctl stop NetworkManager
+set $netstart   sudo systemctl start NetworkManager
+set $suspend    sudo systemctl suspend
 
 # SET DEFAULT LAYOUT
 workspace_layout tabbed
+#hide_edge_borders none|vertical|horizontal|both|smart
+hide_edge_borders smart
+
+for_window [class=".*"] title_format "<b> %title </b>"
 
 ## SET COLOURS
-##                       border    backgr.   text      indicator  child_border
+##                        border    bckgnd    text      indicator  child_border
 #client.focused           #0099ff   #0099ff   #fdf6e3   #ff0000    #285577
 client.focused            #83b8c8   #83b8c8   #000000   #ff0000    #5c828d
 #client.focused           #c8c800   #c8c800   #000000   #ff0000    #285577
@@ -129,12 +135,9 @@ bindsym $mod+Shift+minus    exec --no-startup-id ~/.scripts/playercontrol volume
 # #---Basic Bindings---# #
 bindsym $mod+Return             exec $term
 
-bindsym $mod+Escape             workspace prev
-
 bindsym $mod+Shift+Escape       exec ~/.scripts/exit_menu
 bindsym $mod+Shift+Tab          exec ~/.scripts/window_chooser
 bindsym $mod+Shift+j            exec ~/.scripts/rofi-emoji
-
 
 # #---Letter Key Bindings---# #
 ##bindsym $mod+q          kill
@@ -144,7 +147,7 @@ bindsym $mod+Shift+w    exec --no-startup-id firefox
 
 bindsym $mod+r          exec --no-startup-id $term -t vifm -e ~/.local/bin/vifm
 
-bindsym $mod+t          split toggle
+bindsym $mod+Shift+t    split toggle
 
 bindsym $mod+u          [title="dropdown"] scratchpad show; [title="dropdown"] move position center
 
@@ -160,7 +163,6 @@ bindsym $mod+Shift+d    exec --no-startup-id dmenu_run
 bindsym $mod+d          exec --no-startup-id rofi -show drun -theme sidebar -show-icons -drun-show-actions -icon-theme breeze-dark
 bindsym $mod+Shift+h    exec --no-startup-id rofi -show ssh -width 50 -lines 10  -theme Monokai -terminal $term
 
-bindsym $mod+g          workspace prev
 bindsym $mod+Shift+g    exec --no-startup-id gimp; workspace $ws2
 
 bindsym $mod+x          exec --no-startup-id ~/.config/i3/lock.sh
@@ -172,24 +174,25 @@ bindsym $mod+Shift+m    exec --no-startup-id  ~/.scripts/watch_video
 
 bindsym $mod+Shift+y    exec --no-startup-id  $term -e ~/.local/bin/mpsyt
 
-#bindsym $mod+Shift+v    exec --no-startup-id projectMSDL
-bindsym $mod+Shift+v     [title="VIM"] focus
+bindsym $mod+t           [class="St" title="^((?!VIM).)*$"] focus
+bindsym $mod+n           [title="VIM"] focus
+bindsym $mod+g           [title="Firefox"] focus
 
 bindsym $mod+Shift+s    exec --no-startup-id tabbed surf -e
 
 # Resize window (you can also use the mouse for that)
 bindsym $mod+p mode "resize"
 mode "resize" {
+        bindsym j resize grow height 2 px or 2 ppt
+        bindsym k resize shrink height 2 px or 2 ppt
         bindsym h resize shrink width 2 px or 2 ppt
-        bindsym k resize grow height 2 px or 2 ppt
-        bindsym j resize shrink height 2 px or 2 ppt
         bindsym l resize grow width 2 px or 2 ppt
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 5 px or 5 ppt
-        bindsym Down resize grow height 5 px or 5 ppt
-        bindsym Up resize shrink height 5 px or 5 ppt
+        bindsym Left  resize shrink width 5 px or 5 ppt
         bindsym Right resize grow width 5 px or 5 ppt
+        bindsym Down  resize grow height 5 px or 5 ppt
+        bindsym Up    resize shrink height 5 px or 5 ppt
 
         # exit resize mode: Enter or Escape
         bindsym Return mode "default"
@@ -200,12 +203,12 @@ mode "resize" {
 bindsym $mod+y mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id ~/.config/i3/lock.sh, mode "default"
-    bindsym s exec --no-startup-id $suspend, mode "default"
-    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym r exec --no-startup-id $reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id $shutdown, mode "default"
+    bindsym l         exec --no-startup-id ~/.config/i3/lock.sh, mode "default"
+    bindsym s         exec --no-startup-id $suspend, mode "default"
+    bindsym u         exec --no-startup-id i3exit switch_user, mode "default"
+    bindsym e         exec --no-startup-id i3-msg exit, mode "default"
+    bindsym r         exec --no-startup-id $reboot, mode "default"
+    bindsym Shift+s   exec --no-startup-id $shutdown, mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
@@ -222,8 +225,8 @@ bindsym $mod+Shift+Prior    move container to workspace prev
 bindsym $mod+Next           workspace next
 bindsym $mod+Shift+Next     move container to workspace next
 bindsym $mod+Tab            workspace back_and_forth
-bindsym $mod+XF86Back       workspace prev
-bindsym $mod+XF86Forward    workspace next
+#bindsym $mod+XF86Back       workspace prev
+#bindsym $mod+XF86Forward    workspace next
 bindsym $mod+semicolon      workspace next
 bindsym $mod+apostrophe     split horizontal ;; exec --no-startup-id $term
 bindsym $mod+slash          split vertical ;; exec --no-startup-id $term
@@ -297,50 +300,54 @@ bindsym $mod+Shift+0    move container to workspace $ws10
 for_window [title="mpvfloat"] floating enable
 for_window [title="mpvfloat"] sticky enable
 for_window [title="mpvfloat"] border pixel 0
-no_focus [title="mpvfloat"]
+no_focus   [title="mpvfloat"]
 
 for_window [title="Default - Wine desktop"] floating enable
 
 # move all floating windows to the scratchpad
-bindsym $mod+F2 [floating] move scratchpad
-bindsym $mod+F3 scratchpad show
+bindsym $mod+F7 [floating] move scratchpad
+bindsym $mod+F8 scratchpad show
 
 # #---Function Buttons---# #
-bindsym $mod+F1     exec --no-startup-id okular ~/.config/i3/i3_guide.pdf
-bindsym $mod+F4     exec --no-startup-id $suspend
-bindsym $mod+F5     exec --no-startup-id $netrefresh
-bindsym $mod+F6     exec --no-startup-id ~/.scripts/paswitch #switch audio card
+bindsym $mod+F1        exec --no-startup-id ~/.scripts/show-i3-bindings
+bindsym $mod+F2        exec --no-startup-id ~/.scripts/show-i3-sysbindings
+bindsym $mod+Shift+F3  exec --no-startup-id $netstart
+bindsym $mod+Shift+F4  exec --no-startup-id $netstop
+bindsym $mod+Shift+F5  exec --no-startup-id $netrefresh
+bindsym $mod+Shift+F6  exec --no-startup-id ~/.scripts/paswitch #switch audio card
 ##bindsym $mod+F6     exec --no-startup-id $term -e transmission-remote-cli
 ##bindsym $mod+F7
 ##bindsym $mod+F8
-bindsym $mod+F9  exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
-bindsym $mod+F10 exec --no-startup-id ~/.local/bin/quickswitch.py -j -e -f -C Polybar
-bindsym $mod+F11 exec --no-startup-id ~/.local/bin/quickswitch.py -m -C Polybar
-bindsym $mod+F12 exec --no-startup-id ~/.local/bin/quickswitch.py -C Polybar
-bindsym F12      exec --no-startup-id ~/.local/bin/tdrop -ma -y 48 -h 70% st
+bindsym $mod+F9     exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
+bindsym $mod+F10    exec --no-startup-id ~/.local/bin/quickswitch.py -j -e -f -C Polybar
+bindsym $mod+F11    exec --no-startup-id ~/.local/bin/quickswitch.py -m -C Polybar
+bindsym $mod+F12    exec --no-startup-id ~/.local/bin/quickswitch.py -C Polybar
+bindsym F12         exec --no-startup-id ~/.local/bin/tdrop -ma -y 48 -h 70% st
 
 # #---Arrow Keys---# #
-bindsym $mod+Left       focus left
-bindsym $mod+Down       focus down
-bindsym $mod+Up         focus up
-bindsym $mod+Right      focus right
+bindsym $mod+Left           focus left
+bindsym $mod+Down           focus down
+bindsym $mod+Up             focus up
+bindsym $mod+Right          focus right
 bindsym $mod+Shift+Left     move left
 bindsym $mod+Shift+Down     move down
 bindsym $mod+Shift+Up       move up
 bindsym $mod+Shift+Right    move right
 
 # For screenshots and recording
-bindsym Print           exec --no-startup-id spectacle
-#bindsym Shift+Print     exec --no-startup-id scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/shots/'
-bindsym Shift+Print     exec --no-startup-id maim -s ~/shots/$(date +%s).png
+bindsym Print               exec --no-startup-id spectacle
+#bindsym Shift+Print        exec --no-startup-id scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/shots/'
+bindsym Shift+Print         exec --no-startup-id maim -s ~/shots/$(date +%s).png
 
 # #---Extra XF86 Keys---# #
 # These are the extra media keys that some keyboards have.
-bindsym XF86Calculator  exec --no-startup-id kcalc
-bindsym XF86Sleep       exec sudo zzz
-bindsym XF86WWW         exec --no-startup-id firefox
-bindsym XF86ScreenSaver exec --no-startup-id ~/.scripts/monitor-off
-bindsym XF86WebCam      exec --no-startup-id ~/.scripts/camtoggle
+bindsym XF86Calculator       exec --no-startup-id kcalc
+bindsym XF86Sleep            exec $suspend
+bindsym XF86WWW              exec --no-startup-id firefox
+bindsym XF86ScreenSaver      exec --no-startup-id ~/.scripts/monitor-off
+bindsym XF86WebCam           exec --no-startup-id ~/.scripts/camtoggle
+bindsym XF86TouchpadToggle   exec --no-startup-id ~/.scripts/touchpad-toggle
+bindsym XF86RFKill           exec $netstop
 
 for_window [class="(?i)qsynth"] floating enable
 for_window [class="(?i)copyq"] floating enable
@@ -351,6 +358,8 @@ for_window [class="(?i)beebeep"] floating enable
 for_window [class="(?i)qjack"] floating enable
 for_window [class="Yad"] floating enable
 for_window [title="Calendario"] border pixel 1
+for_window [title="Event Tester"] floating enable
+for_window [title="Regolazione del volume"] floating enable; resize set 640 x 480
 
 # #---Starting External Scripts---# #
 exec --no-startup-id /usr/bin/kuiserver5
@@ -403,8 +412,9 @@ exec --no-startup-id "sleep 10; redshift-gtk"
 exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' kdeconnect-indicator"
 
 # Touchpad tap and speed
-exec --no-startup-id xinput set-prop 14 306 1
-exec --no-startup-id xinput set-prop 14 326 0.8
+#exec --no-startup-id xinput set-prop 14 306 1
+#exec --no-startup-id xinput set-prop 14 326 0.8
+exec --no-startup-id ~/.scripts/touchpad-config
 
 # Conky
 exec --no-startup-id conky -c ~/.conky/conkyrc_i3
@@ -416,5 +426,4 @@ exec --no-startup-id setxkbmap
 
 # Allow run some GUI apps as root
 exec --no-startup-id /usr/libexec/kf5/polkit-kde-authentication-agent-1
-
 

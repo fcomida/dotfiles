@@ -1,0 +1,11 @@
+#!/bin/sh
+
+device=$(xinput | grep Touch | awk '{ print $6 }' | awk -F '=' '{ print $2 }')
+
+enabled=$(xinput list-props $device | grep  "Device Enabled" | awk '{ print $4 }')
+
+if [ $enabled = 1 ]; then
+    xinput disable $device
+else
+    xinput enable $device
+fi

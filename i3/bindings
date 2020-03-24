@@ -1,0 +1,32 @@
+$mod+F1             This  guide
+$mod+Shift+F3       start NetworkManager
+$mod+Shift+F4       stop NetworkManager
+$mod+Shift+F5       restart NetworkManager
+$mod+Shift+F6       switch audio card
+
+$mod+Shift+b        toggle polybar
+
+$mod+x              lock screen
+$mod+c              toggle webcam
+
+$mod+plus           active player volume up
+$mod+Shift+plus     active player volume BIG UP
+$mod+minus          active player volume down
+$mod+Shift+minus    active player volume BIG DOWN
+
+$mod+Shift+w        firefox
+$mod+Shift+g        gimp
+$mod+r              vifm
+$mod+i              htop
+$mod+F9             gotop
+$mod+Shift+i        sxiv ~/Immagini
+$mod+m              ncmpcpp
+$mod+Shift+y        mps-youtube
+$mod+Shift+s        surf
+
+$mod+Shift+d        dmenu_run
+$mod+Shift+Esc      rofi EXIT MENU
+$mod+Shift+h        rofi ssh
+$mod+Shift+j        rofi emoji
+$mod+Shift+m        rofi watch_video
+$mod+Shift+p        rofi select player

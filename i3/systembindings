@@ -18,8 +18,10 @@ $mod+y                SYSTEM  MODE
 $mod+z                DISPLAY MODE
 $mod+apostrophe       split horizontal and execute terminal
 $mod+slash            split vertical and execute terminal
-$mod+F5               RESTART NETWORK MANAGER
-$mod+F6               SWITCH AUDIO CARD
+$mod+Shift+F3         START NETWORK MANAGER
+$mod+Shift+F4         STOP  NETWORK MANAGER
+$mod+Shift+F5         RESTART NETWORK MANAGER
+$mod+Shift+F6         SWITCH AUDIO CARD
 $mod+F8               scratchpad show
 Print                 SCREENSHOT / spectacle
 Shift+Print           SCREENSHOT / maim -s ~/shots/$(date +%s).png

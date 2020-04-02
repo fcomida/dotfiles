@@ -15,8 +15,8 @@ conky.config = {
 	own_window_argb_value = 50,
 
 	double_buffer = true,
---minimum_size 250 5
---maximum_width 500
+--minimum_size 200,
+    maximum_width = 600,
 	draw_shades = false,
 	draw_outline = false,
 	draw_borders = false,
@@ -26,7 +26,7 @@ conky.config = {
 	default_outline_color = 'green',
 	alignment = 'top_middle',
 	gap_x = -150,
-	gap_y = 35,
+	gap_y = 50,
 	no_buffers = true,
 	uppercase = false,
 	cpu_avg_samples = 2,
@@ -40,7 +40,7 @@ conky.config = {
 };
 
 conky.text = [[
-${voffset 10}${color EAEAEA}${font GE Inspira:pixelsize=120}${time %I:%M}${font}${voffset -84}${offset 10}${color FFA300}${font GE Inspira:pixelsize=42}${time %d} ${voffset -15}${color EAEAEA}${font GE Inspira:pixelsize=22}${time  %B} ${time %Y}${font}${voffset 24}${font GE Inspira:pixelsize=58}${offset -148}${time %A}${font}
+${voffset 10}${color EAEAEA}${font GE Inspira:pixelsize=120}${time %H:%M}${font}${voffset -84}${offset 10}${color FFA300}${font GE Inspira:pixelsize=42}${time %d} ${voffset -15}${color EAEAEA}${font GE Inspira:pixelsize=22}${time  %B} ${time %Y}${font}${voffset 24}${font GE Inspira:pixelsize=58}${offset -148}${time %A}${font}
 ${voffset 1}${offset 12}${font Ubuntu:pixelsize=12}${color FFA300}
 
 

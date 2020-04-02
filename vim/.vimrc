@@ -12,15 +12,13 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'takac/vim-hardtime'
 
-Plugin 'vim-airline/vim-airline'
+Plugin 'ycm-core/YouCompleteMe'
 
-Plugin 'vim-airline/vim-airline-themes'
+Plugin 'rdnetto/YCM-Generator'
+
+Plugin 'itchyny/lightline.vim'
 
 Plugin 'arcticicestudio/nord-vim'
-
-Plugin 'edkolev/tmuxline.vim'
-
-Plugin 'edkolev/promptline.vim'
 
 Plugin 'octol/vim-cpp-enhanced-highlight'
 
@@ -42,13 +40,9 @@ Plugin 'tpope/vim-commentary'
 
 Plugin 'airblade/vim-gitgutter'
 
-Plugin 'vim-syntastic/syntastic'
-
 Plugin 'tpope/vim-rhubarb'
 
 Plugin 'scrooloose/nerdtree'
-
-Plugin 'ervandew/supertab'
 
 Plugin 'MarcWeber/vim-addon-mw-utils'
 
@@ -60,13 +54,11 @@ Plugin 'honza/vim-snippets'
 
 Plugin 'foxik/vim-makejob'
 
-Plugin 'rhysd/vim-clang-format'
-
 Plugin 'kana/vim-operator-user'
 
 Plugin 'mboughaba/i3config.vim'
 
-Plugin 'mkitt/tabline.vim'
+"Plugin 'mkitt/tabline.vim'
 ""Plugin 'justmao945/vim-clang'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -86,7 +78,6 @@ filetype plugin indent on    " required
 """""""
 " Maps
 """""""
-
 " Reformat current paragraph
 nnoremap Q gqip
 
@@ -119,16 +110,17 @@ vno <left> <Nop>
 vno <right> <Nop>
 vno <up> <Nop>
 
+" copy visual selected test to clipboard
 vnoremap <C-c> "+y
 
-"let mapleader = ','
 let mapleader = ' '
-"map <leader>( a()<ESC>i
-map <Leader>( a<CR>{<CR><ESC>o<ESC>i}<ESC>ki<TAB>
+"map <Leader>( a<CR>{<CR><ESC>o<ESC>i}<ESC>ki<TAB>
+
+" NERDTree
 map <C-n> :NERDTreeToggle<CR>
+
+" Toggle between source and header
 map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
-"nnoremap <C-down> ddp<ESC>
-"nnoremap <C-up> ddk<ESC>P
 
 " Reselect code after indentation
 vnoremap > >gv
@@ -157,10 +149,16 @@ nnoremap td  :tabclose<CR>
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 set splitbelow splitright
 
+command -nargs=1 Vsb call VsbFunction(<f-args>)
+
+function VsbFunction (arg1)
+  execute 'vert sb' a:arg1
+endfunction
+
+
 " =============
 "  CUSTOM CODE
 " =============
-
 " Delete trailing white space on save.
 func! DeleteTrailingWhiteSpace()
     exe "normal mz"
@@ -200,8 +198,18 @@ set incsearch                  " Incremental search
 set backspace=indent,eol,start " Better handling of backspace key
 set autoindent                 " Sane indenting when filetype not recognised
 set nostartofline              " Emulate typical editor navigation behaviour
+set nowrap
 set nopaste                    " Start in normal (non-paste) mode
 set pastetoggle=<f11>          " Use <F11> to toggle paste modes
+
+"
+set relativenumber
+set cursorline
+set ruler
+syntax enable
+set synmaxcol=0
+set display=uhex
+set shortmess+=aAIsT
 
 " Status / Command Line Options:
 set wildmenu                   " Better commandline completion
@@ -209,17 +217,41 @@ set wildmode=longest:full,full " Expand match on first Tab complete
 set showcmd                    " Show (partial) command in status line.
 set laststatus=2               " Always show a status line
 set cmdheight=2                " Prevent "Press Enter" messages
-" Show detailed information in status line
-set statusline=%f%m%r%h%w\ [%n:%{&ff}/%Y]%=[0x\%04.4B][%03v][%p%%\ line\ %l\ of\ %L]
 
+" Show detailed information in status line
+" set statusline=%f%m%r%h%w\ [%n:%{&ff}/%Y]%=[0x\%04.4B][%03v][%p%%\ line\ %l\ of\ %L]
+
+" set statusline=%F%m%r%h%w\
+" set statusline+=%{fugitive#statusline()}\
+" set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
+" set statusline+=\ [line\ %l\/%L]
+
+" set statusline=[%n]\ %<%.99f\ %h%w%m%r%{fugitive#statusline()}%y%=%-16.(\ %l,%c-%v\ %)%P
+" tpope's
+" set statusline=[%n]\ %<%.99f\ %h%w%m%r%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%y%=%-16(\ %l,%c-%v\ %)%P
 "
-set cursorline
-set ruler
-syntax enable
-set synmaxcol=0
-set display=uhex
-set shortmess+=aAIsT
-set nowrap
+" check if variable bg exists at all, and return it in a safe way
+fun! GetBG()
+if exists("&bg")|return &bg|else|return "-"|endif
+endfun
+
+" check is colorscheme name exists and return it
+fun! GetCN()
+if exists("g:colors_name") | return g:colors_name | else | return "-" | endif
+endfun
+
+set statusline=
+set statusline+=%f%=\ " filename
+set statusline+=%< " folding left
+set statusline+=%{fugitive#statusline()}\
+set statusline+=[%{GetBG()}\:%{GetCN()}]\ " background and colorscheme
+set statusline+=[%1*%M%*%n%R%W\,%{strlen(&ft)?&ft:'none'}]\ " flags and filetype
+set statusline+=%{synIDattr(synID(line('.'),col('.'),1),'name')}\ " highlight type on word
+set statusline+=%(%3l,%02c%03V%)\ " row,column,virtual-column
+set statusline+=\b\:%-04O\ " cursor hex offset from start of file
+set statusline+=\c\:%03b\ " char byte code under cursor
+set statusline+=%P " percentage of the file
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -234,19 +266,16 @@ set tabstop=4
 set softtabstop=4
 
 set smartindent
-set autoindent
-
 set smartcase
-set relativenumber
-
+" set noshowmode
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
-set nowritebackup
-set nobackup
-set noswapfile
+"set nowritebackup
+"set nobackup
+"set noswapfile
 
 set showmatch
 set matchtime=1
@@ -262,7 +291,13 @@ set linespace=0
 set history=1000
 set list listchars=tab:›\ ,trail:-,extends:>,precedes:<,eol:¬
 set makeprg=make\ -j5\ -C\ build
+set encoding=utf-8
 
+set grepprg=grep\ -nH\ $*
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" CTAGS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f ~/.vim/tags/lhdr $(pwd)/src<CR>
 set tags+=~/.vim/tags/lhdr
 set tags+=~/.vim/tags/cpp
@@ -290,8 +325,7 @@ set completeopt=menuone,menu,longest,preview
 """"""""""""""""""""""""""""""""""""""""""""""
 " COLORS
 """"""""""""""""""""""""""""""""""""""""""""""
-set grepprg=grep\ -nH\ $*
-set t_Co=256
+"set t_Co=256
 set background=dark
 " let st terminal display true colors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -314,47 +348,40 @@ let g:nord_italic=1
 let g:nord_italic_comments=1
 unlet g:c_comment_strings
 try
-    colorscheme nord
+    colorscheme palenight
 catch
 endtry
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntastic
+" YouCompleteMe
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-
-let g:syntastic_debug = 0
-let g:syntastic_cpp_compiler_options = '-std=gnu++11 -fPIC -Wno-deprecated-declarations'
-let g:syntastic_cpp_include_dirs = ['./librtprocess/src/include', './src', './build/src', '/usr/include','/usr/include/qt5','/usr/include/qt5/QtCore','/usr/include/qt5/QtGui','/usr/include/qt5/QtWidgets','/usr/include/qt5/QtConcurrent','/usr/include/qt5/QtSql','/usr/include/qt5/QtXml','/usr/include/qt5/QtWebEngineWidgets','/usr/include/qt5/QtNetwork','/usr/include/exiv2','/usr/include/OpenEXR','/usr/include/cfitsio','/usr/include/eigen3']
-let g:syntastic_ignore_files = ['\m\c\<ui_[^/]*\.h$', '\m\c\<config\.h$', '\m\c\<global[^/]*$']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_auto_refresh_includes = 1
+let g:ycm_clangd_binary_path = "/usr/bin/clangd"
+"let g:ycm_key_list_select_completion=[]
+"let g:ycm_key_list_previous_completion=[]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " Ultisnip
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsExpandTrigger='<leader><tab>'
 let g:UltiSnipsJumpForwardTrigger='<c-j>'
 let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline
+" lightline
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-if &term != "linux"
-    let g:airline_theme='nord'
-    let g:airline_powerline_fonts = 1
-    "let g:promptline_theme = 'palenight'
-endif
+let g:lightline = {
+      \ 'colorscheme': 'nord',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " fzf

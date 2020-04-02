@@ -16,10 +16,11 @@ Xft.hintstyle:              hintslight
 !-------------------------------------------------------------------------------
 
 URxvt.depth:                32
-URxvt.geometry:             169x42
-urxvt*background:           rgba:0000/0000/0200/c800
-#URxvt.transparent:          true
-URxvt.fading:               100
+! URxvt.geometry:             169x42
+URxvt.geometry:             170x39
+URxvt*background:           rgba:0b00/0b00/0b00/f900
+URxvt.transparent:          false
+URxvt.fading:               30
 ! URxvt.urgentOnBell:         true
 ! URxvt.visualBell:           true
 URxvt.loginShell:           true
@@ -48,52 +49,57 @@ URxvt.matcher.button:       1
 URxvt.urlLauncher:          firefox
 
 ! Cursor
-URxvt.cursorBlink:          true
-URxvt.cursorColor:          #657b83
+URxvt.cursorBlink:          false
+URxvt.cursorColor:          #d8dee9
 URxvt.cursorUnderline:      false
 
 ! Pointer
 URxvt.pointerBlank:         true
 
+URxvt.colorIT:      #87af5f
+URxvt.colorBD:      #d7d7d7
+URxvt.colorUL:      #87afd7
+
 !!Source http://github.com/altercation/solarized
 
-*background:           rgba:0000/2b00/3600/f800
-#*background: #002b36
+! *background:           rgba:0000/2b00/3600/f800
+*background:           rgba:0b00/0b00/0b00/f900
+! *background: #002b36
 *foreground: #657b83
 !!*fading: 40
-*fadeColor: #002b36
-*cursorColor: #93a1a1
+*fadeColor: #000000
+*cursorColor: #d8dee9
 *pointerColorBackground: #586e75
 *pointerColorForeground: #93a1a1
 
 !! black dark/light
-*color0: #073642
-*color8: #002b36
+*color0: #3B4252
+*color8: #4C566A
 
 !! red dark/light
-*color1: #dc322f
-*color9: #cb4b16
+*color1: #BF616A
+*color9: #BF616A
 
 !! green dark/light
-*color2: #859900
-*color10: #586e75
+*color2: #A3BE8C
+*color10: #A3BE8C
 
 !! yellow dark/light
-*color3: #b58900
-*color11: #657b83
+*color3: #EBCB8B
+*color11: #EBCB8B
 
 !! blue dark/light
-*color4: #268bd2
-*color12: #839496
+*color4: #81A1C1
+*color12: #81A1C1
 
 !! magenta dark/light
-*color5: #d33682
-*color13: #6c71c4
+*color5: #B48EAD
+*color13: #B48EAD
 
 !! cyan dark/light
-*color6: #2aa198
-*color14: #93a1a1
+*color6: #88C0D0
+*color14: #8FBCBB
 
 !! white dark/light
-*color7: #eee8d5
-*color15: #fdf6e3
+*color7: #E5E9F0
+*color15: #88C0D0

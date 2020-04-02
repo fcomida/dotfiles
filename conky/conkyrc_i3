@@ -11,12 +11,12 @@ conky.config = {
     draw_outline = false,
     draw_shades = false,
     use_xft = true,
-    font = 'Inconsolata:size=11:face=bold',
+    font = 'DejaVu Sans Mono:size=10:face=bold',
     gap_x = 30,
-    gap_y = 35,
+    gap_y = 50,
     minimum_height = 5,
     minimum_width = 5,
-    maximum_width = 320,
+    maximum_width = 330,
     use_spacer = yes,
     net_avg_samples = 2,
     no_buffers = true,
@@ -30,7 +30,7 @@ conky.config = {
     own_window_colour=white,
     own_window_hints="undecorated,below,sticky,skip_taskbar,skip_pager",
     own_window_argb_visual = true,
-    own_window_argb_value = 70,
+    own_window_argb_value = 100,
     own_window_transparent = false,
     stippled_borders = 0,
     update_interval = 1.0,
@@ -44,13 +44,12 @@ conky.text = [[
 $sysname $kernel
 ${color grey}$hr
 ${color white}Uptime:$color $uptime
-
-${color white}Processore
+${color grey}$hr
+${color white}Processore:
 ${color white}Utilizzo CPU:$color $cpu% ${goto 160}${cpubar 4}
 ${color white}Frequenza (in MHz):$color $freq
-
-$color core 0:${cpu cpu1}%${color} ${goto 90}   ${execi 20 sensors | grep Core\ 0 | cut -c16-20}°C
-$color core 1:${cpu cpu2}%${color} ${goto 90}   ${execi 20 sensors | grep Core\ 1 | cut -c16-20}°C
+${color white} core 0: ${color}${cpu cpu1}% ${goto 90}   ${execi 20 sensors | grep Core\ 0 | cut -c16-20}°C
+${color white} core 1: ${color}${cpu cpu2}% ${goto 90}   ${execi 20 sensors | grep Core\ 1 | cut -c16-20}°C
 ${color gray}$hr
 ${color white}Processi:$color $processes  ${color white}Attivi:$color $running_processes
 ${color orange}Nome               PID    CPU%   MEM%
@@ -63,26 +62,23 @@ ${color white} ${top name 6} ${top pid 6} ${top cpu 6} ${top mem 6}
 ${color white} ${top name 7} ${top pid 7} ${top cpu 7} ${top mem 7}
 ${color white} ${top name 8} ${top pid 8} ${top cpu 8} ${top mem 8}
 ${color grey}$hr
-${color white}Memoria
+${color white}Memoria:
 Uso RAM:$color $mem/$memmax
 $memperc% ${color grey}${goto 60}${membar 4}
 ${color white}Uso Swap:$color $swap/$swapmax
 $swapperc% ${color grey}${goto 60}${swapbar 4}
 ${color grey}$hr
 ${color white}File systems:
-DISCHI    ${diskiograph /dev/sda 18,170 666666 CC3333}
+Dischi    ${diskiograph /dev/sda 18,170 666666 CC3333}
 /         $color${fs_used /}/${fs_size /}${color white}
 /home     $color${fs_used /home}/${fs_size /home}${color white}
-TEMPERATURA
-SDA:${goto 50} ${color yellow}${execi 5 hddtemp -n /dev/sda}°C
+Temperatura SDA:${goto 150} ${color yellow}${execi 5 hddtemp -n /dev/sda}°C
 ${color white}$hr
 ${color white}Networking:
-
 ${color white}IP Locale:   $color${addr wlp3s0}
 ${color white}IP Pubblico: $color${execi 30 curl ifconfig.co}
-${color white}Down: $color${goto 45}${downspeed wlp3s0}
-${color white}Up:   $color${goto 45}${upspeed wlp3s0}
+${color white}Down: $color${goto 50}${downspeed wlp3s0}
+${color white}Up:   $color${goto 50}${upspeed wlp3s0}
 ${color white}${goto 5}Totale Down: $color${totaldown wlp3s0}
-${color white}${goto 5}Totale Up:   $color${totalup wlp3s0}
-${color gray}$hr
+${color white}${goto 5}Totale Up:   $color${totalup wlp3s0}${color gray}
 ]]

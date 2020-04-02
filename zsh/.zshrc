@@ -1,4 +1,5 @@
 # If you come from bash you might have to change your $PATH.
+emulate zsh                    # restore default options just in case something messed them up
 export PATH=$HOME/.local/bin:/opt/epson-printer-utility/bin/:$PATH
 #source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -14,7 +15,7 @@ export ZSH=/home/franco/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="agnoster"
-ZSH_THEME="clean"
+ZSH_THEME="juanghurtado"
 ZLE_RPROMPT_INDENT=1
 # ZSH_THEME="powerlevel9k/powerlevel9k"
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
@@ -77,7 +78,6 @@ plugins=(
   history
   git
   k
-  colored-man-pages
   sudo
   systemd
   tmux
@@ -128,29 +128,30 @@ vim_ins_mode="INS"
 vim_cmd_mode="NML"
 vim_mode=$vim_ins_mode
 
-function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  __promptline
-  zle reset-prompt
-}
-zle -N zle-keymap-select
+#function zle-keymap-select {
+#  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+#  #__promptline
+#  zle reset-prompt
+#}
+#zle -N zle-keymap-select
 
-function zle-line-finish {
-  vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
+#function zle-line-finish {
+#  vim_mode=$vim_ins_mode
+#}
+#zle -N zle-line-finish
 
-function TRAPINT() {
-  vim_mode=$vim_ins_mode
-  return $(( 128 + $1 ))
-}
+#function TRAPINT() {
+#  vim_mode=$vim_ins_mode
+#  return $(( 128 + $1 ))
+#}
 fi
 
 if [[ -z $(tty | grep '/dev/pts') ]];
 then
     ;
 else
-    source ~/.promptline.sh
+    #source ~/.promptline.sh
+    ;
 fi
 
 # fzf stuff
@@ -167,6 +168,14 @@ forgit_restore=gcff
 forgit_clean=gcleanf
 forgit_stash_show=gssf
 source ~/src/forgit/forgit.plugin.zsh
+
+v() {
+  local files
+  files=$(grep '^>' ~/.viminfo | cut -c3- |
+          while read line; do
+            [ -f "${line/\~/$HOME}" ] && echo "$line"
+          done | fzf-tmux -d -m -q "$*" -1) && vim ${files//\~/$HOME}
+}
 
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.

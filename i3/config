@@ -1,43 +1,61 @@
 # vim: filetype=i3config
-# Be sure that you have your $BROWSER environmental variable set to your favorite browser.
-# E.g., put `export BROWSER="firefox"` into your bash_profile
 
 # #---Basic Definitions---# #
-#font pango:Noto Sans Bold 10
-font pango:Noto Sans 10
+font pango:Noto Sans Bold 10
+#font pango:Noto Sans 10
 set $mod Mod4
 set $term /usr/local/bin/st
 
-# SYSTEMD
-set $shutdown   sudo shutdown -h now
-set $reboot     sudo reboot
-set $netrefresh sudo systemctl restart NetworkManager
-set $netstop    sudo systemctl stop NetworkManager
-set $netstart   sudo systemctl start NetworkManager
-set $suspend    sudo systemctl suspend
+# Define variables
+set $shutdown             sudo shutdown -h now
+set $reboot               sudo reboot
+set $suspend              sudo systemctl suspend
+set $netrefresh           sudo systemctl restart NetworkManager
+set $netstart             sudo systemctl start NetworkManager
+set $netstop              sudo systemctl stop NetworkManager
+set $nettoggle            ~/.scripts/network-toggle
+set $monitor-off          ~/.scripts/monitor-off
+set $cam-toggle           ~/.scripts/camtoggle
+set $touchpad-toggle      ~/.scripts/touchpad-toggle
+set $show-i3-sysbindings  ~/.scripts/show-i3-sysbindings
+set $show-i3-xf86bindings ~/.scripts/show-i3-xf86bindings
+set $show-i3-bindings     ~/.scripts/show-i3-bindings
+set $switch_audio_card    ~/.scripts/paswitch
+set $touchpad-config      ~/.scripts/touchpad-config
+set $picom_launch         ~/.scripts/picom_launch
+set $polybar_launch       ~/.scripts/polybar_launch
+set $start_multimonitor   ~/.scripts/start_multimonitor
+set $stop_multimonitor    ~/.scripts/stop_multimonitor
+set $lock_screen          ~/.config/i3/lock.sh
+set $playerctl            ~/.scripts/playercontrol
+set $volumectl            ~/.scripts/volume-ctl
+set $exit_menu            ~/.scripts/exit_menu
+set $window_chooser       ~/.scripts/window_chooser
+set $pickup_emoji         ~/.scripts/rofi-emoji
+set $select_video         ~/.scripts/watch_video
+set $select_player        ~/.scripts/select_player
 
 # SET DEFAULT LAYOUT
 workspace_layout tabbed
 #hide_edge_borders none|vertical|horizontal|both|smart
 hide_edge_borders smart
 
-for_window [class=".*"] title_format "<b> %title </b>"
-
-## SET COLOURS
-##                        border    bckgnd    text      indicator  child_border
-#client.focused           #0099ff   #0099ff   #fdf6e3   #ff0000    #285577
-client.focused            #83b8c8   #83b8c8   #000000   #ff0000    #5c828d
-#client.focused           #c8c800   #c8c800   #000000   #ff0000    #285577
-#client.focused_inactive  #005086   #005086   #fdf6e3   #ff0000    #285577
-client.focused_inactive   #5c828d   #5c828d   #fdf6e3   #ff0000    #5c828d
-#client.focused_inactive  #bfd800   #bfd800   #202020   #ff0000    #285577
-#client.unfocused         #001523   #001523   #888888   #ff0000    #285577
-client.unfocused          #7d9bba   #7d9bba   #000000   #ff0000    #5c828d
-#client.unfocused         #002843   #002843   #888888   #ff0000    #285577
-#client.unfocused         #4b4c47   #4b4c47   #888888   #ff0000    #285577
-
 default_border normal 1
 default_floating_border normal 0
+
+#assign [class="^URxvt$"] 2
+#assign [class="^St$"] 2
+#assign [class="^Alacritty$"] 2
+#assign [class="^Lxterminal$"] 2
+
+## SET COLOURS
+##                        border    backgnd   text      indicator  child_border
+client.focused            #85a6c7   #85a6c7   #000000   #ff0000    #5c828d
+client.focused_inactive   #313e4a   #313e4a   #817d74   #ff0000    #5c828d
+client.unfocused          #657e96   #657e96   #404040   #ff0000    #5c828d
+
+# #---Basic Bindings---# #
+bindsym $mod+Return exec --no-startup-id $term
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -46,13 +64,13 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e    exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi veramente terminare i3?' -b 'Si, termina i3' 'i3-msg exit'"
+bindsym $mod+Shift+e            exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi veramente terminare i3?' -b 'Si, termina i3' 'i3-msg exit'"
 
 # reboot
 bindsym $mod+Shift+BackSpace    exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi riavviare il computer?' -b 'Si, riavvia' '$reboot'"
 
 # shutdown
-bindsym $mod+Shift+x    exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi spegnere il computer?' -b 'Si, spegni' '$shutdown'"
+bindsym $mod+Shift+x            exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi spegnere il computer?' -b 'Si, spegni' '$shutdown'"
 
 # Alt-TAB
 set $i3t_alt_tab        ~/.scripts/i3t.py n
@@ -71,6 +89,9 @@ bindsym $mod+b split h
 
 # split in vertical orientation
 bindsym $mod+v split v
+
+# toggle split
+bindsym $mod+Shift+t split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -92,94 +113,96 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+Shift+a focus child
 
-# hide/show polybar
-bindsym $mod+Shift+b exec --no-startup-id polybar-msg cmd toggle
+# toggle container sticky
+bindsym $mod+o sticky toggle
+
+# #-----------------------------------------------------------------------------#
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.scripts/volume-ctl up #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/.scripts/volume-ctl down #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id ~/.scripts/volume-ctl toggle # mute/unmute sound
+bindsym XF86AudioRaiseVolume  exec --no-startup-id  $volumectl up #increase sound volume
+bindsym XF86AudioLowerVolume  exec --no-startup-id  $volumectl down #decrease sound volume
+bindsym XF86AudioMute         exec --no-startup-id  $volumectl toggle # mute/unmute sound
 exec --no-startup-id pactl set-sink-mute 0 0
 
 # Screen brightness controls
-bindsym XF86MonBrightnessUp exec --no-startup-id  light -b -A 5
-bindsym XF86MonBrightnessDown exec --no-startup-id light -b -U 5
+bindsym XF86MonBrightnessUp   exec --no-startup-id  light -b -A 5
+bindsym XF86MonBrightnessDown exec --no-startup-id  light -b -U 5
 
 # Media player controls
-#bindsym XF86AudioPlay exec --no-startup-id playerctl -p mpd play-pause
-#bindsym XF86AudioStop exec --no-startup-id playerctl -p mpd stop
-#bindsym XF86AudioNext exec --no-startup-id playerctl -p mpd next
-#bindsym XF86AudioPrev exec --no-startup-id playerctl -p mpd previous
-bindsym XF86AudioPlay exec --no-startup-id ~/.scripts/playercontrol player play-pause
-bindsym XF86AudioStop exec --no-startup-id ~/.scripts/playercontrol player stop
-bindsym XF86AudioNext exec --no-startup-id ~/.scripts/playercontrol player next
-bindsym XF86AudioPrev exec --no-startup-id ~/.scripts/playercontrol player previous
+bindsym XF86AudioPlay         exec --no-startup-id  $playerctl player play-pause
+bindsym XF86AudioStop         exec --no-startup-id  $playerctl player stop
+bindsym XF86AudioNext         exec --no-startup-id  $playerctl player next
+bindsym XF86AudioPrev         exec --no-startup-id  $playerctl player previous
 
 # Volume keys
-#bindsym $mod+plus           exec --no-startup-id playerctl volume .05+
-#bindsym $mod+Shift+plus     exec --no-startup-id playerctl volume .2+
-#bindsym $mod+minus          exec --no-startup-id playerctl volume .05-
-##bindsym $mod+Shift+minus    exec --no-startup-id playerctl volume .2-
-bindsym $mod+plus           exec --no-startup-id ~/.scripts/playercontrol volume .05+
-bindsym $mod+Shift+plus     exec --no-startup-id ~/.scripts/playercontrol volume .2+
-bindsym $mod+minus          exec --no-startup-id ~/.scripts/playercontrol volume .05-
-bindsym $mod+Shift+minus    exec --no-startup-id ~/.scripts/playercontrol volume .2-
+bindsym $mod+plus             exec --no-startup-id  $playerctl volume .05+
+bindsym $mod+Shift+plus       exec --no-startup-id  $playerctl volume .2+
+bindsym $mod+minus            exec --no-startup-id  $playerctl volume .05-
+bindsym $mod+Shift+minus      exec --no-startup-id  $playerctl volume .2-
 
-#bar {
-#    status_command i3blocks
-#    position top
-#    mode dock
-#    modifier None
-#}
+bindsym $mod+Shift+Escape     exec $exit_menu
+bindsym $mod+Shift+Tab        exec $window_chooser
 
-# #---Basic Bindings---# #
-bindsym $mod+Return             exec $term
-
-bindsym $mod+Shift+Escape       exec ~/.scripts/exit_menu
-bindsym $mod+Shift+Tab          exec ~/.scripts/window_chooser
-bindsym $mod+Shift+j            exec ~/.scripts/rofi-emoji
+# #-----------------------------------------------------------------------------#
 
 # #---Letter Key Bindings---# #
-##bindsym $mod+q          kill
-bindsym $mod+Shift+q    kill
-
-bindsym $mod+Shift+w    exec --no-startup-id firefox
-
-bindsym $mod+r          exec --no-startup-id $term -t vifm -e ~/.local/bin/vifm
-
-bindsym $mod+Shift+t    split toggle
-
-bindsym $mod+u          [title="dropdown"] scratchpad show; [title="dropdown"] move position center
-
-bindsym $mod+i          exec --no-startup-id $term -e htop
+# bindsym $mod+a        focus parent
+# bindsym $mod+Shift+a  focus child
+# bindsym $mod+b        split h
+bindsym $mod+Shift+b    exec polybar-msg cmd toggle # hide/show polybar
+# bindsym $mod+c
+# bindsym $mod+Shift+c  reload
+bindsym $mod+d          exec rofi -show drun -theme sidebar -show-icons -drun-show-actions -icon-theme breeze-dark
+bindsym $mod+Menu       exec rofi -show drun -theme sidebar -show-icons -drun-show-actions -icon-theme breeze-dark
+bindsym $mod+Shift+d    exec --no-startup-id  dmenu_run
+# bindsym $mod+e        layout toggle split
+# bindsym $mod+Shift+e  exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi veramente terminare i3?' -b 'Si, termina i3' 'i3-msg exit'"
+# bindsym $mod+f        fullscreen toggle
+# bindsym $mod+Shift+f
+bindsym $mod+g          [title="Firefox"] focus
+bindsym $mod+Shift+g    exec --no-startup-id gimp; workspace $ws3
+# bindsym $mod+h        focus left
+bindsym $mod+Shift+h    exec rofi -show ssh -width 50 -lines 10  -theme Monokai -terminal $term
+bindsym $mod+i          exec --no-startup-id  $term -e htop
 bindsym $mod+Shift+i    exec --no-startup-id $term -e sxiv -t -r ~/Immagini/
-
-bindsym $mod+o          sticky toggle
-
-##bindsym $mod+Shift+p    exec --no-startup-id mypaint; workspace $ws2
-bindsym $mod+Shift+p    exec --no-startup-id ~/.scripts/select_player
-
-bindsym $mod+Shift+d    exec --no-startup-id dmenu_run
-bindsym $mod+d          exec --no-startup-id rofi -show drun -theme sidebar -show-icons -drun-show-actions -icon-theme breeze-dark
-bindsym $mod+Shift+h    exec --no-startup-id rofi -show ssh -width 50 -lines 10  -theme Monokai -terminal $term
-
-bindsym $mod+Shift+g    exec --no-startup-id gimp; workspace $ws2
-
-bindsym $mod+x          exec --no-startup-id ~/.config/i3/lock.sh
-
-bindsym $mod+c          exec --no-startup-id ~/.scripts/camtoggle
-
+# bindsym $mod+j        focus down
+bindsym $mod+Shift+j    exec $pickup_emoji
+# bindsym $mod+k        focus up
+# bindsym $mod+Shift+k
+# bindsym $mod+l        focus right
+bindsym $mod+Shift+l    exec $select_video
 bindsym $mod+m          exec --no-startup-id  $term -e ncmpcpp
-bindsym $mod+Shift+m    exec --no-startup-id  ~/.scripts/watch_video
-
+# bindsym $mod+Shift+m  exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+n          [title="VIM$"] focus
+# bindsym $mod+Shift+n  exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
+# bindsym $mod+o        sticky toggle
+# bindsym $mod+Shift+o
+# bindsym $mod+p        mode "resize"
+bindsym $mod+Shift+p    exec $select_player
+# bindsym $mod+q
+bindsym $mod+Shift+q    kill
+bindsym $mod+r          exec --no-startup-id  $term -t vifm -e ~/.local/bin/vifm
+# bindsym $mod+Shift+r  restart
+# bindsym $mod+s        layout stacking
+bindsym $mod+Shift+s    exec --no-startup-id tabbed surf -e; workspace $ws2
+bindsym $mod+t          [class="St" title="^((?!VIM).)*$"] focus
+# bindsym $mod+Shift+t  split toggle
+bindsym $mod+u          [title="franco - BeeBEEP$"] scratchpad show; [title="BeeBEEP$"] move position 985 px 34 px
+# bindsym $mod+Shift+u
+# bindsym $mod+v        split v
+# bindsym $mod+Shift+v
+# bindsym $mod+w        layout tabbed
+bindsym $mod+Shift+w    exec --no-startup-id firefox; workspace $ws2
+bindsym $mod+x          exec $lock_screen
+# bindsym $mod+Shift+x  exec --no-startup-id "i3-nagbar -t warning -m 'Vuoi spegnere il computer?' -b 'Si, spegni' '$shutdown'"
+# bindsym $mod+y        mode "$mode_system"
 bindsym $mod+Shift+y    exec --no-startup-id  $term -e ~/.local/bin/mpsyt
+# bindsym $mod+z        mode "$mode_display"
+# bindsym $mod+Shift+z
 
-bindsym $mod+t           [class="St" title="^((?!VIM).)*$"] focus
-bindsym $mod+n           [title="VIM"] focus
-bindsym $mod+g           [title="Firefox"] focus
+# #-----------------------------------------------------------------------------#
 
-bindsym $mod+Shift+s    exec --no-startup-id tabbed surf -e
-
+# # ------------------ SET SOME MODES --------------#
 # Resize window (you can also use the mouse for that)
 bindsym $mod+p mode "resize"
 mode "resize" {
@@ -203,17 +226,35 @@ mode "resize" {
 bindsym $mod+y mode "$mode_system"
 set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (r)eboot, (Shift+s)hutdown
 mode "$mode_system" {
-    bindsym l         exec --no-startup-id ~/.config/i3/lock.sh, mode "default"
-    bindsym s         exec --no-startup-id $suspend, mode "default"
-    bindsym u         exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e         exec --no-startup-id i3-msg exit, mode "default"
-    bindsym r         exec --no-startup-id $reboot, mode "default"
-    bindsym Shift+s   exec --no-startup-id $shutdown, mode "default"
+    bindsym l         exec $lock_screen, mode "default"
+    bindsym s         exec $suspend, mode "default"
+    bindsym u         exec i3exit switch_user, mode "default"
+    bindsym e         exec i3-msg exit, mode "default"
+    bindsym r         exec $reboot, mode "default"
+    bindsym Shift+s   exec $shutdown, mode "default"
 
     # exit system mode: "Enter" or "Escape"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+
+## Manual management of external displays
+# Set the shortcuts and what they do
+set $mode_display Ext Screen (v) VGA ON, (h) HDMI ON, (x) VGA OFF, (y) HDMI OFF
+mode "$mode_display" {
+    #bindsym v exec --no-startup-id xrandr --output VGA1 --auto --right-of eDP-1, mode "default"
+    #bindsym h exec --no-startup-id xrandr --output HDMI-1 --auto --right-of eDP-1, mode "default"
+    bindsym h exec --no-startup-id  $start_multimonitor, mode "default"
+    #bindsym x exec --no-startup-id xrandr --output VGA1 --auto --off, mode "default"
+    #bindsym y exec --no-startup-id xrandr --output HDMI-1 --auto --off, mode "default"
+    bindsym y exec --no-startup-id  $stop_multimonitor, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+# Declare here the shortcut to bring the display selection menu
+bindsym $mod+z mode "$mode_display"
 
 # #---Workspace Bindings---# #
 bindsym $mod+Home           workspace $ws1
@@ -225,30 +266,10 @@ bindsym $mod+Shift+Prior    move container to workspace prev
 bindsym $mod+Next           workspace next
 bindsym $mod+Shift+Next     move container to workspace next
 bindsym $mod+Tab            workspace back_and_forth
-#bindsym $mod+XF86Back       workspace prev
-#bindsym $mod+XF86Forward    workspace next
 bindsym $mod+semicolon      workspace next
-bindsym $mod+apostrophe     split horizontal ;; exec --no-startup-id $term
-bindsym $mod+slash          split vertical ;; exec --no-startup-id $term
+bindsym $mod+apostrophe     split horizontal ;; exec --no-startup-id  $term
+bindsym $mod+slash          split vertical ;; exec --no-startup-id  $term
 bindsym $mod+backslash      workspace back_and_forth
-
-## Manual management of external displays
-# Set the shortcuts and what they do
-set $mode_display Ext Screen (v) VGA ON, (h) HDMI ON, (x) VGA OFF, (y) HDMI OFF
-mode "$mode_display" {
-    #bindsym v exec --no-startup-id xrandr --output VGA1 --auto --right-of eDP-1, mode "default"
-    #bindsym h exec --no-startup-id xrandr --output HDMI-1 --auto --right-of eDP-1, mode "default"
-    bindsym h exec --no-startup-id ~/.scripts/start_multimonitor, mode "default"
-    #bindsym x exec --no-startup-id xrandr --output VGA1 --auto --off, mode "default"
-    #bindsym y exec --no-startup-id xrandr --output HDMI-1 --auto --off, mode "default"
-    bindsym y exec --no-startup-id ~/.scripts/stop_multimonitor, mode "default"
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-# Declare here the shortcut to bring the display selection menu
-bindsym $mod+z mode "$mode_display"
 
 set $ws1 "1"
 set $ws2 "2"
@@ -263,7 +284,7 @@ set $ws10 "10"
 
 workspace 5 output HDMI-1
 #workspace 1 output eDP-1
-#workspace 2 output eDP-1
+
 # switch to workspace
 bindsym $mod+1      workspace $ws1
 bindsym $mod+2      workspace $ws2
@@ -289,12 +310,12 @@ bindsym $mod+Shift+9    move container to workspace $ws9
 bindsym $mod+Shift+0    move container to workspace $ws10
 
 # I'll later bind this to mod+u.
-#exec --no-startup-id $term -t dropdown -e calc
-#for_window [title="dropdown"] floating enable
-#for_window [title="dropdown"] resize set 800 600
-#for_window [title="dropdown"] resize set 625 400
-#for_window [title="dropdown"] move scratchpad
-#for_window [title="dropdown"] border pixel 1
+exec --no-startup-id beebeep
+for_window [title="franco - BeeBEEP$"] floating enable
+for_window [title="franco - BeeBEEP"] resize set 300 600
+#for_window [title="^BeeBEEP$"] resize set 625 400
+for_window [title="franco - BeeBEEP$"] move scratchpad
+for_window [title="franco - BeeBEEP$"] border pixel 1
 
 # Bindings to make the webcam float and stick.
 for_window [title="mpvfloat"] floating enable
@@ -304,25 +325,25 @@ no_focus   [title="mpvfloat"]
 
 for_window [title="Default - Wine desktop"] floating enable
 
-# move all floating windows to the scratchpad
-bindsym $mod+F7 [floating] move scratchpad
-bindsym $mod+F8 scratchpad show
-
 # #---Function Buttons---# #
-bindsym $mod+F1        exec --no-startup-id ~/.scripts/show-i3-bindings
-bindsym $mod+F2        exec --no-startup-id ~/.scripts/show-i3-sysbindings
-bindsym $mod+Shift+F3  exec --no-startup-id $netstart
-bindsym $mod+Shift+F4  exec --no-startup-id $netstop
-bindsym $mod+Shift+F5  exec --no-startup-id $netrefresh
-bindsym $mod+Shift+F6  exec --no-startup-id ~/.scripts/paswitch #switch audio card
-##bindsym $mod+F6     exec --no-startup-id $term -e transmission-remote-cli
+bindsym $mod+F1        exec --no-startup-id  $show-i3-sysbindings
+bindsym $mod+Shift+F1  exec --no-startup-id  $show-i3-xf86bindings
+bindsym $mod+F2        exec --no-startup-id  $show-i3-bindings
+bindsym $mod+Shift+F3  exec --no-startup-id  $netstart
+bindsym $mod+Shift+F4  exec --no-startup-id  $netstop
+bindsym $mod+Shift+F5  exec --no-startup-id  $netrefresh
+bindsym $mod+Shift+F6  exec --no-startup-id  $switch_audio_card
+# bindsym $mod+F6      exec --no-startup-id $term -e transmission-remote-cli
+
+# move all floating windows to the scratchpad
+bindsym $mod+F7       [floating] move scratchpad
+bindsym $mod+F8       [title="^((?!BeeBEEP).)*$"] scratchpad show
 ##bindsym $mod+F7
 ##bindsym $mod+F8
-bindsym $mod+F9     exec --no-startup-id $term -t gotop -e gotop -c solarized -s -b
-bindsym $mod+F10    exec --no-startup-id ~/.local/bin/quickswitch.py -j -e -f -C Polybar
-bindsym $mod+F11    exec --no-startup-id ~/.local/bin/quickswitch.py -m -C Polybar
-bindsym $mod+F12    exec --no-startup-id ~/.local/bin/quickswitch.py -C Polybar
-bindsym F12         exec --no-startup-id ~/.local/bin/tdrop -ma -y 48 -h 70% st
+bindsym $mod+F9        exec --no-startup-id  $term -t gotop -e gotop -c solarized -s -b
+bindsym $mod+F10       exec ~/.local/bin/quickswitch.py -j -e -f -C Polybar
+bindsym $mod+F11       exec ~/.local/bin/quickswitch.py -m -C Polybar
+bindsym $mod+F12       exec ~/.local/bin/quickswitch.py -C Polybar
 
 # #---Arrow Keys---# #
 bindsym $mod+Left           focus left
@@ -342,12 +363,18 @@ bindsym Shift+Print         exec --no-startup-id maim -s ~/shots/$(date +%s).png
 # #---Extra XF86 Keys---# #
 # These are the extra media keys that some keyboards have.
 bindsym XF86Calculator       exec --no-startup-id kcalc
-bindsym XF86Sleep            exec $suspend
+bindsym XF86Sleep            exec --no-startup-id $suspend
 bindsym XF86WWW              exec --no-startup-id firefox
-bindsym XF86ScreenSaver      exec --no-startup-id ~/.scripts/monitor-off
-bindsym XF86WebCam           exec --no-startup-id ~/.scripts/camtoggle
-bindsym XF86TouchpadToggle   exec --no-startup-id ~/.scripts/touchpad-toggle
-bindsym XF86RFKill           exec $netstop
+bindsym XF86ScreenSaver      exec --no-startup-id $monitor-off
+bindsym XF86WebCam           exec --no-startup-id $cam-toggle
+bindsym XF86TouchpadToggle   exec --no-startup-id $touchpad-toggle
+bindsym XF86RFKill           exec --no-startup-id $nettoggle
+
+# read 1 character and mark the current window with this character
+bindsym $mod+Shift+m         exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+
+# read 1 character and go to the window with the character
+bindsym $mod+Shift+n         exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 for_window [class="(?i)qsynth"] floating enable
 for_window [class="(?i)copyq"] floating enable
@@ -360,9 +387,13 @@ for_window [class="Yad"] floating enable
 for_window [title="Calendario"] border pixel 1
 for_window [title="Event Tester"] floating enable
 for_window [title="Regolazione del volume"] floating enable; resize set 640 x 480
+for_window [title="Connessioni di rete"] floating enable; resize set 640 x 480
+for_window [title="SimpleScreenRecorder"] floating enable; resize set 640 x 480
+
+# #---------------------------------------------------------------------------------------------#
 
 # #---Starting External Scripts---# #
-exec --no-startup-id /usr/bin/kuiserver5
+#exec /usr/bin/kuiserver5
 
 exec --no-startup-id /usr/libexec/dconf-service
 
@@ -373,15 +404,13 @@ exec --no-startup-id xset -dpms
 exec --no-startup-id xset s off
 
 # Composite manager:
-exec --no-startup-id ~/.scripts/picom_launch
+exec --no-startup-id $picom_launch
 
 # Setting the background:
-#exec_always --no-startup-id feh --bg-fill ~/.config/i3/sardinia.jpg
-exec_always --no-startup-id feh --bg-fill ~/.config/i3/001.png
+exec_always --no-startup-id feh --bg-fill ~/.config/i3/default-wallpaper
 
 # Launch Polybar where appropriate:
-#exec --no-startup-id polybar top -r
-exec_always --no-startup-id ~/.scripts/polybar_launch
+exec_always --no-startup-id $polybar_launch
 
 # Starts dunst for notifications:
 exec --no-startup-id dunst
@@ -397,7 +426,7 @@ exec --no-startup-id dunst
 exec --no-startup-id xbanish
 
 # Network Manager applet
-exec --no-startup-id "sleep 10; nm-applet"
+exec --no-startup-id sleep 10; nm-applet
 
 # Automounter
 exec --no-startup-id udiskie -t -f dolphin
@@ -406,7 +435,7 @@ exec --no-startup-id udiskie -t -f dolphin
 exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' qlipper"
 
 # Redshift
-exec --no-startup-id "sleep 10; redshift-gtk"
+exec --no-startup-id sleep 10; redshift-gtk
 
 # KDE Connect
 exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' kdeconnect-indicator"
@@ -414,11 +443,11 @@ exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME=
 # Touchpad tap and speed
 #exec --no-startup-id xinput set-prop 14 306 1
 #exec --no-startup-id xinput set-prop 14 326 0.8
-exec --no-startup-id ~/.scripts/touchpad-config
+exec --no-startup-id $touchpad-config
 
 # Conky
-exec --no-startup-id conky -c ~/.conky/conkyrc_i3
-exec --no-startup-id "sleep 5; conky -c ~/.conky/Gotham/Gotham_i3"
+exec --no-startup-id sleep 3; conky -c ~/.conky/conkyrc_i3
+exec --no-startup-id sleep 5; conky -c ~/.conky/Gotham/Gotham_i3
 exec --no-startup-id cd ~/.conky-weather/; ./run
 
 # IT keymap
@@ -426,4 +455,3 @@ exec --no-startup-id setxkbmap
 
 # Allow run some GUI apps as root
 exec --no-startup-id /usr/libexec/kf5/polkit-kde-authentication-agent-1
-

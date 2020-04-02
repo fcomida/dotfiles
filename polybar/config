@@ -9,9 +9,9 @@
 ;=====================================================
 
 [colors]
-background = #ca000000
+background = #44000000
 background-alt = #444
-foreground = #a8a19f
+foreground = #fff93c
 foreground-alt = #555
 primary = #d5911a
 secondary = #6666ea
@@ -29,7 +29,7 @@ enable-ipc=true
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-line-size = 3
+line-size = 0
 line-color = #f22c40
 
 border-size = 0
@@ -62,24 +62,6 @@ tray-padding = 0
 scroll-up = i3wm-wsnext
 scroll-down = i3wm-wsprev
 
-[module/xkeyboard]
-type = internal/xkeyboard
-blacklist-0 = num lock
-
-format-prefix = %{F#6666ea} %{F-}
-format-prefix-foreground = ${colors.foreground-alt}
-
-label-layout = %{F#6666ea}%layout%%{F-}
-
-label-indicator-padding = 2
-label-indicator-margin = 1
-#label-indicator-background = ${colors.secondary}
-label-indicator-background = #6666ea
-label-indicator-foreground = #ffff00
-indicator-icon-default =
-indicator-icon-0 = caps lock;-CL;🔒
-label-indicator-on-capslock = %icon%
-
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
@@ -89,13 +71,14 @@ wrapping-scroll = false
 ; Only show workspaces on the same output as the bar
 ;pin-workspaces = true
 
+label-mode = %mode%
 label-mode-padding = 2
-label-mode-foreground = #000
-label-mode-background = ${colors.primary}
+label-mode-foreground = #000000
+label-mode-background = #ffffff
 
 ; focused = Active workspace on focused monitor
-label-focused = %index%
-label-focused-background = #00004d
+label-focused = %{F#151009}%index%%{F-}
+label-focused-background = #a3be8c
 label-focused-underline= ${colors.primary}
 label-focused-padding = 2
 
@@ -109,43 +92,40 @@ label-visible-background = ${self.label-focused-background}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
-label-urgent = %index%!
+label-urgent = %index%
 label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
 
-[module/mpd]
-type = internal/mpd
-format-online = <label-song> <label-time>
+format-prefix = %{F#b48ead} %{F-}
+format-prefix-foreground = #b48ead
 
-icon-prev = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
+label-layout = %{F#b48ead}%layout%%{F-}
 
-;bar-progress-width = 45
-;bar-progress-indicator = |
-;bar-progress-fill = -
-;bar-progress-empty = -
-
-label-song =  %artist% - %title%
-label-song-maxlen = 45
-label-song-ellipsis = true
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = #6666ea
+label-indicator-foreground = #ffff00
+indicator-icon-default =
+indicator-icon-0 = caps lock;-CL;🔒
+label-indicator-on-capslock = %icon%
 
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = %{F#ffff00} %{F-}
+format-prefix = %{F#ebcb8b} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-label = %{F#ffff00}%percentage%%%{F-}
+label = %{F#ebcb8b}%percentage%%%{F-}
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = %{F#00ad9c} %{F-}
+format-prefix = %{F#8abc81} %{F-}
 format-prefix-foreground = ${colors.foreground-alt}
-label = %{F#00ad9c}%percentage_used%%%{F-}
+label = %{F#8abc81}%percentage_used%%%{F-}
 
 [module/wlan]
 type = internal/network
@@ -153,11 +133,10 @@ interface = wlp3s0
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-label-connected = %{F#6666ea}%essid%%{F-}
+label-connected = %{F#4f7be2}%essid%%{F-}
 
-;format-disconnected =
 format-disconnected = <label-disconnected>
-label-disconnected = no wifi
+label-disconnected = %{F#ff0000}no wifi%{F-}
 label-disconnected-foreground = ${colors.foreground-alt}
 
 ramp-signal-0 = 
@@ -165,7 +144,7 @@ ramp-signal-1 = 
 ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
-ramp-signal-foreground = #6666ea
+ramp-signal-foreground = #4f7be2
 
 [module/eth]
 type = internal/network
@@ -176,59 +155,9 @@ format-connected-prefix = " "
 format-connected-prefix-foreground = ${colors.foreground-alt}
 label-connected = %local_ip%
 
-;format-disconnected =
 format-disconnected = <label-disconnected>
 label-disconnected = no eth
 label-disconnected-foreground = ${colors.foreground-alt}
-
-[module/date]
-type = internal/date
-interval = 5
-
-date = " %d/%m/%Y"
-
-# If you're not living in a country where AM and PM is used you can add -alt to the time above this line and comment it using ;, then you can remove the -alt to the time under this line and uncomment it.
-time = %H:%M
-
-format-prefix = 
-format-prefix-foreground = ${colors.foreground-alt}
-
-label = %{F#d5911a}%time%%{F-}
-
-[module/volume]
-type = internal/pulseaudio
-
-label-volume-foreground = #5ab738
-
-format-muted-foreground = ${colors.foreground-alt}
-
-format-volume = <ramp-volume> <bar-volume>
-
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-3 = 
-ramp-volume-foreground= #5ab738
-
-format-muted-prefix =
-label-muted = %{F#ff0000}  spento  %{F-}
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #5ab738
-bar-volume-foreground-1 = #5ab738
-bar-volume-foreground-2 = #5ab738
-bar-volume-foreground-3 = #5ab738
-bar-volume-foreground-4 = #5ab738
-bar-volume-foreground-5 = #5ab738
-bar-volume-foreground-6 = #f22c40
-bar-volume-gradient = false
-bar-volume-indicator =
-bar-volume-indicator-font = 2
-bar-volume-fill = 
-bar-volume-fill-font = 2
-bar-volume-empty = 
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
 
 [module/battery]
 type = internal/battery
@@ -236,10 +165,8 @@ battery = BAT0
 adapter = ADP1
 full-at = 98
 
-;format-charging = Charging... <label-charging>
 format-charging = <animation-charging> %{F#aa0015}<label-charging>%{F-}
 
-;format-discharging = <label-discharging>
 format-discharging = <ramp-capacity> %{F#aa0015}<label-discharging>%{F-}
 
 format-full-prefix = %{F#aa0015} %{F-}
@@ -264,56 +191,22 @@ warn-temperature = 60
 format = <ramp> <label>
 format-warn = <ramp> <label-warn>
 
-label = %{F#ffaa00}%temperature-c%%{F-}
+label = %{F#ce9738}%temperature-c%%{F-}
 label-warn = %temperature-c%
 label-warn-foreground = #f00
 
 ramp-0 = 
 ramp-1 = 
 ramp-2 = 
-ramp-foreground = #ffaa00
-
-[module/powermenu]
-type = custom/menu
-
-format-spacing = 1
-
-label-open = 
-label-open-foreground = ${colors.secondary}
-label-close =  cancella
-label-close-foreground = ${colors.secondary}
-label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
-
-menu-0-0 = riavvia
-menu-0-0-exec = menu-open-1
-menu-0-1 = spegni
-menu-0-1-exec = menu-open-2
-menu-0-2 = esci
-menu-0-2-exec = menu-open-3
-
-menu-1-0 = riavvia
-menu-1-0-exec = sudo reboot
-menu-1-1 = cancella
-menu-1-1-exec = menu-open-0
-
-menu-2-0 = spegni
-menu-2-0-exec = sudo poweroff
-menu-2-1 = cancella
-menu-2-1-exec = menu-open-0
-
-menu-3-0 = esci
-menu-3-0-exec = pkill i3
-menu-3-1 = cancella
-menu-3-1-exec = menu-open-0
+ramp-foreground = #ce9738
 
 [module/popup-calendar]
 type = custom/script
 exec = ~/.scripts/popup-calendar-kde
 interval = 5
 click-left = ~/.scripts/popup-calendar-kde --popup
-format-prefix = %{F#55ff00}%{F-}
-label = %{F#55ff00}%output%%{F-}
+format-prefix = %{F#a3be8c}%{F-}
+label = %{F#a3be8c}%output%%{F-}
 
 [module/player-mpris-simple]
 type = custom/script
@@ -326,29 +219,22 @@ label = %{F#55aaff}%output%%{F-}
 label-maxlen = 120
 label-ellipsis = true
 
-[module/kdeconnect]
-type = custom/script
-exec = ". ~/.scripts/polybar-kdeconnect; show_devices"
-tail = true
-label = %{T3}%output%%{T-}
-
 [module/notification-github]
 type = custom/script
 exec = ~/.scripts/notification-github
-label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
-interval = 60
+label = %{F#81a1c1}%{T6}%{T-} %output%%{F-}
+interval = 600
 
 [module/updates-fedora]
 type = custom/script
 exec = ~/.scripts/updates-fedora
-label = %{F#ffaa00}%{T6}%{T-} %output%%{F-}
+label = %{F#ebcb8b}%{T6}%{T-} %output%%{F-}
 interval = 600
 
 [module/pulseaudio-control]
 type = custom/script
 tail = true
-label=%{F#5ab1f6}%output%%{F-}
-#format-underline = ${colors.blue}
+label=%{F#88c0d0}%output%%{F-}
 
 exec = ~/.scripts/pulseaudio-control --listen
 click-right = exec pavucontrol &
@@ -357,15 +243,12 @@ click-middle = ~/.scripts/pulseaudio-control --change
 scroll-up = ~/.scripts/pulseaudio-control --up
 scroll-down = ~/.scripts/pulseaudio-control --down
 label-padding = 2
-label-foreground = ${colors.foreground}
+label-foreground = #88c0d0
 
 [settings]
 screenchange-reload = true
-compositing-background = xor
-;compositing-background = screen
+compositing-background = screen
 compositing-foreground = source
-;compositing-border = over
-#pseudo-transparency = true
 
 [global/wm]
 margin-top = 5

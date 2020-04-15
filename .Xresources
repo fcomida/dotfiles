@@ -10,9 +10,6 @@ Xft.hintstyle:              hintslight
 
 !-------------------------------------------------------------------------------
 ! URxvt settings
-! Colours lifted from Solarized (http://ethanschoonover.com/solarized)
-! More info at:
-! http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod
 !-------------------------------------------------------------------------------
 
 URxvt.depth:                32
@@ -30,11 +27,7 @@ URxvt.lineSpace:            0
 
 ! Fonts
 URxvt.allow_bold:           true
-/* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
-/* URxvt*font: xft:Monospace:pixelsize=14 */
-/* URxvt*boldFont: xft:Monospace:pixelsize=14 */
 URxvt*font: xft:Source Code Pro for Powerline:style=Regular:size=10,xft:Fira Mono for Powerline:style=Medium:size=10,xft:Font Awesome 5 Free Regular:style=Regular:size=10
-
 
 ! Fix font space
 URxvt*letterSpace: -1
@@ -60,14 +53,47 @@ URxvt.colorIT:      #87af5f
 URxvt.colorBD:      #d7d7d7
 URxvt.colorUL:      #87afd7
 
-!!Source http://github.com/altercation/solarized
+!-------------------------------------------------------------------------------
+! xterm settings
+!-------------------------------------------------------------------------------
 
-! *background:           rgba:0000/2b00/3600/f800
-*background:           rgba:0b00/0b00/0b00/f900
-! *background: #002b36
-*foreground: #657b83
-!!*fading: 40
-*fadeColor: #000000
+! Use a nice truetype font and size by default...
+xterm*faceName: IBM Plex Mono
+xterm*faceSize: 11
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+xterm*loginshell: true
+
+! I like a LOT of scrollback...
+xterm*savelines: 16384
+
+! double-click to select whole URLs :D
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! right hand side scrollbar...
+xterm*rightScrollBar: false
+xterm*ScrollBar: false
+
+! stop output to terminal from jumping down to bottom of scroll again
+xterm*scrollTtyOutput: false
+
+!-------------------------------------------------------------------------------
+! st settings
+!-------------------------------------------------------------------------------
+
+*alpha:     0.96
+*alphaUnfocussed:     0.7
+*font:      IBM Plex Mono:pixelsize=14:antialias=true:autohint=true
+*cwscale:   1.0
+*chscale:   1.0
+*borderpx:  0
+
+!-------------------------------------------------------------------------------
+! Nord color scheme
+!-------------------------------------------------------------------------------
+
+*background: #0b0b0b
+*foreground: #d8dee9
 *cursorColor: #d8dee9
 *pointerColorBackground: #586e75
 *pointerColorForeground: #93a1a1

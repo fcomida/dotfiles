@@ -5,16 +5,12 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'takac/vim-hardtime'
-
-Plugin 'ycm-core/YouCompleteMe'
-
-Plugin 'rdnetto/YCM-Generator'
 
 Plugin 'itchyny/lightline.vim'
 
@@ -22,27 +18,9 @@ Plugin 'arcticicestudio/nord-vim'
 
 Plugin 'octol/vim-cpp-enhanced-highlight'
 
-Plugin 'altercation/vim-colors-solarized'
-
-Plugin 'dracula/vim'
-
-Plugin 'morhetz/gruvbox'
-
-Plugin 'joshdick/onedark.vim'
-
 Plugin 'drewtempelmeyer/palenight.vim'
 
-Plugin 'rafi/awesome-vim-colorschemes'
-
-Plugin 'tpope/vim-fugitive'
-
 Plugin 'tpope/vim-commentary'
-
-Plugin 'airblade/vim-gitgutter'
-
-Plugin 'tpope/vim-rhubarb'
-
-Plugin 'scrooloose/nerdtree'
 
 Plugin 'MarcWeber/vim-addon-mw-utils'
 
@@ -58,8 +36,20 @@ Plugin 'kana/vim-operator-user'
 
 Plugin 'mboughaba/i3config.vim'
 
-"Plugin 'mkitt/tabline.vim'
-""Plugin 'justmao945/vim-clang'
+Plugin 'frazrepo/vim-rainbow'
+
+Plugin 'terryma/vim-expand-region'
+
+Plugin 'christoomey/vim-tmux-navigator'
+
+Plugin 'vim-syntastic/syntastic'
+
+Plugin 'itchyny/vim-gitbranch'
+
+Plugin 'nelstrom/vim-visual-star-search'
+
+Plugin 'junegunn/fzf.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -78,6 +68,10 @@ filetype plugin indent on    " required
 """""""
 " Maps
 """""""
+
+" Set Leader to Space
+let mapleader = "\<Space>"
+
 " Reformat current paragraph
 nnoremap Q gqip
 
@@ -89,9 +83,49 @@ nnoremap <Down> gj
 " which is the default
 map Y y$
 
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" next search
-nnoremap <C-L> :nohl<CR><C-L>
+" -----------------------------------------------------------------------------
+" Basic autocommands
+" -----------------------------------------------------------------------------
+
+" Auto-resize splits when Vim gets resized.
+autocmd VimResized * wincmd =
+
+" Lower timeour on InsertEnter
+autocmd InsertEnter * silent! set timeoutlen=100
+autocmd InsertLeave * silent! set timeoutlen=1000 | set nopaste
+
+" -----------------------------------------------------------------------------
+
+" Add all TODO items to the quickfix list relative to where you opened Vim.
+function! s:todo() abort
+  let entries = []
+  for cmd in ['git grep -niIw -e TODO -e FIXME 2> /dev/null',
+            \ 'grep -rniIw -e TODO -e FIXME . 2> /dev/null']
+    let lines = split(system(cmd), '\n')
+    if v:shell_error != 0 | continue | endif
+    for line in lines
+      let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
+      call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
+    endfor
+    break
+  endfor
+
+  if !empty(entries)
+    call setqflist(entries)
+    copen
+  endif
+endfunction
+
+command! Todo call s:todo()
+
+" -----------------------------------------------------------------------------
+" Ctrl-Space for completions. Heck Yeah!
+inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+        \ "\<lt>C-n>" :
+        \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+        \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+        \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+imap <C-@> <C-Space>
 
 " Toggle search highlighting
 nnoremap <C-Bslash>       :set hls!<bar>:set hls?<CR>
@@ -110,14 +144,44 @@ vno <left> <Nop>
 vno <right> <Nop>
 vno <up> <Nop>
 
-" copy visual selected test to clipboard
-vnoremap <C-c> "+y
+" Type <Space>w to save file (a lot faster than :w<Enter>):
+nnoremap <Leader>w :w<CR>
+nnoremap <Leader>s :wq<CR>
+"nnoremap <Leader>v V
+nnoremap <Leader>g gf
 
-let mapleader = ' '
-"map <Leader>( a<CR>{<CR><ESC>o<ESC>i}<ESC>ki<TAB>
+nnoremap H 0
+nnoremap L $
 
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
+" Copy & paste to system clipboard with <Space>p and <Space>y:
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
+"Enter visual line mode with <Space><Space>:
+nmap <Leader><Leader> V
+nmap <Leader>b :MakeJob<CR>
+
+" vim-expand
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+" Discover text search object
+vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
+    \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
+omap s :normal vs<CR>
+
+" Automatically jump to end of text you pasted:
+" I can paste multiple lines multiple times with simple ppppp.
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+nnoremap <CR> G
+nnoremap <BS> gg
 
 " Toggle between source and header
 map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
@@ -132,10 +196,36 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+
+" The same as above but instead of acting on the whole file it will be
+" restricted to the previously visually selected range. You can do that by
+" pressing *, visually selecting the range you want it to apply to and then
+" press a key below to replace all instances of it in the current selection.
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
+
+" Type a replacement term and press . to repeat the replacement again. Useful
+" for replacing a few instances of the term (comparable to multiple cursors).
+nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> s* "sy:let @/=@s<CR>cgn
+
+" Edit Vim config file in a new tab.
+map <Leader>ev :tabnew $MYVIMRC<CR>
+
+" Source Vim config file.
+map <Leader>sv :source $MYVIMRC<CR>
+
+map <C-U> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
+map <C-D> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
+
 " tab navigation
 nnoremap th  :tabfirst<CR>
 nnoremap tk  :tabnext<CR>
-nnoremap tj  :tabprev<CR>
+nnoremap tj  :tabprevious<CR>
 nnoremap tl  :tablast<CR>
 nnoremap tt  :tabedit<Space>
 nnoremap tn  :tabnext<Space>
@@ -216,41 +306,7 @@ set wildmenu                   " Better commandline completion
 set wildmode=longest:full,full " Expand match on first Tab complete
 set showcmd                    " Show (partial) command in status line.
 set laststatus=2               " Always show a status line
-set cmdheight=2                " Prevent "Press Enter" messages
-
-" Show detailed information in status line
-" set statusline=%f%m%r%h%w\ [%n:%{&ff}/%Y]%=[0x\%04.4B][%03v][%p%%\ line\ %l\ of\ %L]
-
-" set statusline=%F%m%r%h%w\
-" set statusline+=%{fugitive#statusline()}\
-" set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
-" set statusline+=\ [line\ %l\/%L]
-
-" set statusline=[%n]\ %<%.99f\ %h%w%m%r%{fugitive#statusline()}%y%=%-16.(\ %l,%c-%v\ %)%P
-" tpope's
-" set statusline=[%n]\ %<%.99f\ %h%w%m%r%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%y%=%-16(\ %l,%c-%v\ %)%P
-"
-" check if variable bg exists at all, and return it in a safe way
-fun! GetBG()
-if exists("&bg")|return &bg|else|return "-"|endif
-endfun
-
-" check is colorscheme name exists and return it
-fun! GetCN()
-if exists("g:colors_name") | return g:colors_name | else | return "-" | endif
-endfun
-
-set statusline=
-set statusline+=%f%=\ " filename
-set statusline+=%< " folding left
-set statusline+=%{fugitive#statusline()}\
-set statusline+=[%{GetBG()}\:%{GetCN()}]\ " background and colorscheme
-set statusline+=[%1*%M%*%n%R%W\,%{strlen(&ft)?&ft:'none'}]\ " flags and filetype
-set statusline+=%{synIDattr(synID(line('.'),col('.'),1),'name')}\ " highlight type on word
-set statusline+=%(%3l,%02c%03V%)\ " row,column,virtual-column
-set statusline+=\b\:%-04O\ " cursor hex offset from start of file
-set statusline+=\c\:%03b\ " char byte code under cursor
-set statusline+=%P " percentage of the file
+set cmdheight=2                " Prevent 'Press Enter' messages
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text, tab and indent related
@@ -267,16 +323,11 @@ set softtabstop=4
 
 set smartindent
 set smartcase
-" set noshowmode
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
-"set nowritebackup
-"set nobackup
-"set noswapfile
-
+set noshowmode
 set showmatch
 set matchtime=1
 
@@ -290,15 +341,57 @@ set colorcolumn=133
 set linespace=0
 set history=1000
 set list listchars=tab:›\ ,trail:-,extends:>,precedes:<,eol:¬
-set makeprg=make\ -j5\ -C\ build
+set makeprg=make\ -j5\ -C\ ../build
 set encoding=utf-8
 
 set grepprg=grep\ -nH\ $*
 
+set ttimeout
+set ttyfast
+set ttymouse=sgr
+
+""""""""""""""""""""""""""""""""""""""""""""""
+" COLORS
+""""""""""""""""""""""""""""""""""""""""""""""
+"set t_Co=256
+set background="dark"
+" let st terminal display true colors
+if &term == "st-256color"
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+if &term == "st-256color" || &term == "xterm-256color"
+    set termguicolors
+elseif &term == "tmux-256color" || &term == "screen-256color"
+    set term=xterm-256color
+    set termguicolors
+endif
+
+let g:gruvbox_contrast_dark='hard'
+let g:solarized_termcolors=256
+let g:palenight_terminal_italics=1
+let g:nord_italic=1
+let g:nord_italic_comments=1
+
+try
+    colorscheme palenight
+catch
+endtry
+
+if (&background == "dark")
+  " Fix the visual selection and cursorline colors of palenight
+  hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#550000
+  hi Cursorline cterm=NONE ctermfg=NONE ctermbg=237 guibg=#202020
+
+else
+  hi Visual cterm=NONE ctermfg=NONE ctermbg=223 guibg=#ffd7af
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CTAGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <F5> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f ~/.vim/tags/lhdr $(pwd)/src<CR>
+map <F5> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q -f ~/.vim/tags/lhdr $(pwd)<CR>
 set tags+=~/.vim/tags/lhdr
 set tags+=~/.vim/tags/cpp
 set tags+=~/.vim/tags/qt5-core
@@ -307,6 +400,11 @@ set tags+=~/.vim/tags/qt5-widgets
 set tags+=~/.vim/tags/qt5-concurrent
 set tags+=~/.vim/tags/qt5-printsupport
 
+set path+=$PROJECT
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGINS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""
 " OmniCppComplete
 """"""""""""""""""""""""""""""""""""""""""""""
@@ -317,69 +415,66 @@ let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
 let OmniCpp_MayCompleteDot = 1 " autocomplete after .
 let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
 let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ['std', '_GLIBCXX_STD']
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD", "boost", "pfs", "libhdr"]
+let OmniCpp_SelectFirstItem = 2 " select first popup item (without inserting it to the text)
 " automatically open and close the popup menu / preview window
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 set completeopt=menuone,menu,longest,preview
-
-""""""""""""""""""""""""""""""""""""""""""""""
-" COLORS
-""""""""""""""""""""""""""""""""""""""""""""""
-"set t_Co=256
-set background=dark
-" let st terminal display true colors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-if &term == "st-256color"
-    set termguicolors
-endif
-if &term == "xterm-256color"
-    set termguicolors
-endif
-if &term == "tmux-256color"
-    set term=xterm-256color
-    set termguicolors
-endif
-
-let g:gruvbox_contrast_dark='hard'
-let g:solarized_termcolors=256
-let g:palenight_terminal_italics=1
-let g:nord_italic=1
-let g:nord_italic_comments=1
-unlet g:c_comment_strings
-try
-    colorscheme palenight
-catch
-endtry
-
-set statusline+=%#warningmsg#
-set statusline+=%*
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+"autocmd CmdwinEnter * inoremap <expr><buffer> <TAB>
+"      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-" YouCompleteMe
+" Syntastic
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ycm_clangd_binary_path = "/usr/bin/clangd"
-"let g:ycm_key_list_select_completion=[]
-"let g:ycm_key_list_previous_completion=[]
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+
+let g:syntastic_debug = 0
+let g:syntastic_cpp_compiler_options = '-std=gnu++11 -fPIC -Wno-deprecated-declarations'
+let g:syntastic_cpp_include_dirs = [
+            \ './src',
+            \ './build/src',
+            \ '/usr/include',
+            \ '/usr/include/qt5',
+            \ '/usr/include/qt5/QtCore',
+            \ '/usr/include/qt5/QtGui',
+            \ '/usr/include/qt5/QtWidgets',
+            \ '/usr/include/qt5/QtConcurrent',
+            \ '/usr/include/qt5/QtSql',
+            \ '/usr/include/qt5/QtXml',
+            \ '/usr/include/qt5/QtWebEngineWidgets',
+            \ '/usr/include/qt5/QtNetwork',
+            \ '/usr/include/exiv2',
+            \ '/usr/include/OpenEXR',
+            \ '/usr/include/cfitsio',
+            \ '/usr/include/eigen3']
+let g:syntastic_ignore_files = ['\m\c\<ui_[^/]*\.h$', '\m\c\<config\.h$', '\m\c\<global[^/]*$']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+let g:syntastic_cpp_check_header = 1
+let g:syntastic_cpp_auto_refresh_includes = 1
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " Ultisnip
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsExpandTrigger='<leader><tab>'
-let g:UltiSnipsJumpForwardTrigger='<c-j>'
-let g:UltiSnipsJumpBackwardTrigger='<c-k>'
+"let g:UltiSnipsExpandTrigger='<Tab>'
+"let g:UltiSnipsJumpForwardTrigger='<c-j>'
+"let g:UltiSnipsJumpBackwardTrigger='<c-k>'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " lightline
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'nord',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
+      \   'gitbranch': 'gitbranch#name'
       \ },
       \ }
 
@@ -419,9 +514,20 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " Add namespace for fzf.vim exported commands
-let g:fzf_command_prefix = 'Fzf'
+let g:fzf_command_prefix = ''
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
-nnoremap <silent> <leader>o :FZF<CR>
+nnoremap <silent> <leader>o :FZF -m<CR>
+
+" Map a few common things to do with FZF.
+nnoremap <silent> <Leader><Enter> :Buffers<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VIM RAINBOW
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+au FileType c,cpp call rainbow#load()
+
+let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'red',  'yellow', 'magenta']

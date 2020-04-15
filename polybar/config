@@ -53,11 +53,11 @@ modules-left = i3 player-mpris-simple
 modules-right = pulseaudio-control wlan memory cpu temperature popup-calendar xkeyboard notification-github updates-fedora
 
 tray-position = right
-tray-padding = 0
-#tray-reparent = true
+tray-padding = 2
+tray-reparent = true
 
-#wm-restack = i3
-#override-redirect = true
+;wm-restack = i3
+;override-redirect = true
 
 scroll-up = i3wm-wsnext
 scroll-down = i3wm-wsprev

@@ -1,0 +1,86 @@
+!
+! Generated with :
+! XRDB2Xreources.py
+! Use a nice truetype font and size by default...
+
+!-------------------------------------------------------------------------------
+! Xft settings
+!-------------------------------------------------------------------------------
+
+Xft.dpi:                    96
+Xft.antialias:              true
+Xft.rgba:                   rgb
+Xft.hinting:                true
+Xft.hintstyle:              hintslight
+
+xterm*faceName: IBM Plex Mono
+xterm*faceSize: 11
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+xterm*loginshell: true
+
+! I like a LOT of scrollback...
+xterm*savelines: 16384
+
+! double-click to select whole URLs :D
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! right hand side scrollbar...
+xterm*rightScrollBar: false
+xterm*ScrollBar: false
+
+!-------------------------------------------------------------------------------
+! st settings
+!-------------------------------------------------------------------------------
+
+*alpha:     0.96
+*alphaUnfocussed:     0.7
+*font:      IBM Plex Mono:pixelsize=14:antialias=true:autohint=true
+*cwscale:   1.0
+*chscale:   1.0
+*borderpx:  0
+
+!-------------------------------------------------------------------------------
+! Japanesque color scheme
+!-------------------------------------------------------------------------------
+
+*.foreground:  #f7f6ec
+*.background:  #1e1e1e
+*.cursorColor: #edcf4f
+!
+! Black
+*.color0:      #343935
+*.color8:      #595b59
+!
+! Red
+*.color1:      #cf3f61
+*.color9:      #d18fa6
+!
+! Green
+*.color2:      #7bb75b
+*.color10:     #767f2c
+!
+! Yellow
+*.color3:      #e9b32a
+*.color11:     #78592f
+!
+! Blue
+*.color4:      #4c9ad4
+*.color12:     #135979
+!
+! Magenta
+*.color5:      #a57fc4
+*.color13:     #604291
+!
+! Cyan
+*.color6:      #389aad
+*.color14:     #76bbca
+!
+! White
+*.color7:      #fafaf6
+*.color15:     #b2b5ae
+!
+! Bold, Italic, Underline
+*.colorBD:     #fffffa
+!*.colorIT:
+!*.colorUL:

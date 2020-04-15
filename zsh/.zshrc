@@ -9,14 +9,14 @@ export PATH=$HOME/.local/bin:/opt/epson-printer-utility/bin/:$PATH
 #fi
 
 # Path to your oh-my-zsh installation.
-export ZSH=/home/franco/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="agnoster"
-ZSH_THEME="juanghurtado"
-ZLE_RPROMPT_INDENT=1
+ZSH_THEME="fox"
+ZLE_RPROMPT_INDENT=0
 # ZSH_THEME="powerlevel9k/powerlevel9k"
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
 # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs vi_mode time)
@@ -83,10 +83,14 @@ plugins=(
   tmux
   vi-mode
   zsh-syntax-highlighting
-  zsh-navigation-tools
   fzf
   history-substring-search
   vundle
+  pj
+  catimg
+  extract
+  forgit
+  themes
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -98,6 +102,11 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 export LANG=it_IT.UTF-8
 
+#  pj
+export PROJECT_PATHS=(~/src/fcomida/LuminanceHDR/src)
+
+export BROWSER=firefox
+export XIVIEWER=sxiv
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -146,28 +155,11 @@ vim_mode=$vim_ins_mode
 #}
 fi
 
-if [[ -z $(tty | grep '/dev/pts') ]];
-then
-    ;
-else
-    #source ~/.promptline.sh
-    ;
-fi
-
 # fzf stuff
 source /usr/share/zsh/site-functions/fzf
 # Setting fd as the default source for fzf
 export FZF_DEFAULT_COMMAND='fd --type f'
-# Define them before sourcing the plugin if you don't use any plugin manager.
-forgit_log=glof
-forgit_diff=gdf
-forgit_add=gaf
-forgit_reset_head=grhf
-forgit_ignore=gif
-forgit_restore=gcff
-forgit_clean=gcleanf
-forgit_stash_show=gssf
-source ~/src/forgit/forgit.plugin.zsh
+
 
 v() {
   local files

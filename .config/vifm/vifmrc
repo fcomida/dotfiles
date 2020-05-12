@@ -70,13 +70,13 @@ set norunexec
 
 " Selected color scheme
 
-colorscheme dracula
+colorscheme palenight
 
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
 " See man date or man strftime for details.
 
-set timefmt=%m/%d\ %H:%M
+set timefmt=%d/%m\ %H:%M
 
 " Show list of matches on tab completion in command-line mode
 
@@ -178,7 +178,7 @@ command! reload :write | restart
 " program.
 
 " Pdf
-filextype *.pdf okular %c, zathura %c %i &, apvlv %c, xpdf %c
+filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
 fileviewer *.pdf
         \ vifmimg pdfpreview %px %py %pw %ph %c
         \ %pc
@@ -447,7 +447,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 nnoremap s :shell<cr>
 
 " Display sorting dialog
-nnoremap S :sort<cr>
+    nnoremap S :sort<cr>
 
 " Toggle visibility of preview window
 nnoremap w :view<cr>
@@ -473,7 +473,7 @@ nnoremap cc cw<c-u>
 nnoremap A cw
 
 " Open console in current directory
-nnoremap ,t :!xterm &<cr>
+nnoremap ,t :!st &<cr>
 
 " Open editor to edit vifmrc and apply settings after returning to vifm
 nnoremap ,c :write | edit $MYVIFMRC | restart<cr>

@@ -20,6 +20,8 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 
 Plugin 'drewtempelmeyer/palenight.vim'
 
+Plugin 'ayu-theme/ayu-vim'
+
 Plugin 'tpope/vim-commentary'
 
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -49,6 +51,8 @@ Plugin 'itchyny/vim-gitbranch'
 Plugin 'nelstrom/vim-visual-star-search'
 
 Plugin 'junegunn/fzf.vim'
+
+Plugin 'Yggdroot/indentLine'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -128,8 +132,8 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 imap <C-@> <C-Space>
 
 " Toggle search highlighting
-nnoremap <C-Bslash>       :set hls!<bar>:set hls?<CR>
-inoremap <C-Bslash>       <Esc>:set hls!<bar>:set hls?<CR>a
+nnoremap <Leader><Bslash>   :set hls!<bar>:set hls?<CR>
+inoremap <Leader><Bslash>   <Esc>:set hls!<bar>:set hls?<CR>a
 
 no <down> <Nop>
 no <left> <Nop>
@@ -150,8 +154,8 @@ nnoremap <Leader>s :wq<CR>
 "nnoremap <Leader>v V
 nnoremap <Leader>g gf
 
-nnoremap H 0
-nnoremap L $
+" nnoremap H 0
+" nnoremap L $
 
 " Copy & paste to system clipboard with <Space>p and <Space>y:
 vmap <Leader>y "+y
@@ -180,8 +184,8 @@ vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 
-nnoremap <CR> G
-nnoremap <BS> gg
+" nnoremap <CR> G
+" nnoremap <BS> gg
 
 " Toggle between source and header
 map <F4> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
@@ -373,9 +377,10 @@ let g:solarized_termcolors=256
 let g:palenight_terminal_italics=1
 let g:nord_italic=1
 let g:nord_italic_comments=1
+let ayucolor="dark"
 
 try
-    colorscheme palenight
+    colorscheme ayu
 catch
 endtry
 
@@ -424,12 +429,17 @@ au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 "      \ pumvisible() ? "\<C-n>" : "\<TAB>"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntastic
+" cpp enhanced highlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_template_highlight = 1
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Syntastic
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:syntastic_debug = 0
 let g:syntastic_cpp_compiler_options = '-std=gnu++11 -fPIC -Wno-deprecated-declarations'
 let g:syntastic_cpp_include_dirs = [
@@ -468,7 +478,7 @@ let g:syntastic_cpp_auto_refresh_includes = 1
 " lightline
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'ayu',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -531,3 +541,9 @@ nnoremap <silent> <Leader>l :Lines<CR>
 au FileType c,cpp call rainbow#load()
 
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'red',  'yellow', 'magenta']
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" IndentLine
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:indentLine_setColors = 0
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']

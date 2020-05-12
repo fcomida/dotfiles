@@ -1,0 +1,13 @@
+#!/bin/sh
+
+data=$(date '+%a %d %b %Y')
+ora=$(date '+%k:%M')
+
+printf "%s %s " "📅 $data " "🕙 $ora "
+
+case $BLOCK_BUTTON in
+	1) notify-send "Mese corrente" "$(cal --color=always | sed "s/..7m/<b><span color=\"red\">/;s/..27m/<\/span><\/b>/")" && notify-send "Appuntamenti" "$(calcurse -D ~/.config/calcurse -d3)" ;;
+	2) $TERMINAL -e calcurse -D ~/.config/calcurse ;;
+	3) notify-send "📅 Data/ora" "\- Il tasto sinistro mostra gli appuntamenti per i prossimi tre giorni tramite \`calcurse -d3\` e il mese tramite \`cal\`
+- Tasto medio lancia calcurse" ;;
+esac

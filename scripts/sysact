@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# A dmenu wrapper script for system functions.
+
+cmds="\
+🖥 spegni	sudo -A shutdown -h now
+🔃 riavvia	 sudo -A reboot
+🚪 termina sessione	kill -TERM $(pidof -s dwmblocks); kill -TERM $(pidof -s dwm)
+🔒 blocco schermo	lock-screen
+♻ riavvia dwm	kill -HUP $(pidof -s dwm)
+"
+
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -p Sistema -c -l 5)"
+
+`echo "$cmds" | grep "^$choice	" | cut -d '	' -f2`

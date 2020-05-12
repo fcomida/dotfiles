@@ -34,7 +34,7 @@ xterm*ScrollBar: false
 !-------------------------------------------------------------------------------
 
 *alpha:     0.96
-*alphaUnfocussed:     0.7
+*alphaUnfocussed:     0.88
 *font:      IBM Plex Mono:pixelsize=14:antialias=true:autohint=true
 *cwscale:   1.0
 *chscale:   1.0
@@ -84,3 +84,23 @@ xterm*ScrollBar: false
 *.colorBD:     #fffffa
 !*.colorIT:
 !*.colorUL:
+
+/* ! Dracula Xresources palette */
+*dwm.foreground: #55aa00
+*dwm.background: #282A36
+*dwm.color0:     #282a36
+*dwm.color8:     #3abe8c
+*dwm.color1:     #55aa00
+*dwm.color9:     #FF6E67
+*dwm.color2:     #50FA7B
+*dwm.color10:    #5AF78E
+*dwm.color3:     #F1FA8C
+*dwm.color11:    #F4F99D
+*dwm.color4:     #BD93F9
+*dwm.color12:    #CAA9FA
+*dwm.color5:     #FF79C6
+*dwm.color13:    #FF92D0
+*dwm.color6:     #55ff00
+*dwm.color14:    #a3be8c
+*dwm.color7:     #BFBFBF
+*dwm.color15:    #E6E6E6

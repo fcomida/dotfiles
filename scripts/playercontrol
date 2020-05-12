@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env sh
 
 players=($(playerctl -l))
 savedplayer=$(cat ~/.scripts/selected_player)
@@ -41,11 +41,11 @@ then
     fi
 fi
 
-if [[ "$1" == "volume" ]];
-then
+if [[ "$1" == "volume" ]]; then
     playerctl -p $player volume $2
-elif [[ "$1" == "player" ]];
-then
+elif [[ "$1" == "player" ]]; then
     playerctl -p $player $2
+elif [[ "$1" == "seek" ]]; then
+    playerctl -p $player position $2
 fi
 

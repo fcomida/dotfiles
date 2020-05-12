@@ -1,0 +1,115 @@
+#!/bin/env sh
+
+players=($(playerctl -l))
+oneplayer=FALSE
+if [ ${#players[@]} -eq 1 ]
+then
+    oneplayer=TRUE
+    player="mpd"
+fi
+
+if [ $oneplayer == FALSE ]
+then
+    savedplayer=$(cat ~/.scripts/selected_player)
+    player_status=$(playerctl -p $savedplayer status 2> /dev/null)
+
+    if [[ ($savedplayer == "mpd") && ($player_status != "Stopped") ]];
+    then
+        player="mpd"
+    else
+        found=FALSE
+
+        for item in ${players[*]}
+        do
+            if [[ ($item == $savedplayer) && ($item != "mpd") ]];
+            then
+                player=$savedplayer
+                found=TRUE
+            fi
+        done
+
+        if [ $found == FALSE ]
+        then
+            for item in ${players[*]}
+            do
+                if [[ $item != "mpd" ]];
+                then
+                    player=$item
+                    player_status=$(playerctl -p $player status 2> /dev/null)
+                    if [ $player_status == "Playing" ]
+                    then
+                        break
+                    fi
+                fi
+            done
+        fi
+    fi
+fi
+
+player_status=$(playerctl -p $player status 2> /dev/null)
+metadata=($(playerctl -p $player metadata))
+foundartist=FALSE
+foundalbum=FALSE
+
+for item in ${metadata[*]}
+do
+    if [[ $item == "xesam:artist" ]];
+    then
+        foundartist=TRUE
+    fi
+done
+
+for item in ${metadata[*]}
+do
+    if [[ $item == "xesam:album" ]];
+    then
+        foundalbum=TRUE
+    fi
+done
+
+length="$(playerctl -p $player metadata --format "{{ duration(mpris:length) }}")"
+
+if [ $foundartist == TRUE ]; then
+    output="$(playerctl -p $player metadata artist) - $(playerctl -p $player metadata title)"
+    strlen=${#output}
+    if [[ $strlen -gt 70 ]]; then
+        output="${output:0:70}..."
+    fi
+    if [ "$player_status" = "Playing" ]; then
+        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
+        printf "%b" "$output [$position/$length] "
+    elif [ "$player_status" = "Paused" ]; then
+        printf "%b" "$output [In pausa] "
+    else
+        printf "\0"
+    fi
+elif [ $foundalbum == TRUE ]; then
+    output="$(playerctl -p $player metadata album) - $(playerctl -p $player metadata title)"
+    strlen=${#output}
+    if [[ $strlen -gt 70 ]]; then
+        output="${output:0:70}..."
+    fi
+    if [ "$player_status" = "Playing" ]; then
+        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
+        printf "%b" "$output [$position/$length] "
+    elif [ "$player_status" = "Paused" ]; then
+        printf "%b" "$output [In pausa] "
+    else
+        printf "\0"
+    fi
+else
+    output="$(playerctl -p $player metadata title)"
+    strlen=${#output}
+    if [[ $strlen -gt 70 ]]; then
+        output="${output:0:70}..."
+    fi
+    if [ "$player_status" = "Playing" ]; then
+        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
+        printf "%b" "$output [$position/$length] "
+    elif [ "$player_status" = "Paused" ]; then
+        printf "%b" "$output [In pausa] "
+    else
+        printf "\0"
+    fi
+fi
+

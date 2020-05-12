@@ -1,0 +1,14 @@
+#!/bin/env sh
+index=$(pacmd list-sinks | awk '$1 == "*" && $2 == "index:" {print $3}')
+
+case "$1" in
+    toggle) pactl set-sink-mute $index toggle ;;
+    up) pactl set-sink-volume $index +5% ;;
+    down) pactl set-sink-volume $index -5% ;;
+esac
+case $BLOCK_BUTTON in
+    1) setsid "$TERMINAL" -e alsamixer & ;;
+    2) pactl set-sink-mute $index toggle ;;
+    4) pactl set-sink-volume $index +5% ;;
+    5) pactl set-sink-volume $index -5% ;;
+esac

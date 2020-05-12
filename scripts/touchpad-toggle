@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env sh
 
 device=$(xinput | grep Touch | awk '{ print $6 }' | awk -F '=' '{ print $2 }')
 

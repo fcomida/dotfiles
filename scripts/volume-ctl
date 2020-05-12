@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env sh
 index=$(pacmd list-sinks | awk '$1 == "*" && $2 == "index:" {print $3}')
 
 case "$1" in

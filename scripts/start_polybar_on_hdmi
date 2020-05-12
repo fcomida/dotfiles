@@ -1,2 +1,2 @@
-#!/bin/sh
+#!/bin/env sh
 polybar hdmi -c /home/franco/.config/polybar/config-hdmi

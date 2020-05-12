@@ -1,0 +1,111 @@
+!
+! Generated with :
+! XRDB2Xreources.py
+!
+!-------------------------------------------------------------------------------
+! Xft settings
+!-------------------------------------------------------------------------------
+
+Xft.dpi:                    96
+Xft.antialias:              true
+Xft.rgba:                   rgb
+Xft.hinting:                true
+Xft.hintstyle:              hintslight
+
+xterm*faceName: IBM Plex Mono
+xterm*faceSize: 11
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+xterm*loginshell: true
+
+! I like a LOT of scrollback...
+xterm*savelines: 16384
+
+! double-click to select whole URLs :D
+xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+
+! right hand side scrollbar...
+xterm*rightScrollBar: false
+xterm*ScrollBar: false
+
+!-------------------------------------------------------------------------------
+! st settings
+!-------------------------------------------------------------------------------
+
+*alpha:     0.96
+*alphaUnfocussed:     0.88
+*font:      Source Code Pro:size=11:antialias=true:autohint=true
+*cwscale:   1.0
+*chscale:   1.0
+*borderpx:  0
+
+!-------------------------------------------------------------------------------
+! Ayu color scheme
+!--------------------------------------------------------------------------------
+
+*.foreground:  #e6e1cf
+*.background:  #0f1419
+*.cursorColor: #f29718
+!
+! Black
+*.color0:      #000000
+*.color8:      #323232
+!
+! Red
+*.color1:      #ff3333
+*.color9:      #ff6565
+!
+! Green
+*.color2:      #b8cc52
+*.color10:     #eafe84
+!
+! Yellow
+*.color3:      #e7c547
+*.color11:     #fff779
+!
+! Blue
+*.color4:      #36a3d9
+*.color12:     #68d5ff
+!
+! Magenta
+*.color5:      #f07178
+*.color13:     #ffa3aa
+!
+! Cyan
+*.color6:      #95e6cb
+*.color14:     #c7fffd
+!
+! White
+*.color7:      #ffffff
+*.color15:     #ffffff
+!
+! Bold, Italic, Underline
+*.colorBD:     #e6e1cf
+!*.colorIT:
+!*.colorUL:
+
+/* ! Dracula Xresources palette */
+*dwm.foreground: #55aa00
+*dwm.background: #282A36
+*dwm.color0:     #282a36
+*dwm.color8:     #3abe8c
+*dwm.color1:     #55aa00
+*dwm.color9:     #FF6E67
+*dwm.color2:     #50FA7B
+*dwm.color10:    #5AF78E
+*dwm.color3:     #F1FA8C
+*dwm.color11:    #F4F99D
+*dwm.color4:     #BD93F9
+*dwm.color12:    #CAA9FA
+*dwm.color5:     #FF79C6
+*dwm.color13:    #FF92D0
+*dwm.color6:     #55ff00
+*dwm.color14:    #a3be8c
+*dwm.color7:     #BFBFBF
+*dwm.color15:    #E6E6E6
+
+*dmenu.font: Noto Sans Bold:size=12
+*dmenu.foreground: #55ff00
+*dmenu.background: #282A36
+*dmenu.selbackground: #a3be8c
+*dmenu.selforeground: #000000

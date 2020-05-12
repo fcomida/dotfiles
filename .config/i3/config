@@ -332,7 +332,6 @@ bindsym $mod+Shift+9    move container to workspace $ws9
 bindsym $mod+Shift+0    move container to workspace $ws10
 
 # I'll later bind this to mod+u.
-exec --no-startup-id beebeep
 for_window [title="franco - BeeBEEP$"] floating enable
 for_window [title="franco - BeeBEEP"] resize set 300 600
 #for_window [title="^BeeBEEP$"] resize set 625 400
@@ -420,66 +419,8 @@ for_window [title="Connessioni - JACK Audio Connection Kit"] resize set 400 x 25
 # #---------------------------------------------------------------------------------------------#
 
 # #---Starting External Scripts---# #
-#exec /usr/bin/kuiserver5
-
-exec --no-startup-id /usr/libexec/dconf-service
-
-exec --no-startup-id /usr/libexec/gconfd-2
-
-# Disable DPMS
-exec --no-startup-id xset -dpms
-exec --no-startup-id xset s off
-
-# Composite manager:
-exec --no-startup-id $picom_launch
-
-# Setting the background:
-exec_always --no-startup-id feh --bg-fill ~/.config/i3/default-wallpaper
-
 # Launch Polybar where appropriate:
 exec_always --no-startup-id $polybar_launch
 
-# Starts dunst for notifications:
-exec --no-startup-id dunst
+exec_always --no-startup-id ~/.config/i3/autostart.sh
 
-# Torrent daemon:
-#exec --no-startup-id transmission-daemon
-#exec --no-startup-id transmission-qt
-
-# Runs the key remapping scripts
-#exec --no-startup-id ~/.scripts/remaps
-
-# xbanish - hide the X11 mouse cursor when a key is pressed
-exec --no-startup-id xbanish
-
-# Network Manager applet
-exec --no-startup-id sleep 10; nm-applet
-
-# Automounter
-exec --no-startup-id udiskie -t -f dolphin
-
-# Clipboard manager
-#exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' qlipper"
-exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' copyq"
-
-# Redshift
-exec --no-startup-id sleep 10; redshift-gtk
-
-# KDE Connect
-exec --no-startup-id "sleep 10; env XDG_CURRENT_DESKTOP=i3 QT_QPA_PLATFORMTHEME='qt5ct' kdeconnect-indicator"
-
-# Touchpad tap and speed
-#exec --no-startup-id xinput set-prop 14 306 1
-#exec --no-startup-id xinput set-prop 14 326 0.8
-exec --no-startup-id $touchpad-config
-
-# Conky
-exec --no-startup-id sleep 3; conky -c ~/.conky/conkyrc_i3
-exec --no-startup-id sleep 5; conky -c ~/.conky/Gotham/Gotham_i3
-exec --no-startup-id cd ~/.conky-weather/; ./run
-
-# IT keymap
-exec --no-startup-id setxkbmap
-
-# Allow run some GUI apps as root
-exec --no-startup-id /usr/libexec/kf5/polkit-kde-authentication-agent-1

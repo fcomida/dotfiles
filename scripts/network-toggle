@@ -1,0 +1,10 @@
+#!/bin/env sh
+
+active=$(sudo systemctl is-active NetworkManager.service)
+
+if [ $active = active ]; then
+    sudo systemctl stop NetworkManager.service
+else
+    sudo systemctl start NetworkManager.service
+fi
+

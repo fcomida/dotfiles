@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 emulate zsh                    # restore default options just in case something messed them up
-export PATH=$HOME/.local/bin:/opt/epson-printer-utility/bin/:$PATH
+export PATH=$HOME/.scripts/:$HOME/.local/bin/:$HOME/.local/bin/statusbar:/opt/epson-printer-utility/bin/:$PATH
+export TERMINAL=st
 #source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #if [ "$(pidof fbterm)" ]
@@ -102,8 +103,11 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 export LANG=it_IT.UTF-8
 
+export COLORTERM=truecolor
+
 #  pj
 export PROJECT_PATHS=(~/src/fcomida/LuminanceHDR/src)
+export PROJECT=~/src/fcomida/LuminanceHDR/src
 
 export BROWSER=firefox
 export XIVIEWER=sxiv
@@ -137,22 +141,22 @@ vim_ins_mode="INS"
 vim_cmd_mode="NML"
 vim_mode=$vim_ins_mode
 
-#function zle-keymap-select {
-#  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-#  #__promptline
-#  zle reset-prompt
-#}
-#zle -N zle-keymap-select
+function zle-keymap-select {
+  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
+  #__promptline
+  zle reset-prompt
+}
+zle -N zle-keymap-select
 
-#function zle-line-finish {
-#  vim_mode=$vim_ins_mode
-#}
-#zle -N zle-line-finish
+function zle-line-finish {
+  vim_mode=$vim_ins_mode
+}
+zle -N zle-line-finish
 
-#function TRAPINT() {
-#  vim_mode=$vim_ins_mode
-#  return $(( 128 + $1 ))
-#}
+function TRAPINT() {
+  vim_mode=$vim_ins_mode
+  return $(( 128 + $1 ))
+}
 fi
 
 # fzf stuff

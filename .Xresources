@@ -129,3 +129,23 @@ xterm*scrollTtyOutput: false
 !! white dark/light
 *color7: #E5E9F0
 *color15: #88C0D0
+
+/* ! Dracula Xresources palette */
+*dwm.foreground: #F8F8F2
+*dwm.background: #282A36
+*dwm.color0:     #282A36
+*dwm.color8:     #4D4D4D
+*dwm.color1:     #FF5555
+*dwm.color9:     #FF6E67
+*dwm.color2:     #50FA7B
+*dwm.color10:    #5AF78E
+*dwm.color3:     #F1FA8C
+*dwm.color11:    #F4F99D
+*dwm.color4:     #BD93F9
+*dwm.color12:    #CAA9FA
+*dwm.color5:     #FF79C6
+*dwm.color13:    #FF92D0
+*dwm.color6:     #8BE9FD
+*dwm.color14:    #9AEDFE
+*dwm.color7:     #BFBFBF
+*dwm.color15:    #E6E6E6

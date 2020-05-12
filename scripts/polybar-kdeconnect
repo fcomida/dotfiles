@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # CONFIGURATION
 LOCATION=0
@@ -19,12 +19,8 @@ COLOR_BATTERY_50='#666'         # Battery >= 50
 COLOR_BATTERY_LOW='#f00'        # Battery <  50
 
 # Icons shown in Polybar
-ICON_SMARTPHONE=''
-ICON_SMARTPHONE=''
-ICON_SMARTPHONE='☎'
-ICON_SMARTPHONE=''
 ICON_SMARTPHONE='📱'
-ICON_TABLET=''
+ICON_TABLET='💻'
 SEPERATOR='|'
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

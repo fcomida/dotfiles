@@ -1,6 +1,5 @@
-export PATH=$HOME/.scripts:$PATH
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/.local/bin/statusbar:$PATH
+export PATH=/opt/epson-printer-utility/bin/:$PATH
+export PATH=$HOME/.scripts/:$HOME/.local/bin/:$HOME/.local/bin/statusbar:$PATH
 export TERMINAL=st
 export BROWSER=firefox
 export QT_QPA_PLATFORM=xcb

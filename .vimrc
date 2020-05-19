@@ -88,41 +88,6 @@ nnoremap <Down> gj
 map Y y$
 
 " -----------------------------------------------------------------------------
-" Basic autocommands
-" -----------------------------------------------------------------------------
-
-" Auto-resize splits when Vim gets resized.
-autocmd VimResized * wincmd =
-
-" Lower timeour on InsertEnter
-autocmd InsertEnter * silent! set timeoutlen=100
-autocmd InsertLeave * silent! set timeoutlen=1000 | set nopaste
-
-" -----------------------------------------------------------------------------
-
-" Add all TODO items to the quickfix list relative to where you opened Vim.
-function! s:todo() abort
-  let entries = []
-  for cmd in ['git grep -niIw -e TODO -e FIXME 2> /dev/null',
-            \ 'grep -rniIw -e TODO -e FIXME . 2> /dev/null']
-    let lines = split(system(cmd), '\n')
-    if v:shell_error != 0 | continue | endif
-    for line in lines
-      let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
-      call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
-    endfor
-    break
-  endfor
-
-  if !empty(entries)
-    call setqflist(entries)
-    copen
-  endif
-endfunction
-
-command! Todo call s:todo()
-
-" -----------------------------------------------------------------------------
 " Ctrl-Space for completions. Heck Yeah!
 inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
         \ "\<lt>C-n>" :
@@ -147,6 +112,21 @@ vno <down> <Nop>
 vno <left> <Nop>
 vno <right> <Nop>
 vno <up> <Nop>
+
+" saner CTRL-L
+nnoremap <leader>L :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+
+" Quickly edit macros
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+
+" n always search forward and N backward
+nnoremap <expr> n  'Nn'[v:searchforward]
+xnoremap <expr> n  'Nn'[v:searchforward]
+onoremap <expr> n  'Nn'[v:searchforward]
+
+nnoremap <expr> N  'nN'[v:searchforward]
+xnoremap <expr> N  'nN'[v:searchforward]
+onoremap <expr> N  'nN'[v:searchforward]
 
 " Type <Space>w to save file (a lot faster than :w<Enter>):
 nnoremap <Leader>w :w<CR>
@@ -240,6 +220,34 @@ nnoremap td  :tabclose<CR>
 "nnoremap tl :tabprev<CR>
 "nnoremap tn :tabnew<CR>
 
+" -----------------------------------------------------------------------------
+" Basic autocommands
+" -----------------------------------------------------------------------------
+
+" Auto-resize splits when Vim gets resized.
+autocmd VimResized * wincmd =
+
+" Lower timeour on InsertEnter
+autocmd InsertEnter * silent! set timeoutlen=100
+autocmd InsertLeave * silent! set timeoutlen=1000 | set nopaste
+
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
+
+" -----------------------------------------------------------------------------
+
+" =============
+"  CUSTOM CODE
+" =============
+
+" Delete trailing white space on save.
+func! DeleteTrailingWhiteSpace()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+autocmd BufWrite * :call DeleteTrailingWhiteSpace()
+
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 set splitbelow splitright
 
@@ -249,17 +257,27 @@ function VsbFunction (arg1)
   execute 'vert sb' a:arg1
 endfunction
 
+" Add all TODO items to the quickfix list relative to where you opened Vim.
+function! s:todo() abort
+  let entries = []
+  for cmd in ['git grep -niIw -e TODO -e FIXME 2> /dev/null',
+            \ 'grep -rniIw -e TODO -e FIXME . 2> /dev/null']
+    let lines = split(system(cmd), '\n')
+    if v:shell_error != 0 | continue | endif
+    for line in lines
+      let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
+      call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
+    endfor
+    break
+  endfor
 
-" =============
-"  CUSTOM CODE
-" =============
-" Delete trailing white space on save.
-func! DeleteTrailingWhiteSpace()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc
-autocmd BufWrite * :call DeleteTrailingWhiteSpace()
+  if !empty(entries)
+    call setqflist(entries)
+    copen
+  endif
+endfunction
+
+command! Todo call s:todo()
 
 """"""""""
 " Options
@@ -361,8 +379,9 @@ set ttymouse=sgr
 set background="dark"
 " let st terminal display true colors
 if &term == "st-256color"
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    let &t_8f = "[38;2;%lu;%lu;%lum"
+    let &t_8b = "[48;2;%lu;%lu;%lum"
+    set t_ut=
 endif
 
 if &term == "st-256color" || &term == "xterm-256color"
@@ -385,13 +404,112 @@ catch
 endtry
 
 if (&background == "dark")
-  " Fix the visual selection and cursorline colors of palenight
+  " Fix the visual selection and cursorline colors of ayu
   hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#550000
   hi Cursorline cterm=NONE ctermfg=NONE ctermbg=237 guibg=#202020
 
 else
   hi Visual cterm=NONE ctermfg=NONE ctermbg=223 guibg=#ffd7af
 endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" DIFF
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup aug_color_scheme
+  au!
+
+  autocmd ColorScheme slate call s:PatchColorScheme()
+augroup END
+
+function s:PatchColorScheme()
+  hi! link DiffChange NONE
+  hi! clear DiffChange
+  hi! DiffText term=NONE ctermfg=215 ctermbg=233 cterm=NONE guifg=#FFB86C guibg=#14141a gui=NONE
+
+endfunction
+
+set diffopt=vertical,filler,context:3,indent-heuristic,algorithm:patience,internal
+
+" Detect if vim is started as a diff tool (vim -d, vimdiff)
+" NOTE: Does not work when you start Vim as usual and enter diff mode using :diffthis
+if &diff
+  let s:is_started_as_vim_diff = 1
+  syntax off
+  setlocal nospell
+  colorscheme slate
+endif
+
+augroup aug_diffs
+  au!
+
+  " Inspect whether some windows are in diff mode, and apply changes for such windows
+  " Run asynchronously, to ensure '&diff' option is properly set by Vim
+  au WinEnter,BufEnter * call timer_start(50, 'CheckDiffMode')
+
+augroup END
+
+" In diff mode:
+" - Disable syntax highlighting
+" - Disable spell checking
+function CheckDiffMode(timer)
+  let curwin = winnr()
+
+  " Check each window
+  for _win in range(1, winnr('$'))
+    exe "noautocmd " . _win . "wincmd w"
+
+    call s:change_option_in_diffmode('b:', 'syntax', 'off')
+    call s:change_option_in_diffmode('w:', 'spell', 0, 1)
+  endfor
+
+  " Get back to original window
+  exe "noautocmd " . curwin . "wincmd w"
+endfunction
+
+" Detect window or buffer local option is in sync with diff mode
+function s:change_option_in_diffmode(scope, option, value, ...)
+  let isBoolean = get(a:, "1", 0)
+  let backupVarname = a:scope . "_old_" . a:option
+
+  " Entering diff mode
+  if &diff && !exists(backupVarname)
+    colorscheme slate
+    exe "let " . backupVarname . "=&" . a:option
+    call s:set_option(a:option, a:value, 1, isBoolean)
+  endif
+
+  " Exiting diff mode
+  if !&diff && exists(backupVarname)
+    colorscheme ayu
+    let oldValue = eval(backupVarname)
+    call s:set_option(a:option, oldValue, 1, isBoolean)
+    exe "unlet " . backupVarname
+  endif
+endfunction
+
+function s:set_option(option, value, ...)
+  let isLocal = get(a:, "1", 0)
+  let isBoolean = get(a:, "2", 0)
+  if isBoolean
+    exe (isLocal ? "setlocal " : "set ") . (a:value ? "" : "no") . a:option
+  else
+    exe (isLocal ? "setlocal " : "set ") . a:option . "=" . a:value
+  endif
+endfunction
+
+nnoremap <silent> <leader>q :call <SID>QuitWindow()<CR>
+
+function s:QuitWindow()
+  if get(s:, 'is_started_as_vim_diff', 0)
+    qall
+    return
+  endif
+
+  quit
+endfunction
+
+nmap <expr> <Up> &diff ? '[czz' : '<Up>'
+nmap <expr> <Down> &diff ? ']czz' : '<Down>'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CTAGS

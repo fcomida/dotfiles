@@ -1,7 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 emulate zsh                    # restore default options just in case something messed them up
-export PATH=$HOME/.scripts/:$HOME/.local/bin/:$HOME/.local/bin/statusbar:/opt/epson-printer-utility/bin/:$PATH
-export TERMINAL=st
+typeset -U PATH path
+export PATH=$HOME/.scripts/:$PATH
+# export TERMINAL=st
 #source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #if [ "$(pidof fbterm)" ]

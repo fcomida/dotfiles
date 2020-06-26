@@ -11,8 +11,8 @@ alternative_header_first_line_format =  "$(white)─┤ $b$(magenta)%a$(end)$/b 
 alternative_header_second_line_format = "$(16)%t (%y)$(end)"
 alternative_ui_separator_color =        "cyan"
 
- Formato de canción:
-song_columns_list_format =              "$L (10)[white]{n} $1│$7 (20)[magenta]{a} $1│$7 (20)[white]{b} $1│$7 (20)[magenta]{t} $1│$7 (20)[white]{l}"
+# Formato de canción:
+song_columns_list_format =              "$L (8)[white]{n} $1│$7 (20)[magenta]{a} $1│$7 (40)[white]{b} $1│$7 (27)[magenta]{t} $1│$7 (8)[white]{l}"
 now_playing_prefix =                    "$b"
 centered_cursor =                       "no"
 cyclic_scrolling =                      "yes"
@@ -24,6 +24,12 @@ display_bitrate =                       "yes"
 header_visibility =                     "yes"
 statusbar_visibility =                  "yes"
 progressbar_look =                      "==-"
+follow_now_playing_lyrics =             "yes"
+locked_screen_width_part =              "70"
+external_editor =                       "vim"
+use_console_editor =                    "yes"
+fetch_lyrics_for_current_song_in_background = "yes"
+
 
 
 # Visualizador de música:
@@ -32,19 +38,32 @@ visualizer_in_stereo =                  "no"
 visualizer_fifo_path =                  "/home/franco/.config/mpd/mpd.fifo"
 visualizer_sync_interval =              "10"
 visualizer_type =                       "spectrum"
-visualizer_look =                       "▋▋"
-
+visualizer_look =                       ▋▋
 
 # Color:
+# color1 =                                "white"
+# color2 =                                "red"
+#discard_colors_if_item_is_selected =    "yes"
+#main_window_color =                     "white"
+#header_window_color =                   "4"
+#progressbar_color =                     "cyan"
+#statusbar_color =                       "red"
+##active_column_color =                   "white"
+#current_item_inactive_column_prefix =   "$(4)"
+#volume_color =                          "4"
+#window_border_color =                   "white"
+#active_window_border =                  "4"
+
+discard_colors_if_item_is_selected =    "yes"
 color1 =                                "white"
 color2 =                                "red"
-discard_colors_if_item_is_selected =    "yes"
 main_window_color =                     "white"
 header_window_color =                   "4"
-progressbar_color =                     "cyan"
-statusbar_color =                       "red"
-#active_column_color =                   "white"
-current_item_inactive_column_prefix =   "white"
+progressbar_color =                     "yellow"
+statusbar_color =                       "cyan"
+current_item_inactive_column_prefix =   "$(4)"
 volume_color =                          "4"
 window_border_color =                   "white"
 active_window_border =                  "4"
+state_line_color =                      "yellow"
+state_flags_color =                     "4"

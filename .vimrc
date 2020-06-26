@@ -609,6 +609,7 @@ let g:lightline = {
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " fzf
 """"""""""""""""""""""""""""""""""""""""""""""""""""
+set rtp+=/home/franco/.fzf
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -642,17 +643,75 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 " Add namespace for fzf.vim exported commands
-let g:fzf_command_prefix = ''
+let g:fzf_command_prefix = 'Fzf'
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
-nnoremap <silent> <leader>o :FZF -m<CR>
+" File path completion in Insert mode using fzf
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-buffer-line)
 
-" Map a few common things to do with FZF.
-nnoremap <silent> <Leader><Enter> :Buffers<CR>
-nnoremap <silent> <Leader>l :Lines<CR>
-"
+" Use preview when FzfFiles runs in fullscreen
+command! -nargs=? -bang -complete=dir FzfFiles
+      \ call fzf#vim#files(<q-args>, <bang>0 ? fzf#vim#with_preview('up:60%') : {}, <bang>0)
+
+" Mappings
+nnoremap <silent> <leader>o :FzfFiles<CR>
+nnoremap <silent> <leader>O :FzfFiles!<CR>
+nnoremap <silent> <leader>l  :FzfBuffers<CR>
+nnoremap <silent> <leader>b :FzfBLines<CR>
+nnoremap <silent> <leader>`  :FzfMarks<CR>
+nnoremap <silent> <leader>p :FzfCommands<CR>
+nnoremap <silent> <leader>t :FzfFiletypes<CR>
+nnoremap <silent> <F1> :FzfHelptags<CR>
+inoremap <silent> <F1> <ESC>:FzfHelptags<CR>
+cnoremap <silent> <expr> <C-p> getcmdtype() == ":" ? "<C-u>:FzfHistory:\<CR>" : "\<ESC>:FzfHistory/\<CR>"
+cnoremap <silent> <C-_> <C-u>:FzfCommands<CR>
+
+" fzf.Tags uses existing 'tags' file or generates it otherwise
+nnoremap <silent> <leader>] :FzfTags<CR>
+xnoremap <silent> <leader>] "zy:FzfTags <C-r>z<CR>
+
+" fzf.BTags generate tags on-fly for current file
+nnoremap <silent> <leader>} :FzfBTags<CR>
+xnoremap <silent> <leader>} "zy:FzfBTags <C-r>z<CR>
+
+" Show list of change in fzf
+" Some code is borrowed from ctrlp.vim and tweaked to work with fzf
+command FzfChanges call s:fzf_changes()
+nnoremap <silent> <leader>; :FzfChanges<CR>
+
+function! s:fzf_changelist()
+  redir => result
+  silent! changes
+  redir END
+
+  return map(split(result, "\n")[1:], 'tr(v:val, "	", " ")')
+endf
+
+function! s:fzf_changeaccept(line)
+  let info = matchlist(a:line, '\s\+\(\d\+\)\s\+\(\d\+\)\s\+\(\d\+\).\+$')
+  call cursor(get(info, 2), get(info, 3))
+  silent! norm! zvzz
+endfunction
+
+function! s:fzf_changes()
+  return fzf#run(fzf#wrap({
+
+\ 'source':  reverse(s:fzf_changelist()),
+        \ 'sink': function('s:fzf_changeaccept'),
+        \ 'options': '+m +s --nth=3..'
+        \ }))
+endfunction
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM RAINBOW
 """"""""""""""""""""""""""""""""""""""""""""""""""""

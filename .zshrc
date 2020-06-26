@@ -161,9 +161,20 @@ function TRAPINT() {
 fi
 
 # fzf stuff
-source /usr/share/zsh/site-functions/fzf
+# source /usr/share/zsh/site-functions/fzf
 # Setting fd as the default source for fzf
-export FZF_DEFAULT_COMMAND='fd --type f'
+# export FZF_DEFAULT_COMMAND='fd --type f'
+# Configure fzf, command line fuzzyf finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+FD_OPTIONS="--follow --exclude .git --exclude node_modules"
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy),ctrl-x:execute(rm -i {+})+abort'"
+# Use git-ls-files inside git repo, otherwise fd
+export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard || fd --type f --type l $FD_OPTIONS"
+export FZF_CTRL_T_COMMAND="fd $FD_OPTIONS"
+export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
+
+export BAT_PAGER="less -R"
+export BAT_THEME="Monokai Extended"
 
 
 v() {
@@ -187,6 +198,8 @@ alias lx='ls -lXB'              # sort by extension
 alias lk='ls -lSrh'              # sort by size
 alias lc='colorls -lA --sd'
 alias vimrc='vim ~/.vimrc'
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
 
 # Enable decent options. See http://zsh.sourceforge.net/Doc/Release/Options.html.
 emulate zsh                    # restore default options just in case something messed them up
@@ -209,3 +222,4 @@ setopt NO_FLOW_CONTROL         # disable start/stop characters in shell editor
 setopt PATH_DIRS               # perform path search even on command names with slashes
 setopt SHARE_HISTORY           # write and import history on every command
 setopt C_BASES                 # print hex/oct numbers as 0xFF/077 instead of 16#FF/8#77
+

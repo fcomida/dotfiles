@@ -1,3 +1,7 @@
+!
+! Generated with :
+! XRDB2Xreources.py
+!
 !-------------------------------------------------------------------------------
 ! Xft settings
 !-------------------------------------------------------------------------------
@@ -8,58 +12,8 @@ Xft.rgba:                   rgb
 Xft.hinting:                true
 Xft.hintstyle:              hintslight
 
-!-------------------------------------------------------------------------------
-! URxvt settings
-!-------------------------------------------------------------------------------
-
-URxvt.depth:                32
-! URxvt.geometry:             169x42
-URxvt.geometry:             170x39
-URxvt*background:           rgba:0b00/0b00/0b00/f900
-URxvt.transparent:          false
-URxvt.fading:               30
-! URxvt.urgentOnBell:         true
-! URxvt.visualBell:           true
-URxvt.loginShell:           true
-URxvt.saveLines:            50
-URxvt.internalBorder:       3
-URxvt.lineSpace:            0
-
-! Fonts
-URxvt.allow_bold:           true
-URxvt*font: xft:Source Code Pro for Powerline:style=Regular:size=10,xft:Fira Mono for Powerline:style=Medium:size=10,xft:Font Awesome 5 Free Regular:style=Regular:size=10
-
-! Fix font space
-URxvt*letterSpace: -1
-
-! Scrollbar
-URxvt.scrollStyle:          rxvt
-URxvt.scrollBar:            false
-
-! Perl extensions
-URxvt.perl-ext-common:      default,matcher
-URxvt.matcher.button:       1
-URxvt.urlLauncher:          firefox
-
-! Cursor
-URxvt.cursorBlink:          false
-URxvt.cursorColor:          #d8dee9
-URxvt.cursorUnderline:      false
-
-! Pointer
-URxvt.pointerBlank:         true
-
-URxvt.colorIT:      #87af5f
-URxvt.colorBD:      #d7d7d7
-URxvt.colorUL:      #87afd7
-
-!-------------------------------------------------------------------------------
-! xterm settings
-!-------------------------------------------------------------------------------
-
-! Use a nice truetype font and size by default...
 xterm*faceName: IBM Plex Mono
-xterm*faceSize: 11
+xterm*faceSize: 14
 
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
 xterm*loginshell: true
@@ -74,68 +28,83 @@ xterm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
 xterm*rightScrollBar: false
 xterm*ScrollBar: false
 
-! stop output to terminal from jumping down to bottom of scroll again
-xterm*scrollTtyOutput: false
+XTerm.vt100.cursorColor: #CECECE
 
+XTerm.vt100.geometry: 80x32
+
+xterm*decTerminalID: vt340
+
+xterm*numColorRegisters: 256
+xterm*sixelScrolling: 1
+xterm*sixelScrollsRight: 1
+
+XTerm.vt100.translations: #override \n\
+    Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>V: insert-selection(CLIPBOARD)
 !-------------------------------------------------------------------------------
 ! st settings
 !-------------------------------------------------------------------------------
 
 *alpha:     0.96
-*alphaUnfocussed:     0.7
-*font:      IBM Plex Mono:pixelsize=14:antialias=true:autohint=true
+*alphaUnfocussed:     0.88
+*alphaUnfocused:     0.88
+*font:      Source Code Pro:size=14:antialias=true:autohint=true
 *cwscale:   1.0
 *chscale:   1.0
-*borderpx:  0
+*borderpx:  2
 
 !-------------------------------------------------------------------------------
-! Nord color scheme
-!-------------------------------------------------------------------------------
+! Ayu color scheme
+!--------------------------------------------------------------------------------
 
-*background: #0b0b0b
-*foreground: #d8dee9
-*cursorColor: #d8dee9
-*pointerColorBackground: #586e75
-*pointerColorForeground: #93a1a1
-
-!! black dark/light
-*color0: #3B4252
-*color8: #4C566A
-
-!! red dark/light
-*color1: #BF616A
-*color9: #BF616A
-
-!! green dark/light
-*color2: #A3BE8C
-*color10: #A3BE8C
-
-!! yellow dark/light
-*color3: #EBCB8B
-*color11: #EBCB8B
-
-!! blue dark/light
-*color4: #81A1C1
-*color12: #81A1C1
-
-!! magenta dark/light
-*color5: #B48EAD
-*color13: #B48EAD
-
-!! cyan dark/light
-*color6: #88C0D0
-*color14: #8FBCBB
-
-!! white dark/light
-*color7: #E5E9F0
-*color15: #88C0D0
+*.foreground:  #e6e1cf
+*.background:  #0f1419
+!*.cursorColor: #f29718
+*cursorColor: #ff0000
+!
+! Black
+*.color0:      #000000
+*.color8:      #323232
+!
+! Red
+*.color1:      #ff3333
+*.color9:      #ff6565
+!
+! Green
+*.color2:      #b8cc52
+*.color10:     #eafe84
+!
+! Yellow
+*.color3:      #e7c547
+*.color11:     #fff779
+!
+! Blue
+*.color4:      #36a3d9
+*.color12:     #68d5ff
+!
+! Magenta
+*.color5:      #f07178
+*.color13:     #ffa3aa
+!
+! Cyan
+*.color6:      #95e6cb
+*.color14:     #c7fffd
+!
+! White
+*.color7:      #ffffff
+*.color15:     #ffffff
+!
+! Bold, Italic, Underline
+*.colorBD:     #e6e1cf
+!*.colorIT:
+!*.colorUL:
 
 /* ! Dracula Xresources palette */
-*dwm.foreground: #F8F8F2
+*dwm.foreground: #55aa00
 *dwm.background: #282A36
-*dwm.color0:     #282A36
-*dwm.color8:     #4D4D4D
-*dwm.color1:     #FF5555
+*dwm.color0:     #282a36
+*dwm.color8:     #3abe8c
+*dwm.color1:     #55aa00
 *dwm.color9:     #FF6E67
 *dwm.color2:     #50FA7B
 *dwm.color10:    #5AF78E
@@ -145,7 +114,13 @@ xterm*scrollTtyOutput: false
 *dwm.color12:    #CAA9FA
 *dwm.color5:     #FF79C6
 *dwm.color13:    #FF92D0
-*dwm.color6:     #8BE9FD
-*dwm.color14:    #9AEDFE
+*dwm.color6:     #55ff00
+*dwm.color14:    #a3be8c
 *dwm.color7:     #BFBFBF
 *dwm.color15:    #E6E6E6
+
+*dmenu.font: Noto Sans Bold:size=14
+*dmenu.foreground: #55ff00
+*dmenu.background: #282A36
+*dmenu.selbackground: #a3be8c
+*dmenu.selforeground: #000000

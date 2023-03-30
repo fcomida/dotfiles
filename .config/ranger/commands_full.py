@@ -1,10 +1,12 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # This file is part of ranger, the console file manager.
 # This configuration file is licensed under the same terms as ranger.
 # ===================================================================
 #
-# NOTE: If you copied this file to ~/.config/ranger/commands_full.py,
-# then it will NOT be loaded by ranger, and only serve as a reference.
+# NOTE: If you copied this file to /etc/ranger/commands_full.py or
+# ~/.config/ranger/commands_full.py, then it will NOT be loaded by ranger,
+# and only serve as a reference.
 #
 # ===================================================================
 # This file contains ranger's commands.
@@ -13,9 +15,14 @@
 # Note that additional commands are automatically generated from the methods
 # of the class ranger.core.actions.Actions.
 #
-# You can customize commands in the file ~/.config/ranger/commands.py.
-# It has the same syntax as this file.  In fact, you can just copy this
-# file there with `ranger --copy-config=commands' and make your modifications.
+# You can customize commands in the files /etc/ranger/commands.py (system-wide)
+# and ~/.config/ranger/commands.py (per user).
+# They have the same syntax as this file.  In fact, you can just copy this
+# file to ~/.config/ranger/commands_full.py with
+# `ranger --copy-config=commands_full' and make your modifications, don't
+# forget to rename it to commands.py.  You can also use
+# `ranger --copy-config=commands' to copy a short sample commands.py that
+# has everything you need to get started.
 # But make sure you update your configs when you update ranger.
 #
 # ===================================================================
@@ -120,9 +127,10 @@ class echo(Command):
 
 
 class cd(Command):
-    """:cd [-r] <dirname>
+    """:cd [-r] <path>
 
     The cd command changes the directory.
+    If the path is a file, selects that file.
     The command 'cd -' is equivalent to typing ``.
     Using the option "-r" will get you to the real path.
     """
@@ -989,7 +997,7 @@ class rename_append(Command):
         relpath = tfile.relative_path.replace(MACRO_DELIMITER, MACRO_DELIMITER_ESC)
         basename = tfile.basename.replace(MACRO_DELIMITER, MACRO_DELIMITER_ESC)
 
-        if basename.find('.') <= 0:
+        if basename.find('.') <= 0 or os.path.isdir(relpath):
             self.fm.open_console('rename ' + relpath)
             return
 
@@ -1021,8 +1029,9 @@ class chmod(Command):
     def execute(self):
         mode_str = self.rest(1)
         if not mode_str:
-            if not self.quantifier:
-                self.fm.notify("Syntax: chmod <octal number>", bad=True)
+            if self.quantifier is None:
+                self.fm.notify("Syntax: chmod <octal number> "
+                               "or specify a quantifier", bad=True)
                 return
             mode_str = str(self.quantifier)
 
@@ -1056,7 +1065,8 @@ class bulkrename(Command):
     After you close it, it will be executed.
     """
 
-    def execute(self):  # pylint: disable=too-many-locals,too-many-statements
+    def execute(self):
+        # pylint: disable=too-many-locals,too-many-statements,too-many-branches
         import sys
         import tempfile
         from ranger.container.file import File
@@ -1085,11 +1095,23 @@ class bulkrename(Command):
         # Generate script
         cmdfile = tempfile.NamedTemporaryFile()
         script_lines = []
-        script_lines.append("# This file will be executed when you close the editor.\n")
-        script_lines.append("# Please double-check everything, clear the file to abort.\n")
-        script_lines.extend("mv -vi -- %s %s\n" % (esc(old), esc(new))
-                            for old, new in zip(filenames, new_filenames) if old != new)
-        script_content = "".join(script_lines)
+        script_lines.append("# This file will be executed when you close the"
+                            " editor.")
+        script_lines.append("# Please double-check everything, clear the file"
+                            " to abort.")
+        new_dirs = []
+        for old, new in zip(filenames, new_filenames):
+            if old != new:
+                basepath, _ = os.path.split(new)
+                if (basepath is not None and basepath not in new_dirs
+                        and not os.path.isdir(basepath)):
+                    script_lines.append("mkdir -vp -- {dir}".format(
+                        dir=esc(basepath)))
+                    new_dirs.append(basepath)
+                script_lines.append("mv -vi -- {old} {new}".format(
+                    old=esc(old), new=esc(new)))
+        # Make sure not to forget the ending newline
+        script_content = "\n".join(script_lines) + "\n"
         if py3:
             cmdfile.write(script_content.encode("utf-8"))
         else:
@@ -1393,6 +1415,8 @@ class scout(Command):
                 self.fm.cd(pattern)
             else:
                 self.fm.move(right=1)
+                if self.quickly_executed:
+                    self.fm.block_input(0.5)
 
         if self.KEEP_OPEN in flags and thisdir != self.fm.thisdir:
             # reopen the console:
@@ -1536,6 +1560,61 @@ class filter_inode_type(Command):
         self.fm.thisdir.refilter()
 
 
+class filter_stack(Command):
+    """
+    :filter_stack ...
+
+    Manages the filter stack.
+
+        filter_stack add FILTER_TYPE ARGS...
+        filter_stack pop
+        filter_stack decompose
+        filter_stack rotate [N=1]
+        filter_stack clear
+        filter_stack show
+    """
+    def execute(self):
+        from ranger.core.filter_stack import SIMPLE_FILTERS, FILTER_COMBINATORS
+
+        subcommand = self.arg(1)
+
+        if subcommand == "add":
+            try:
+                self.fm.thisdir.filter_stack.append(
+                    SIMPLE_FILTERS[self.arg(2)](self.rest(3))
+                )
+            except KeyError:
+                FILTER_COMBINATORS[self.arg(2)](self.fm.thisdir.filter_stack)
+        elif subcommand == "pop":
+            self.fm.thisdir.filter_stack.pop()
+        elif subcommand == "decompose":
+            inner_filters = self.fm.thisdir.filter_stack.pop().decompose()
+            if inner_filters:
+                self.fm.thisdir.filter_stack.extend(inner_filters)
+        elif subcommand == "clear":
+            self.fm.thisdir.filter_stack = []
+        elif subcommand == "rotate":
+            rotate_by = int(self.arg(2) or 1)
+            self.fm.thisdir.filter_stack = (
+                self.fm.thisdir.filter_stack[-rotate_by:]
+                + self.fm.thisdir.filter_stack[:-rotate_by]
+            )
+        elif subcommand == "show":
+            stack = list(map(str, self.fm.thisdir.filter_stack))
+            pager = self.fm.ui.open_pager()
+            pager.set_source(["Filter stack: "] + stack)
+            pager.move(to=100, percentage=True)
+            return
+        else:
+            self.fm.notify(
+                "Unknown subcommand: {}".format(subcommand),
+                bad=True
+            )
+            return
+
+        self.fm.thisdir.refilter()
+
+
 class grep(Command):
     """:grep <string>
 
@@ -1574,6 +1653,17 @@ class flat(Command):
         self.fm.thisdir.unload()
         self.fm.thisdir.flat = level
         self.fm.thisdir.load_content()
+
+
+class reset_previews(Command):
+    """:reset_previews
+
+    Reset the file previews.
+    """
+    def execute(self):
+        self.fm.previews = {}
+        self.fm.ui.need_redraw = True
+
 
 # Version control commands
 # --------------------------------
@@ -1718,6 +1808,7 @@ class yank(Command):
 
     modes = {
         '': 'basename',
+        'name_without_extension': 'basename_without_extension',
         'name': 'basename',
         'dir': 'dirname',
         'path': 'path',
@@ -1750,7 +1841,9 @@ class yank(Command):
 
         clipboard_commands = clipboards()
 
-        selection = self.get_selection_attr(self.modes[self.arg(1)])
+        mode = self.modes[self.arg(1)]
+        selection = self.get_selection_attr(mode)
+
         new_clipboard_contents = "\n".join(selection)
         for command in clipboard_commands:
             process = subprocess.Popen(command, universal_newlines=True,

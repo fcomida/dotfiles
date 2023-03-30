@@ -27,7 +27,7 @@ END_COLOR=""
 # Saves the currently default sink into a variable named `curSink`. It will
 # return an error code when pulseaudio isn't running.
 function getCurSink() {
-    if ! pulseaudio --check; then return 1; fi
+    # if ! pulseaudio --check; then return 1; fi
     curSink=$(pacmd list-sinks | awk '/\* index:/{print $3}')
 }
 
@@ -290,10 +290,10 @@ case "$1" in
 esac
 
 case $BLOCK_BUTTON in
-    1)
+    2)
         setsid "$TERMINAL" -e alsamixer &
         ;;
-    2)
+    1)
         volMute toggle
         ;;
     4)

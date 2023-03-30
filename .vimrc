@@ -10,6 +10,8 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'easymotion/vim-easymotion'
+
 Plugin 'takac/vim-hardtime'
 
 Plugin 'itchyny/lightline.vim'
@@ -21,6 +23,12 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'drewtempelmeyer/palenight.vim'
 
 Plugin 'ayu-theme/ayu-vim'
+
+Plugin 'lsdr/monokai'
+
+Plugin 'phanviet/vim-monokai-pro'
+
+Plugin 'sonph/onehalf', {'rtp': 'vim/'}
 
 Plugin 'tpope/vim-commentary'
 
@@ -36,8 +44,6 @@ Plugin 'foxik/vim-makejob'
 
 Plugin 'kana/vim-operator-user'
 
-Plugin 'mboughaba/i3config.vim'
-
 Plugin 'frazrepo/vim-rainbow'
 
 Plugin 'terryma/vim-expand-region'
@@ -46,13 +52,19 @@ Plugin 'christoomey/vim-tmux-navigator'
 
 Plugin 'vim-syntastic/syntastic'
 
+Plugin 'airblade/vim-gitgutter'
+
 Plugin 'itchyny/vim-gitbranch'
 
 Plugin 'nelstrom/vim-visual-star-search'
 
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
 Plugin 'junegunn/fzf.vim'
 
 Plugin 'Yggdroot/indentLine'
+
+Plugin 'ycm-core/YouCompleteMe'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -372,6 +384,7 @@ set ttimeout
 set ttyfast
 set ttymouse=sgr
 
+set redrawtime=20000
 """"""""""""""""""""""""""""""""""""""""""""""
 " COLORS
 """"""""""""""""""""""""""""""""""""""""""""""
@@ -384,11 +397,15 @@ if &term == "st-256color"
     set t_ut=
 endif
 
-if &term == "st-256color" || &term == "xterm-256color"
+if &term == "st-256color" || &term == "xterm-256color" || &term == "alacritty" || &term == "xterm-new"
     set termguicolors
 elseif &term == "tmux-256color" || &term == "screen-256color"
     set term=xterm-256color
     set termguicolors
+endif
+
+if !empty($DVTM_TERM)
+    set notermguicolors
 endif
 
 let g:gruvbox_contrast_dark='hard'
@@ -399,7 +416,7 @@ let g:nord_italic_comments=1
 let ayucolor="dark"
 
 try
-    colorscheme ayu
+    colorscheme onehalfdark
 catch
 endtry
 
@@ -514,7 +531,7 @@ nmap <expr> <Down> &diff ? ']czz' : '<Down>'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CTAGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <F5> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q -f ~/.vim/tags/lhdr $(pwd)<CR>
+map <F5> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q -f ~/.vim/tags/lhdr $(pwd) /usr/include/net-snmp<CR>
 set tags+=~/.vim/tags/lhdr
 set tags+=~/.vim/tags/cpp
 set tags+=~/.vim/tags/qt5-core
@@ -529,23 +546,30 @@ set path+=$PROJECT
 " PLUGINS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""
+" Easy Motion
+""""""""""""""""""""""""""""""""""""""""""""""
+nmap f <Plug>(easymotion-overwin-f2)
+map <leader>/ <Plug>(easymotion-bd-w)
+nmap <leader>/f <Plug>(easymotion-overwin-w)
+
+""""""""""""""""""""""""""""""""""""""""""""""
 " OmniCppComplete
 """"""""""""""""""""""""""""""""""""""""""""""
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
-let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD", "boost", "pfs", "libhdr"]
-let OmniCpp_SelectFirstItem = 2 " select first popup item (without inserting it to the text)
-" automatically open and close the popup menu / preview window
-set completeopt=menuone,menu,longest,preview
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+" let OmniCpp_NamespaceSearch = 1
+" let OmniCpp_GlobalScopeSearch = 1
+" let OmniCpp_ShowAccess = 1
+" let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+" let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+" let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+" let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+" let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD", "boost", "pfs", "libhdr", "Qt"]
+" let OmniCpp_SelectFirstItem = 2 " select first popup item (without inserting it to the text)
+" " automatically open and close the popup menu / preview window
+" set completeopt=menuone,menu,longest,preview
+" au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 "autocmd CmdwinEnter * inoremap <expr><buffer> <TAB>
 "      \ pumvisible() ? "\<C-n>" : "\<TAB>"
-
+let g:ycm_auto_hover = ""
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " cpp enhanced highlight
 """"""""""""""""""""""""""""""""""""""""""""""""""""
@@ -562,6 +586,7 @@ let g:syntastic_debug = 0
 let g:syntastic_cpp_compiler_options = '-std=gnu++11 -fPIC -Wno-deprecated-declarations'
 let g:syntastic_cpp_include_dirs = [
             \ './src',
+            \ './build/',
             \ './build/src',
             \ '/usr/include',
             \ '/usr/include/qt5',
@@ -596,7 +621,7 @@ let g:syntastic_cpp_auto_refresh_includes = 1
 " lightline
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'ayu',
+      \ 'colorscheme': 'onehalfdark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -609,7 +634,7 @@ let g:lightline = {
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " fzf
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-set rtp+=/home/franco/.fzf
+set rtp+=/home/franco/.vim/bundle/fzf
 " Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -648,14 +673,49 @@ let g:fzf_command_prefix = 'Fzf'
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
+" Empty value to disable preview window altogether
+ let g:fzf_preview_window = ''
+
+" Enable per-command history.
+" CTRL-N and CTRL-P will be automatically bound to next-history and
+" previous-history instead of down and up. If you don't like the change,
+" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
 " File path completion in Insert mode using fzf
 imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-buffer-line)
 
 " Use preview when FzfFiles runs in fullscreen
-command! -nargs=? -bang -complete=dir FzfFiles
-      \ call fzf#vim#files(<q-args>, <bang>0 ? fzf#vim#with_preview('up:60%') : {}, <bang>0)
+command! -bang -nargs=? -complete=dir FzfFiles
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--height=100%']}, <bang>0)
+
+" Show list of change in fzf
+" Some code is borrowed from ctrlp.vim and tweaked to work with fzf
+command FzfChanges call s:fzf_changes()
+nnoremap <silent> <leader>, :FzfChanges<CR>
+
+function! s:fzf_changelist()
+  redir => result
+  silent! changes
+  redir END
+  return map(split(result, "\n")[1:], 'tr(v:val, "	", " ")')
+endf
+
+function! s:fzf_changeaccept(line)
+  let info = matchlist(a:line, '\s\+\(\d\+\)\s\+\(\d\+\)\s\+\(\d\+\).\+$')
+  call cursor(get(info, 2), get(info, 3))
+  silent! norm! zvzz
+endfunction
+
+function! s:fzf_changes()
+  return fzf#run(fzf#wrap({
+\ 'source': reverse(s:fzf_changelist()),
+\ 'sink': function('s:fzf_changeaccept'),
+\ 'options': '+m +s --nth=3..'
+\ }))
+endfunction
 
 " Mappings
 nnoremap <silent> <leader>o :FzfFiles<CR>
@@ -665,6 +725,9 @@ nnoremap <silent> <leader>b :FzfBLines<CR>
 nnoremap <silent> <leader>`  :FzfMarks<CR>
 nnoremap <silent> <leader>p :FzfCommands<CR>
 nnoremap <silent> <leader>t :FzfFiletypes<CR>
+nnoremap <silent> <leader>c :FzfChanges<CR>
+nnoremap <silent> <leader>f :FzfGFiles<CR>
+nnoremap <silent> <leader>? :FzfGFiles?<CR>
 nnoremap <silent> <F1> :FzfHelptags<CR>
 inoremap <silent> <F1> <ESC>:FzfHelptags<CR>
 cnoremap <silent> <expr> <C-p> getcmdtype() == ":" ? "<C-u>:FzfHistory:\<CR>" : "\<ESC>:FzfHistory/\<CR>"
@@ -677,40 +740,6 @@ xnoremap <silent> <leader>] "zy:FzfTags <C-r>z<CR>
 " fzf.BTags generate tags on-fly for current file
 nnoremap <silent> <leader>} :FzfBTags<CR>
 xnoremap <silent> <leader>} "zy:FzfBTags <C-r>z<CR>
-
-" Show list of change in fzf
-" Some code is borrowed from ctrlp.vim and tweaked to work with fzf
-command FzfChanges call s:fzf_changes()
-nnoremap <silent> <leader>; :FzfChanges<CR>
-
-function! s:fzf_changelist()
-  redir => result
-  silent! changes
-  redir END
-
-  return map(split(result, "\n")[1:], 'tr(v:val, "	", " ")')
-endf
-
-function! s:fzf_changeaccept(line)
-  let info = matchlist(a:line, '\s\+\(\d\+\)\s\+\(\d\+\)\s\+\(\d\+\).\+$')
-  call cursor(get(info, 2), get(info, 3))
-  silent! norm! zvzz
-endfunction
-
-function! s:fzf_changes()
-  return fzf#run(fzf#wrap({
-
-\ 'source':  reverse(s:fzf_changelist()),
-        \ 'sink': function('s:fzf_changeaccept'),
-        \ 'options': '+m +s --nth=3..'
-        \ }))
-endfunction
-
-" Enable per-command history.
-" CTRL-N and CTRL-P will be automatically bound to next-history and
-" previous-history instead of down and up. If you don't like the change,
-" explicitly bind the keys to down and up in your $FZF_DEFAULT_OPTS.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM RAINBOW

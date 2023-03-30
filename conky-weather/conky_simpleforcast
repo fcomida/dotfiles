@@ -1,6 +1,6 @@
 conky.config = {
 	use_xft = true,
-	font = '123:size=8',
+	font = '123:size=14',
 	xftalpha = 0.6,
 	update_interval = 1,
 	total_run_times = 0,
@@ -25,8 +25,8 @@ conky.config = {
 	default_shade_color = 'red',
 	default_outline_color = 'green',
 	alignment = 'top_middle',
-	gap_x = -470,
-	gap_y = 560,
+	gap_x = -630,
+	gap_y = 780,
 	no_buffers = true,
 	uppercase = false,
 	cpu_avg_samples = 2,
@@ -36,19 +36,19 @@ conky.config = {
 	use_spacer = 'right',
 
 
-	minimum_width = 0, minimum_height = 0,
+	minimum_width = 360, minimum_height = 0,
 };
 
 
 conky.text = [[
-${offset 15}${font ConkyWeather:size=46}${execi 120 ./conkySimpleForecast -d font}${font}${voffset -30}${offset 10}${color1}${font GE Inspira:pixelsize=36}${execi 120 ./conkySimpleForecast -d temp}°C${font}${voffset -40}${offset -75}${color}${font GE Inspira:pixelsize=18:bold}${execi 120 ./conkySimpleForecast -d summary} (${execi 120 ./conkySimpleForecast -d condition})
-${offset 160}${voffset 0}${font}${color}${font GE Inspira:pixelsize=26} ${execi 120 ./conkySimpleForecast -d city} ${font}${voffset -30}${color}${font Conkywind:size=42}${execi 120 ./conkySimpleForecast -d wind_deg_font}${font} ${font}${voffset -35}${color}${font GE Inspira:pixelsize=26}${execi 120 ./conkySimpleForecast -d wind_deg}${font}
-${voffset 25}${offset 12}${color1}Vento:${offset 5}${font Ubuntu:pixelsize=12:bold}${color}${execi 120 ./conkySimpleForecast -d wind_speed} m/s${font} ${offset 5}${color1}Temp min/max: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d temp_min}°C / ${execi 120 ./conkySimpleForecast -d temp_max}°C${font} ${offset 5}${color1}Umidità: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d humidity}%${font}
-${voffset -5}${offset 12}${color1}${stippled_hr 1}${color}
-${offset 12}${color1}Pressione: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d pressure} hPa${font} ${offset 5}${color1}Nuvole: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d clouds}${font} ${offset 5} ${color1}Visibilità: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d visibility}m${font}
-${voffset -5}${offset 12}${color1}${stippled_hr 1}${color}
-${offset 12}${color1}Alba: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d sunrise}${font} ${offset 5}${font} ${color1}Tramonto: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d sunset}${font}
+${offset 10}${font ConkyWeather:size=66}${execi 120 ./conkySimpleForecast -d font}${font}${voffset -30}${offset 50}${color1}${font GE Inspira:pixelsize=36}${execi 120 ./conkySimpleForecast -d temp}°C${font}${voffset -50}${offset -75}${color}${font GE Inspira:pixelsize=22:bold}${execi 120 ./conkySimpleForecast -d summary}
+${offset 230}${voffset 5}${font}${color}${font GE Inspira:pixelsize=32} ${execi 120 ./conkySimpleForecast -d city} ${font}${offset 20}${voffset -35}${offset 80}${color}${font Conkywind:size=62}${execi 120 ./conkySimpleForecast -d wind_deg_font}${font} ${font}${voffset -55}${color}${font GE Inspira:pixelsize=36}${execi 120 ./conkySimpleForecast -d wind_deg}${font}
+${voffset 35}${offset 10}${color1}Vento:${offset 5}${font Ubuntu:pixelsize=16:bold}${color}${execi 120 ./conkySimpleForecast -d wind_speed} m/s${font} ${offset 5}${color1}Temp min/max: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d temp_min}°C / ${execi 120 ./conkySimpleForecast -d temp_max}°C${font} ${offset 5}${color1}Umidità: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d humidity}%${font}
+${voffset -5}${offset 10}${color1}${stippled_hr 1}${color}
+${offset 16}${color1}Pressione: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d pressure} hPa${font} ${offset 5}${color1}Nuvole: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d clouds}${font} ${offset 5} ${color1}Visibilità: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d visibility}m${font}
+${voffset -5}${offset 10}${color1}${stippled_hr 1}${color}
+${offset 16}${color1}Alba: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d sunrise}${font} ${offset 5}${font} ${color1}Tramonto: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d sunset}${font}
 ${voffset -5}${offset 5}${color1}${stippled_hr 1}${color}
-${offset 12}${color1}Ultimo aggiornamento: ${offset 5}${color}${font Ubuntu:pixelsize=12:bold}${execi 120 ./conkySimpleForecast -d dt}
+${offset 10}${color1}Ultimo aggiornamento: ${offset 5}${color}${font Ubuntu:pixelsize=16:bold}${execi 120 ./conkySimpleForecast -d dt}
 
 ]];

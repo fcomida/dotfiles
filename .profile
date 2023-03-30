@@ -1,10 +1,10 @@
-export PATH=/opt/epson-printer-utility/bin/:$PATH
-export PATH=$HOME/.scripts/:$HOME/.local/bin/:$HOME/.local/bin/statusbar:$PATH
+export PATH=/opt/android-studio/bin:/opt/gradle/gradle-7.0.2/bin:/opt/epson-printer-utility/bin/:$PATH
+export PATH=$HOME/bin:$HOME/.scripts/:$HOME/.local/bin/:$HOME/.local/bin/statusbar:$PATH
 export TERMINAL=st
 export BROWSER=firefox
 export QT_QPA_PLATFORM=xcb
 #export QT_QPA_PLATFORMTHEME='qt5ct'
-export QT_QPA_PLATFORMTHEME='breeze-dark'
+export QT_QPA_PLATFORMTHEME='breeze'
 export GTK_THEME=Breeze-Dark
 export GTK2_RC_FILES=/home/franco/.gtkrc-2.0-kde4
 export KDEDIRS=/usr

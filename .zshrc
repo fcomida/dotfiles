@@ -1,7 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-emulate zsh                    # restore default options just in case something messed them up
-typeset -U PATH path
-export PATH=$HOME/.scripts/:$PATH
+#export PATH=$HOME/.scripts/:$PATH
 # export TERMINAL=st
 #source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -85,7 +83,7 @@ plugins=(
   tmux
   vi-mode
   zsh-syntax-highlighting
-  fzf
+  # fzf
   history-substring-search
   vundle
   pj
@@ -104,20 +102,22 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 export LANG=it_IT.UTF-8
 
-export COLORTERM=truecolor
+#export COLORTERM=truecolor
 
 #  pj
 export PROJECT_PATHS=(~/src/fcomida/LuminanceHDR/src)
 export PROJECT=~/src/fcomida/LuminanceHDR/src
 
-export BROWSER=firefox
+export BROWSER='env MOZ_X11_EGL=1 firefox'
 export XIVIEWER=sxiv
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
+  export VISUAL='vim'
 else
   alias vim=vimx
   export EDITOR='vimx'
+  export VISUAL='vim'
 fi
 
 #zstyle ':completion:*' rehash true
@@ -130,6 +130,9 @@ fi
 export LESS='-C -M -R -I -j 10 -# 4'
 
 if [[ -z $(tty | grep '/dev/pts') ]];
+then
+    ;
+elif [[ "$TERM" == "dvtm-256color" ]];
 then
     ;
 else
@@ -160,22 +163,47 @@ function TRAPINT() {
 }
 fi
 
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias lm='ls --group-directories-first --color=always -lh | less -r'        # pipe through 'less'
+alias lma='ls --group-directories-first --color=always -alh | less -r'        # pipe through 'less'
+alias lx='ls -lXB'              # sort by extension
+alias lk='ls -lSrh'              # sort by size
+alias lc='colorls -lA --sd --color=always'
+alias vimrc='vim ~/.vimrc'
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+
 # fzf stuff
 # source /usr/share/zsh/site-functions/fzf
 # Setting fd as the default source for fzf
 # export FZF_DEFAULT_COMMAND='fd --type f'
 # Configure fzf, command line fuzzyf finder
+alias fzf=fzf-tmux
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 FD_OPTIONS="--follow --exclude .git --exclude node_modules"
-export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy),ctrl-x:execute(rm -i {+})+abort'"
+#export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat --style=numbers {} || less -F {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy),ctrl-x:execute(rm -i {+})+abort'"
+export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -300' --preview-window='right:hidden:wrap' --bind='f3:execute(bat {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | xsel --clipboard --input),ctrl-x:execute(rm -i {+})+abort,ctrl-o:become(vim {} < /dev/tty > /dev/tty)'"
+
+#export FZF_DEFAULT_OPTS="--no-mouse --height 50% -1 --reverse --multi --inline-info"
+
 # Use git-ls-files inside git repo, otherwise fd
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 export FZF_DEFAULT_COMMAND="git ls-files --cached --others --exclude-standard || fd --type f --type l $FD_OPTIONS"
-export FZF_CTRL_T_COMMAND="fd $FD_OPTIONS"
+export FZF_CTRL_T_COMMAND="fd --type f --type l $FD_OPTIONS"
 export FZF_ALT_C_COMMAND="fd --type d $FD_OPTIONS"
+export FZF_TMUX_OPTS='-p80%,60%'
 
 export BAT_PAGER="less -R"
-export BAT_THEME="Monokai Extended"
+export BAT_THEME="OneHalfDark"
 
+export MANROFFOPT="-c"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+export FORGIT_COPY_CMD='xclip -selection clipboard'
+
+source $HOME/.local/share/fzf-git/fzf-git.sh
 
 v() {
   local files
@@ -189,37 +217,54 @@ v() {
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias lm='ls --group-directories-first --color=always -lh | less -r'        # pipe through 'less'
-alias lma='ls --group-directories-first --color=always -alh | less -r'        # pipe through 'less'
-alias lx='ls -lXB'              # sort by extension
-alias lk='ls -lSrh'              # sort by size
-alias lc='colorls -lA --sd'
-alias vimrc='vim ~/.vimrc'
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
 
 # Enable decent options. See http://zsh.sourceforge.net/Doc/Release/Options.html.
-emulate zsh                    # restore default options just in case something messed them up
-setopt ALWAYS_TO_END           # full completions move cursor to the end
-setopt AUTO_CD                 # `dirname` is equivalent to `cd dirname`
-setopt AUTO_PARAM_SLASH        # if completed parameter is a directory, add a trailing slash
-setopt AUTO_PUSHD              # `cd` pushes directories to the directory stack
-setopt COMPLETE_IN_WORD        # complete from the cursor rather than from the end of the word
-setopt EXTENDED_GLOB           # more powerful globbing
-setopt EXTENDED_HISTORY        # write timestamps to history
-setopt HIST_EXPIRE_DUPS_FIRST  # if history needs to be trimmed, evict dups first
-setopt HIST_FIND_NO_DUPS       # don't show dups when searching history
-setopt HIST_IGNORE_DUPS        # don't add consecutive dups to history
-setopt HIST_IGNORE_SPACE       # don't add commands starting with space to history
-setopt HIST_VERIFY             # if a command triggers history expansion, show it instead of running
-setopt INTERACTIVE_COMMENTS    # allow comments in command line
-setopt MULTIOS                 # allow multiple redirections for the same fd
-setopt NO_BG_NICE              # don't nice background jobs
-setopt NO_FLOW_CONTROL         # disable start/stop characters in shell editor
-setopt PATH_DIRS               # perform path search even on command names with slashes
-setopt SHARE_HISTORY           # write and import history on every command
-setopt C_BASES                 # print hex/oct numbers as 0xFF/077 instead of 16#FF/8#77
-
+# emulate zsh                    # restore default options just in case something messed them up
+# setopt ALWAYS_TO_END           # full completions move cursor to the end
+# setopt AUTO_CD                 # `dirname` is equivalent to `cd dirname`
+# setopt AUTO_PARAM_SLASH        # if completed parameter is a directory, add a trailing slash
+# setopt AUTO_PUSHD              # `cd` pushes directories to the directory stack
+# setopt COMPLETE_IN_WORD        # complete from the cursor rather than from the end of the word
+# setopt EXTENDED_GLOB           # more powerful globbing
+# setopt EXTENDED_HISTORY        # write timestamps to history
+# setopt HIST_EXPIRE_DUPS_FIRST  # if history needs to be trimmed, evict dups first
+# setopt HIST_FIND_NO_DUPS       # don't show dups when searching history
+# setopt HIST_IGNORE_DUPS        # don't add consecutive dups to history
+# setopt HIST_IGNORE_SPACE       # don't add commands starting with space to history
+# setopt HIST_VERIFY             # if a command triggers history expansion, show it instead of running
+# setopt INTERACTIVE_COMMENTS    # allow comments in command line
+# setopt MULTIOS                 # allow multiple redirections for the same fd
+# setopt NO_BG_NICE              # don't nice background jobs
+# setopt NO_FLOW_CONTROL         # disable start/stop characters in shell editor
+# setopt PATH_DIRS               # perform path search even on command names with slashes
+# setopt SHARE_HISTORY           # write and import history on every command
+# setopt C_BASES                 # print hex/oct numbers as 0xFF/077 instead of 16#FF/8#77
+setopt alwaystoend
+setopt autocd
+setopt autopushd
+setopt nobeep
+setopt completeinword
+setopt correct
+setopt extendedglob
+setopt extendedhistory
+setopt noflowcontrol
+setopt histexpiredupsfirst
+setopt histignorealldups
+setopt histignoredups
+setopt histignorespace
+setopt histverify
+setopt nohup
+setopt incappendhistory
+setopt interactive
+setopt interactivecomments
+setopt login
+setopt longlistjobs
+setopt nonotify
+setopt nopromptcr
+setopt nopromptsp
+setopt promptsubst
+setopt pushdignoredups
+setopt pushdminus
+setopt sharehistory
+#setopt shinstdin
+setopt vi

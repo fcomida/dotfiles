@@ -103,6 +103,7 @@ function get_weather_url() {
   echo $url
 }
 
+
 function get_cache_path() {
   case $TYPE in
   current)
@@ -271,22 +272,22 @@ function wind_deg_to_text() {
     echo "SSW"
   # SW 213.75 - 236.25
   elif [[ "${deg}" -ge 213 ]] && [[ "${deg}" -lt 236 ]]; then
-    echo "SW"  
+    echo "SW"
   # WSW 236.25 - 258.75
   elif [[ "${deg}" -ge 236 ]] && [[ "${deg}" -lt 258 ]]; then
-    echo "WSW" 
+    echo "WSW"
   # W 258.75 - 281.25
   elif [[ "${deg}" -ge 258 ]] && [[ "${deg}" -lt 281 ]]; then
-    echo "W" 
+    echo "W"
   # WNW 281.25 - 303.75
   elif [[ "${deg}" -ge 281 ]] && [[ "${deg}" -lt 303 ]]; then
-    echo "WNW" 
+    echo "WNW"
   # NW 303.75 - 326.25
   elif [[ "${deg}" -ge 303 ]] && [[ "${deg}" -lt 326 ]]; then
-    echo "NW" 
+    echo "NW"
   # NNW 326.25 - 348.75
   elif [[ "${deg}" -ge 326 ]] && [[ "${deg}" -lt 348 ]]; then
-    echo "NW" 
+    echo "NW"
   else
     echo "N/A"
   fi
@@ -307,7 +308,7 @@ if [[ -z "${API_KEY}" ]]; then
 fi
 
 if [[ -z "${LOCATION}" ]] && [[ -z "${CITY_ID}" ]]; then
-  echo "ERROR: location (-l) or city id (-i) should must be given."  
+  echo "ERROR: location (-l) or city id (-i) should must be given."
 fi
 
 create_cache

@@ -1,6 +1,0 @@
-#!/bin/env sh
-pkill polybar
-xrandr --output HDMI-1 --auto --off
-sleep 5
-polybar top -r &
-~/.scripts/parestore

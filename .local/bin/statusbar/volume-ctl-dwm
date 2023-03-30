@@ -7,8 +7,8 @@ case "$1" in
     down) pactl set-sink-volume $index -5% ;;
 esac
 case $BLOCK_BUTTON in
-    1) setsid "$TERMINAL" -e alsamixer & ;;
-    2) pactl set-sink-mute $index toggle ;;
+    1) pactl set-sink-mute $index toggle ;;
+    2) setsid "$TERMINAL" -e alsamixer & ;;
     4) pactl set-sink-volume $index +5% ;;
     5) pactl set-sink-volume $index -5% ;;
 esac

@@ -1,3 +1,0 @@
-#!/bin/env sh
-
-cat ~/.config/i3/systembindings | rofi -dmenu -p "i3 Key Bindings" -lines 31 -hide-scrollbar -theme Monokai

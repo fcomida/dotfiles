@@ -35,11 +35,6 @@ then
                 if [[ $item != "mpd" ]];
                 then
                     player=$item
-                    player_status=$(playerctl -p $player status 2> /dev/null)
-                    if [ $player_status == "Playing" ]
-                    then
-                        break
-                    fi
                 fi
             done
         fi
@@ -67,49 +62,40 @@ do
     fi
 done
 
-length="$(playerctl -p $player metadata --format "{{ duration(mpris:length) }}")"
+len="$(playerctl -p $player metadata mpris:length)"
+length=$(~/.scripts/convert_time $len)
 
-if [ $foundartist == TRUE ]; then
-    output="$(playerctl -p $player metadata artist) - $(playerctl -p $player metadata title)"
-    strlen=${#output}
-    if [[ $strlen -gt 70 ]]; then
-        output="${output:0:70}..."
-    fi
+if [ $foundartist == TRUE ]
+then
     if [ "$player_status" = "Playing" ]; then
-        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
-        printf "%b" "$output [$position/$length] "
+        pos="$(playerctl -p $player position)"
+        position=$(~/.scripts/convert_time $pos)
+        echo "$(playerctl -p $player metadata artist) - $(playerctl -p $player metadata title)  -  $position / $length"
     elif [ "$player_status" = "Paused" ]; then
-        printf "%b" "$output [In pausa] "
+        echo "$(playerctl -p $player metadata artist) - $(playerctl -p $player metadata title)"
     else
-        printf "\0"
+        echo " "
     fi
-elif [ $foundalbum == TRUE ]; then
-    output="$(playerctl -p $player metadata album) - $(playerctl -p $player metadata title)"
-    strlen=${#output}
-    if [[ $strlen -gt 70 ]]; then
-        output="${output:0:70}..."
-    fi
+elif [ $foundalbum == TRUE ]
+then
     if [ "$player_status" = "Playing" ]; then
-        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
-        printf "%b" "$output [$position/$length] "
+        pos="$(playerctl -p $player position)"
+        position=$(~/.scripts/convert_time $pos)
+        echo "$(playerctl -p $player metadata album) - $(playerctl -p $player metadata title)  -  $position / $length"
     elif [ "$player_status" = "Paused" ]; then
-        printf "%b" "$output [In pausa] "
+        echo "$(playerctl -p $player metadata album) - $(playerctl -p $player metadata title)"
     else
-        printf "\0"
+        echo " "
     fi
 else
-    output="$(playerctl -p $player metadata title)"
-    strlen=${#output}
-    if [[ $strlen -gt 70 ]]; then
-        output="${output:0:70}..."
-    fi
     if [ "$player_status" = "Playing" ]; then
-        position="$(playerctl -p $player position --format "{{ duration(position) }}")"
-        printf "%b" "$output [$position/$length] "
+        pos="$(playerctl -p $player position)"
+        position=$(~/.scripts/convert_time $pos)
+        echo "$(playerctl -p $player metadata title)  -  $position / $length"
     elif [ "$player_status" = "Paused" ]; then
-        printf "%b" "$output [In pausa] "
+        echo "$(playerctl -p $player metadata title)"
     else
-        printf "\0"
+        echo " "
     fi
 fi
 

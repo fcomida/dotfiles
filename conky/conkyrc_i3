@@ -11,12 +11,12 @@ conky.config = {
     draw_outline = false,
     draw_shades = false,
     use_xft = true,
-    font = 'DejaVu Sans Mono:size=10:face=bold',
+    font = 'DejaVu Sans Mono:size=14:face=bold',
     gap_x = 30,
-    gap_y = 50,
+    gap_y = 90,
     minimum_height = 5,
     minimum_width = 5,
-    maximum_width = 330,
+    maximum_width = 430,
     use_spacer = yes,
     net_avg_samples = 2,
     no_buffers = true,
@@ -41,44 +41,47 @@ conky.config = {
 }
 
 conky.text = [[
-$sysname $kernel
+${color white}$sysname $kernel
 ${color grey}$hr
-${color white}Uptime:$color $uptime
+${color orange}Uptime:$color $uptime
 ${color grey}$hr
-${color white}Processore:
-${color white}Utilizzo CPU:$color $cpu% ${goto 160}${cpubar 4}
+${color orange}Processore:
+${color white}Utilizzo CPU:$color $cpu% ${goto 200}${cpubar 4}
 ${color white}Frequenza (in MHz):$color $freq
-${color white} core 0: ${color}${cpu cpu1}% ${goto 90}   ${execi 20 sensors | grep Core\ 0 | cut -c16-20}°C
-${color white} core 1: ${color}${cpu cpu2}% ${goto 90}   ${execi 20 sensors | grep Core\ 1 | cut -c16-20}°C
+${color white} core 0: ${color}${cpu cpu1}% ${goto 120}   ${execi 20 sensors | grep Core\ 0 | cut -c16-20}°C
+${color white} core 1: ${color}${cpu cpu2}% ${goto 120}   ${execi 20 sensors | grep Core\ 1 | cut -c16-20}°C
+${color white} core 2: ${color}${cpu cpu3}% ${goto 120}   ${execi 20 sensors | grep Core\ 2 | cut -c16-20}°C
+${color white} core 3: ${color}${cpu cpu4}% ${goto 120}   ${execi 20 sensors | grep Core\ 3 | cut -c16-20}°C
 ${color gray}$hr
-${color white}Processi:$color $processes  ${color white}Attivi:$color $running_processes
-${color orange}Nome               PID    CPU%   MEM%
-${color white} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
-${color white} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
-${color white} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
-${color white} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
-${color white} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
-${color white} ${top name 6} ${top pid 6} ${top cpu 6} ${top mem 6}
-${color white} ${top name 7} ${top pid 7} ${top cpu 7} ${top mem 7}
-${color white} ${top name 8} ${top pid 8} ${top cpu 8} ${top mem 8}
+${color orange}Processi:$color $processes  ${color white}Attivi:$color $running_processes
+${color white} Nome                PID    CPU%   MEM%
+${color yellow} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${color yellow} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${color yellow} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${color yellow} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
+${color yellow} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+${color yellow} ${top name 6} ${top pid 6} ${top cpu 6} ${top mem 6}
+${color yellow} ${top name 7} ${top pid 7} ${top cpu 7} ${top mem 7}
+${color yellow} ${top name 8} ${top pid 8} ${top cpu 8} ${top mem 8}
 ${color grey}$hr
-${color white}Memoria:
-Uso RAM:$color $mem/$memmax
-$memperc% ${color grey}${goto 60}${membar 4}
-${color white}Uso Swap:$color $swap/$swapmax
-$swapperc% ${color grey}${goto 60}${swapbar 4}
+${color orange}Memoria:
+${color white}Uso RAM:$color $mem/$memmax - $memperc%
+${color yellow}${goto 10}${membar 4}
+${color white}Uso Swap:$color $swap/$swapmax - $swapperc%
+${color yellow}${goto 10}${swapbar 4}
 ${color grey}$hr
-${color white}File systems:
-Dischi    ${diskiograph /dev/sda 18,170 666666 CC3333}
-/         $color${fs_used /}/${fs_size /}${color white}
-/home     $color${fs_used /home}/${fs_size /home}${color white}
-Temperatura SDA:${goto 150} ${color yellow}${execi 5 hddtemp -n /dev/sda}°C
-${color white}$hr
-${color white}Networking:
-${color white}IP Locale:   $color${addr wlp3s0}
-${color white}IP Pubblico: $color${execi 30 curl ifconfig.co}
-${color white}Down: $color${goto 50}${downspeed wlp3s0}
-${color white}Up:   $color${goto 50}${upspeed wlp3s0}
-${color white}${goto 5}Totale Down: $color${totaldown wlp3s0}
-${color white}${goto 5}Totale Up:   $color${totalup wlp3s0}${color gray}
+${color orange}File systems:${color white}
+Dischi   ${color yellow} ${diskiograph /dev/sda 18,170 666666 CC3333}${color white}
+/         $color${fs_size /}/${fs_used /}/${fs_free /}${color white}
+#/home     $color${fs_size /home}/${fs_used /home}/${fs_free /home}${color white}
+#Temperatura SDA:${goto 190} ${color yellow}${execi 30 hddtemp -n /dev/sda}°C
+Temperatura NVME:${goto 190} ${color yellow}${execi 30 hddtemp -n /dev/nvme0n1}°C
+${color gray}$hr
+${color orange}Networking:
+${color white}IP Locale:   $color${addr wlp1s0}
+${color white}IP Pubblico: $color${execi 60 curl ifconfig.me}
+${color white}Down: $color${goto 150}${downspeed wlp1s0}
+${color white}Up:   $color${goto 150}${upspeed wlp1s0}
+${color white}${goto 5}Totale Down: $color${totaldown wlp1s0}
+${color white}${goto 5}Totale Up:   $color${totalup wlp1s0}${color gray}
 ]]

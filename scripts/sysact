@@ -2,14 +2,17 @@
 
 # A dmenu wrapper script for system functions.
 
+session_id=$XDG_SESSION_ID
+
 cmds="\
 🖥 spegni	sudo -A shutdown -h now
 🔃 riavvia	 sudo -A reboot
-🚪 termina sessione	kill -TERM $(pidof -s dwmblocks); kill -TERM $(pidof -s dwm)
+🚪 termina sessione	loginctl kill-session $session_id --signal=TERM
 🔒 blocco schermo	lock-screen
 ♻ riavvia dwm	kill -HUP $(pidof -s dwm)
+❄ sospendi sistema	sudo systemctl suspend
 "
 
-choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -p Sistema -c -l 5)"
+choice="$(echo "$cmds" | cut -d'	' -f 1 | dmenu -c -l 6 -o .7 -dim .6 -fn NotoSans:size=16)"
 
 `echo "$cmds" | grep "^$choice	" | cut -d '	' -f2`

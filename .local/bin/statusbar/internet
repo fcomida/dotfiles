@@ -8,8 +8,6 @@ case $BLOCK_BUTTON in
 	3) notify-send "🌐 Internet module" "\- Click to connect
 📡: no wifi connection
 📶: wifi connection with quality
-❎: no ethernet
-🌐: ethernet working
 " ;;
 esac
 
@@ -18,4 +16,4 @@ esac
 grep -q "down" /sys/class/net/w*/operstate && wifiicon="📡" ||
 	wifiicon="$(grep "^\s*w" /proc/net/wireless | awk '{ print "📶", int($3 * 100 / 70) "%" }')"
 
-printf "%s %s " "$wifiicon" "$(sed "s/down//;s/up/🌐/" /sys/class/net/e*/operstate)"
+printf "%s " "$wifiicon"

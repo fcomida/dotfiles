@@ -35,8 +35,8 @@ fetch_lyrics_for_current_song_in_background = "yes"
 # Visualizador de música:
 visualizer_output_name =                "Visualizer feed"
 visualizer_in_stereo =                  "no"
-visualizer_fifo_path =                  "/home/franco/.config/mpd/mpd.fifo"
-visualizer_sync_interval =              "10"
+visualizer_data_source =                "/home/franco/.config/mpd/mpd.fifo"
+# visualizer_sync_interval =               "10"
 visualizer_type =                       "spectrum"
 visualizer_look =                       ▋▋
 

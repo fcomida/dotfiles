@@ -2,8 +2,7 @@
 
 TOKEN=""
 
-# notifications=$(curl -fs https://api.github.com/notifications?access_token=$TOKEN | jq ".[].unread" | grep -c true)
-notifications=$(curl -fs -H 'Authorization: token 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' https://api.github.com/notifications | grep unread | grep -c true)
+notifications=$(curl -fs -H 'Authorization: token ' https://api.github.com/notifications | grep unread | grep -c true)
 
 if [ "$notifications" -gt 0 ]; then
     printf "%s " " $notifications"
